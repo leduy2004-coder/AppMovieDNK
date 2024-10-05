@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FC1B1B</color>  <!-- Màu đỏ (rgb(252, 27, 27)) -->
+    <color name="black">#27293D</color>          <!-- Màu đen (rgb(39, 31, 45)) -->
+</resources>
