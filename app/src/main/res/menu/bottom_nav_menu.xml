@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/home"
+        android:id="@+id/bottom_home"
         android:icon="@drawable/ic_baseline_home_24"
         android:title="Trang chủ" />
     <item
-        android:id="@+id/ticket"
+        android:id="@+id/bottom_ticket"
         android:icon="@drawable/ic_baseline_book_online_24"
         android:title="Đặt vé" />
     <item
-        android:id="@+id/gift"
+        android:id="@+id/bottom_gift"
         android:icon="@drawable/ic_baseline_card_giftcard_24"
         android:title="Điểm danh" />
 </menu>
