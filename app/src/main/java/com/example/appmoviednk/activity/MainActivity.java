@@ -1,32 +1,29 @@
 package com.example.appmoviednk.activity;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.appmoviednk.R;
+import com.example.appmoviednk.databinding.ActivityMainBinding;
+import com.example.appmoviednk.databinding.HeaderNavigationBinding;
 import com.example.appmoviednk.fragment.BookTicketFragment;
 import com.example.appmoviednk.fragment.HomeFragment;
-import com.example.appmoviednk.R;
 import com.example.appmoviednk.fragment.VoucherFragment;
-import com.example.appmoviednk.databinding.ActivityMainBinding;
-import com.google.android.material.navigation.NavigationView;
 
 
 public class MainActivity extends AppCompatActivity {
-    //không cần findViewById()
+    //Không cần findViewById()
     ActivityMainBinding binding;
-    ImageView btnMenu;
-    ImageView exitNav;
-    NavigationView nvgt;
+
+    // Đặt tên HeaderNavigationBinding vì phải đặt giống tên của xml
+    HeaderNavigationBinding headerBinding;
+
     private DrawerLayout drawerLayout;
 
     @Override
@@ -34,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // Tạo đối tượng binding từ layout XML
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+        headerBinding = HeaderNavigationBinding.inflate(getLayoutInflater());
+
         // Gán root view của layout vào Activity
         setContentView(binding.getRoot());
 
@@ -41,68 +40,54 @@ public class MainActivity extends AppCompatActivity {
 
         // chỉ cần binding.id là đươc
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.home) {
+            if (item.getItemId() == R.id.bottom_home) {
                 replaceFragment(new HomeFragment());
-            }else if (item.getItemId() == R.id.ticket) {
+            } else if (item.getItemId() == R.id.bottom_ticket) {
                 replaceFragment(new BookTicketFragment());
-            }else if (item.getItemId() == R.id.gift) {
+            } else if (item.getItemId() == R.id.bottom_gift) {
                 replaceFragment(new VoucherFragment());
             }
-
             return true;
         });
 
-        ImageView imgAccount = findViewById(R.id.img_account);
-        ImageView imgLogo = findViewById(R.id.img_logo);
-        ImageView imgMenu = findViewById(R.id.img_menu);
-
         // Thiết lập sự kiện click cho imgAccount
-        imgAccount.setOnClickListener(v -> {
+        binding.imgAccount.setOnClickListener(v -> {
 
         });
 
         // Thiết lập sự kiện click cho imgLogo
-        imgLogo.setOnClickListener(v -> {
+        binding.imgLogo.setOnClickListener(v -> {
             replaceFragment(new HomeFragment());
-            binding.bottomNavigationView.setSelectedItemId(R.id.home);
+            binding.bottomNavigationView.setSelectedItemId(R.id.bottom_home);
         });
+
+        drawerLayout = binding.main;
 
         // Thiết lập sự kiện click cho imgMenu
-        imgMenu.setOnClickListener(v -> {
-
-        });
-
-        btnMenu = findViewById(R.id.img_menu);
-        nvgt = findViewById(R.id.navigation);
-        View headerView = binding.navigation.getHeaderView(0);
-        exitNav = headerView.findViewById(R.id.cancelButton);
-        drawerLayout = findViewById(R.id.main);
-        if (exitNav == null) {
-            Log.e("MainActivity", "exitNav is null");
-        }
-        btnMenu.setOnClickListener(new View.OnClickListener(){
+        binding.imgMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (drawerLayout.isDrawerOpen(nvgt)) {
-                    drawerLayout.closeDrawer(nvgt);
+                if (drawerLayout.isDrawerOpen(binding.navigation)) {
+                    drawerLayout.closeDrawer(binding.navigation);
                 } else {
-                    drawerLayout.openDrawer(nvgt);
+                    drawerLayout.openDrawer(binding.navigation);
                 }
             }
         });
-        exitNav.setOnClickListener(new View.OnClickListener() {
+        headerBinding.cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Đóng navigation drawer nếu nó đang mở
-
-                    drawerLayout.closeDrawer(findViewById(R.id.navigation));
+                drawerLayout.closeDrawer(binding.navigation);
             }
         });
         binding.navigation.setNavigationItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.nav_home){
+            if (item.getItemId() == R.id.nav_home) {
                 replaceFragment(new HomeFragment());
-            } else if (item.getItemId() == R.id.nav_calcu){
+                binding.bottomNavigationView.setSelectedItemId(R.id.bottom_home);
+            } else if (item.getItemId() == R.id.nav_calcu) {
                 replaceFragment(new VoucherFragment());
+                binding.bottomNavigationView.setSelectedItemId(R.id.bottom_gift);
             }
             drawerLayout.closeDrawer(findViewById(R.id.navigation));
             return true;
