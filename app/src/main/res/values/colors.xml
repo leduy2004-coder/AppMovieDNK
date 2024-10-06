@@ -4,4 +4,5 @@
     <color name="black">#27293D</color>          <!-- Màu đen (rgb(39, 31, 45)) -->
     <color name="bgr">#271F2D</color>
     <color name="text">#FFF</color>
+    <color name="textLink">#3A56F4</color>
 </resources>
