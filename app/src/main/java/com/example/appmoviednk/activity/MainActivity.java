@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // Tạo đối tượng binding từ layout XML
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        headerBinding = HeaderNavigationBinding.inflate(getLayoutInflater());
+
 
         // Gán root view của layout vào Activity
         setContentView(binding.getRoot());
@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        headerBinding = HeaderNavigationBinding.bind(binding.navigation.getHeaderView(0));
         headerBinding.cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

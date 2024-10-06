@@ -67,24 +67,25 @@
         </androidx.appcompat.widget.Toolbar>
 
 
-        <FrameLayout
-            android:id="@+id/frameLayout"
+        <!-- Sử dụng ScrollView để chứa nội dung dài -->
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/bottomNavigationView"
             android:layout_below="@+id/toolbar"
-            app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" >
+            android:fillViewport="true">
 
-            <com.google.android.material.navigation.NavigationView
-                android:id="@+id/navigation"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:fitsSystemWindows="true"
-                app:headerLayout="@layout/header_navigation"
-                app:menu="@menu/navigation" />
-        </FrameLayout>
+            <FrameLayout
+                android:id="@+id/frameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+                app:layout_constraintTop_toBottomOf="@id/toolbar">
+                <!-- Nội dung fragment sẽ được thêm vào đây -->
+
+            </FrameLayout>
+
+        </ScrollView>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
@@ -101,16 +102,16 @@
             app:menu="@menu/bottom_nav_menu" />
 
     </RelativeLayout>
-<<<<<<< HEAD
 
-=======
+
+
     <com.google.android.material.navigation.NavigationView
         android:fitsSystemWindows="true"
         android:id="@+id/navigation"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         app:headerLayout="@layout/header_navigation"
-        android:layout_gravity="start"
+        android:layout_gravity="end"
         app:menu="@menu/right_nav_menu"/>
->>>>>>> 3761a2b05bff38fe7c8459646acc3df2c344bfa0
+
 </androidx.drawerlayout.widget.DrawerLayout>
