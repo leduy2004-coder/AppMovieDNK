@@ -74,7 +74,17 @@
             android:layout_above="@+id/bottomNavigationView"
             android:layout_below="@+id/toolbar"
             app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar" >
+
+            <com.google.android.material.navigation.NavigationView
+                android:id="@+id/navigation"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:fitsSystemWindows="true"
+                app:headerLayout="@layout/header_navigation"
+                app:menu="@menu/navigation" />
+        </FrameLayout>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
@@ -90,12 +100,5 @@
             app:menu="@menu/bottom_nav_menu" />
 
     </RelativeLayout>
-    <com.google.android.material.navigation.NavigationView
-        android:fitsSystemWindows="true"
-        android:id="@+id/navigation"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:headerLayout="@layout/header_navigation"
-        android:layout_gravity="start"
-        app:menu="@menu/navigation"/>
+
 </androidx.drawerlayout.widget.DrawerLayout>
