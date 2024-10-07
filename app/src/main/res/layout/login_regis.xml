@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:id="@+id/login_regis"
     android:padding="40dp"
-    android:background="@drawable/border_pri">
+    android:background="@drawable/bg_border_pri">
 
 
             <include layout="@layout/button_primary"
