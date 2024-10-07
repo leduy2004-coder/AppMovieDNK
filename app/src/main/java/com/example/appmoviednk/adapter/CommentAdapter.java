@@ -1,6 +1,5 @@
 package com.example.appmoviednk.adapter;
 
-import android.view.View;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,10 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.appmoviednk.databinding.CardMovieHomeBinding;
 import com.example.appmoviednk.databinding.ItemCommentBinding;
 import com.example.appmoviednk.model.CustomerModel;
-import com.example.appmoviednk.model.MovieModel;
 
 import java.util.List;
 
