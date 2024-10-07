@@ -1,17 +1,371 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#C86363"
+    android:background="#FFFFFF"
     tools:context=".fragment.VoucherFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Trang voucher"
-        android:textSize="24dp"
-        android:layout_gravity="center"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center" >
 
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_tlbr"
+            android:gravity="center"
+            android:text="Điểm danh ngay - Voucher về tay"
+            android:textSize="20sp"
+            android:padding="10dp"
+            android:layout_margin="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="224dp"
+                android:orientation="horizontal"
+                android:gravity="center" >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="160dp"
+                    android:layout_height="match_parent"
+                    >
+
+                    <ImageView
+                        android:id="@+id/imageView17"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/voucher_img"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ngày 1"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView17"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/imageView17"
+                        app:layout_constraintVertical_bias="0.888" />
+
+                    <include layout="@layout/button_primary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"></include>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="160dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView18"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/voucher_img"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView19"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ngày 2"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView18"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView18"
+                        app:layout_constraintStart_toStartOf="@+id/imageView18"
+                        app:layout_constraintTop_toTopOf="@+id/imageView18"
+                        app:layout_constraintVertical_bias="0.875" />
+
+                    <include
+                        layout="@layout/button_primary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"></include>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="160dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/voucher_img"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView21"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ngày 3"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView20"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView20"
+                        app:layout_constraintStart_toStartOf="@+id/imageView20"
+                        app:layout_constraintTop_toTopOf="@+id/imageView20"
+                        app:layout_constraintVertical_bias="0.888" />
+
+                    <include
+                        layout="@layout/button_primary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"></include>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="160dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/voucher_img"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ngày 4"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView22"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView22"
+                        app:layout_constraintStart_toStartOf="@+id/imageView22"
+                        app:layout_constraintTop_toTopOf="@+id/imageView22"
+                        app:layout_constraintVertical_bias="0.888" />
+
+                    <include
+                        layout="@layout/button_primary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"></include>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="224dp"
+                android:orientation="horizontal"
+                android:gravity="center" >
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="160dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView23"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/voucher_img"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView23"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ngày 5"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView23"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView23"
+                        app:layout_constraintStart_toStartOf="@+id/imageView23"
+                        app:layout_constraintTop_toTopOf="@+id/imageView23"
+                        app:layout_constraintVertical_bias="0.875" />
+
+                    <include
+                        layout="@layout/button_primary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"></include>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="160dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView24"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/voucher_img"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView24"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ngày 6"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView24"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView24"
+                        app:layout_constraintStart_toStartOf="@+id/imageView24"
+                        app:layout_constraintTop_toTopOf="@+id/imageView24"
+                        app:layout_constraintVertical_bias="0.881" />
+
+                    <include
+                        layout="@layout/button_primary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"></include>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="160dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView25"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/voucher_img"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView25"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ngày 7"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView25"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView25"
+                        app:layout_constraintStart_toStartOf="@+id/imageView25"
+                        app:layout_constraintTop_toTopOf="@+id/imageView25"
+                        app:layout_constraintVertical_bias="0.881" />
+
+                    <include
+                        layout="@layout/button_primary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"></include>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="160dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView26"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/voucher_img"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView26"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ngày 8"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView26"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView26"
+                        app:layout_constraintStart_toStartOf="@+id/imageView26"
+                        app:layout_constraintTop_toTopOf="@+id/imageView26"
+                        app:layout_constraintVertical_bias="0.881" />
+
+                    <include
+                        layout="@layout/button_primary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"></include>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="155dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <include layout="@layout/button_primary" />
+
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Điểm danh liên tiếp 8 ngày để chạy voucher siêu khủng !!!"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
 </FrameLayout>
