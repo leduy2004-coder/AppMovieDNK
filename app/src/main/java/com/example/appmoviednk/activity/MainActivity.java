@@ -2,6 +2,10 @@ package com.example.appmoviednk.activity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -14,12 +18,15 @@ import com.example.appmoviednk.databinding.ActivityMainBinding;
 import com.example.appmoviednk.databinding.HeaderNavigationBinding;
 import com.example.appmoviednk.fragment.BookTicketFragment;
 import com.example.appmoviednk.fragment.HomeFragment;
+import com.example.appmoviednk.fragment.LoginFragment;
+import com.example.appmoviednk.fragment.RegisterFragment;
 import com.example.appmoviednk.fragment.VoucherFragment;
 
 
 public class MainActivity extends AppCompatActivity {
     //Không cần findViewById()
     ActivityMainBinding binding;
+    PopupWindow popupWindow;
 
     // Đặt tên HeaderNavigationBinding vì phải đặt giống tên của xml
     HeaderNavigationBinding headerBinding;
@@ -50,8 +57,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Thiết lập sự kiện click cho imgAccount
-        binding.imgAccount.setOnClickListener(v -> {
-
+        ImageView imgAccount = findViewById(R.id.img_account);
+        imgAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Hiển thị layout với các nút login và register
+                showAccountPopup(v);
+            }
         });
 
         // Thiết lập sự kiện click cho imgLogo
@@ -95,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void replaceFragment(Fragment fragment) {
+    public void replaceFragment(Fragment fragment) {
         // FragmentManager là thành phần quan trọng giúp bạn thực hiện các thao tác thêm, thay thế, hoặc loại bỏ Fragment.
         FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -110,5 +122,36 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    private void showAccountPopup(View anchorView) {
+        // Inflate layout từ file XML
+        View popupView = getLayoutInflater().inflate(R.layout.login_regis, null);
+
+        // Tạo PopupWindow
+        popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
+
+        // Hiển thị PopupWindow
+        popupWindow.showAsDropDown(anchorView, 0, 60);
+
+        // Lấy button từ layout của button_primary
+        Button loginButton = popupView.findViewById(R.id.login).findViewById(R.id.btn_primary);
+        Button registerButton = popupView.findViewById(R.id.register).findViewById(R.id.btn_primary);
+
+        loginButton.setText("Dang nhap");
+        loginButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        // Gán sự kiện click cho nút Login
+        loginButton.setOnClickListener(view -> {
+            replaceFragment(new LoginFragment());
+            popupWindow.dismiss();
+        });
+
+        registerButton.setText("Dang ky");
+        registerButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        // Gán sự kiện click cho nút Register
+        registerButton.setOnClickListener(view -> {
+            replaceFragment(new RegisterFragment());
+            popupWindow.dismiss();
+        });
+
+    }
 
 }
