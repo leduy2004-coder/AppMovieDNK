@@ -36,7 +36,10 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.material.v140)
+    implementation(libs.viewpager2)
+    implementation(libs.cardview)
+    implementation(libs.recyclerview)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

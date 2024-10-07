@@ -5,8 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:openDrawer="start"
-    tools:context=".activity.MainActivity">
+    tools:context=".activity.MainActivity"
+    tools:openDrawer="start">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:src="@drawable/user" />  <!-- Căn đều với trọng số -->
+                    android:src="@drawable/img_user" />  <!-- Căn đều với trọng số -->
 
                 <!-- Căn đều với trọng số -->
 
@@ -53,7 +53,7 @@
                     android:layout_height="60dp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="2"
-                    android:src="@drawable/logo" />
+                    android:src="@drawable/img_logo" />
 
                 <ImageView
                     android:id="@+id/img_menu"
@@ -61,31 +61,20 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:src="@drawable/menu" />  <!-- Căn đều với trọng số -->
+                    android:src="@drawable/img_menu" />  <!-- Căn đều với trọng số -->
             </LinearLayout>
 
         </androidx.appcompat.widget.Toolbar>
 
-
-        <!-- Sử dụng ScrollView để chứa nội dung dài -->
-        <ScrollView
+        <FrameLayout
+            android:id="@+id/frameLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/bottomNavigationView"
-            android:layout_below="@+id/toolbar"
-            android:fillViewport="true">
+            android:layout_below="@+id/toolbar">
+            <!-- Nội dung fragment sẽ được thêm vào đây -->
 
-            <FrameLayout
-                android:id="@+id/frameLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
-                app:layout_constraintTop_toBottomOf="@id/toolbar">
-                <!-- Nội dung fragment sẽ được thêm vào đây -->
-
-            </FrameLayout>
-
-        </ScrollView>
+        </FrameLayout>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
@@ -94,8 +83,8 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
             app:itemBackground="@color/black"
-            app:itemTextColor="@color/custom_color_bottom_nav"
             app:itemIconTint="@color/custom_color_bottom_nav"
+            app:itemTextColor="@color/custom_color_bottom_nav"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -104,14 +93,13 @@
     </RelativeLayout>
 
 
-
     <com.google.android.material.navigation.NavigationView
-        android:fitsSystemWindows="true"
         android:id="@+id/navigation"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        app:headerLayout="@layout/header_navigation"
         android:layout_gravity="end"
-        app:menu="@menu/right_nav_menu"/>
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/header_navigation"
+        app:menu="@menu/right_nav_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

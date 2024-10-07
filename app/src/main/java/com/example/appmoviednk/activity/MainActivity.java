@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
         // Tạo đối tượng binding từ layout XML
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
-
         // Gán root view của layout vào Activity
         setContentView(binding.getRoot());
 

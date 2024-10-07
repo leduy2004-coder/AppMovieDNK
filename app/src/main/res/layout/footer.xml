@@ -19,7 +19,7 @@
             android:id="@+id/imageView5"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@drawable/logo"
+            android:src="@drawable/img_logo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
@@ -76,8 +76,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.656"
-            android:layout_marginTop="60dp"
-            app:srcCompat="@drawable/facebook" />
+            android:layout_marginTop="80dp"
+            app:srcCompat="@drawable/img_facebook" />
 
         <ImageView
             android:id="@+id/imageView4"
@@ -90,8 +90,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.656"
-            android:layout_marginTop="60dp"
-            app:srcCompat="@drawable/youtube" />
+            android:layout_marginTop="80dp"
+            app:srcCompat="@drawable/img_youtube" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
