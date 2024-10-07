@@ -20,6 +20,7 @@ import com.example.appmoviednk.fragment.BookTicketFragment;
 import com.example.appmoviednk.fragment.HomeFragment;
 import com.example.appmoviednk.fragment.LoginFragment;
 import com.example.appmoviednk.fragment.RegisterFragment;
+import com.example.appmoviednk.fragment.TrailerFragment;
 import com.example.appmoviednk.fragment.VoucherFragment;
 
 
