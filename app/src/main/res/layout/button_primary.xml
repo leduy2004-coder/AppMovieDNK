@@ -10,7 +10,7 @@
         android:id="@+id/btn_primary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/black"
+        android:backgroundTint="@color/colorPrimary"
 
         android:textColor="@color/text"
         android:padding="12dp"

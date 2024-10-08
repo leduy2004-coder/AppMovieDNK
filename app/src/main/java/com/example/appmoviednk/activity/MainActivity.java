@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.appmoviednk.R;
 import com.example.appmoviednk.databinding.ActivityMainBinding;
 import com.example.appmoviednk.databinding.HeaderNavigationBinding;
+import com.example.appmoviednk.fragment.AccountFragment;
 import com.example.appmoviednk.fragment.BookTicketFragment;
 import com.example.appmoviednk.fragment.HomeFragment;
 import com.example.appmoviednk.fragment.LoginFragment;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             if (item.getItemId() == R.id.bottom_home) {
                 replaceFragment(new HomeFragment());
             } else if (item.getItemId() == R.id.bottom_ticket) {
-                replaceFragment(new BookTicketFragment());
+                replaceFragment(new AccountFragment());
             } else if (item.getItemId() == R.id.bottom_gift) {
                 replaceFragment(new VoucherFragment());
             }
