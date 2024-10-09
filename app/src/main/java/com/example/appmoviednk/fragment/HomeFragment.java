@@ -17,9 +17,11 @@ import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.appmoviednk.R;
+import com.example.appmoviednk.activity.MainActivity;
 import com.example.appmoviednk.adapter.SlideAdapter;
 import com.example.appmoviednk.adapter.SpinnerAdapter;
 import com.example.appmoviednk.adapter.TagViewMovieAdapter;
+import com.example.appmoviednk.databinding.CardMovieHomeBinding;
 import com.example.appmoviednk.databinding.FragmentHomeBinding;
 import com.example.appmoviednk.model.MovieModel;
 import com.example.appmoviednk.model.ScheduleModel;
@@ -39,9 +41,9 @@ public class HomeFragment extends Fragment {
     private SpinnerAdapter<ShiftModel> shiftAdapter;
     private TagViewMovieAdapter tagViewAdapter;
     private SlideAdapter slideAdapter;
-
     // auto slide
     private Handler slideHandle = new Handler();
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
@@ -104,6 +106,7 @@ public class HomeFragment extends Fragment {
                 slideHandle.postDelayed(slideRunnable, 2000);
             }
         });
+
         return binding.getRoot();
     }
 

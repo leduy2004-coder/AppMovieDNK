@@ -5,7 +5,6 @@ import java.util.Date;
 
 public class MovieModel implements DisplayTextSpinner{
     private String maPhim;
-    private TypeMovieModel typeMovieModel;
     private String tenPhim;
     private String daoDien;
     private int doTuoi;
@@ -43,14 +42,6 @@ public class MovieModel implements DisplayTextSpinner{
 
     public void setMaPhim(String maPhim) {
         this.maPhim = maPhim;
-    }
-
-    public TypeMovieModel getTypeMovieModel() {
-        return typeMovieModel;
-    }
-
-    public void setTypeMovieModel(TypeMovieModel typeMovieModel) {
-        this.typeMovieModel = typeMovieModel;
     }
 
     public String getTenPhim() {
@@ -131,14 +122,21 @@ public class MovieModel implements DisplayTextSpinner{
         this.imageResource = imageResource;
     }
 
+    public MovieModel(String maPhim, String tenPhim, String daoDien, Date ngayKhoiChieu, int thoiLuong, String moTa, int imageResource) {
+        this.maPhim = maPhim;
+        this.tenPhim = tenPhim;
+        this.daoDien = daoDien;
+        this.ngayKhoiChieu = ngayKhoiChieu;
+        this.thoiLuong = thoiLuong;
+        this.moTa = moTa;
+        this.imageResource = imageResource;
+    }
+
     @Override
     public String toString() {
         return tenPhim;
     }
 
-    public String getTenLoaiPhim() {
-        return getTypeMovieModel().getTenLPhim();
-    }
 
     public String getEncode() {
         return encode;

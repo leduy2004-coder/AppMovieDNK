@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.appmoviednk.activity.MainActivity;
 import com.example.appmoviednk.databinding.CardMovieHomeBinding;
+import com.example.appmoviednk.fragment.MovieFragment;
 import com.example.appmoviednk.model.MovieModel;
 
 import java.util.List;
@@ -41,11 +43,20 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
         // Bind data to views
         MovieModel movie = movieList.get(position);
-        if(movie == null){
+        if (movie == null) {
             return;
         }
         holder.cardMovieHomeBinding.tvName.setText(movie.getTenPhim());
         holder.cardMovieHomeBinding.ivImg.setImageResource(movie.getImageResource());
+
+        // Click card
+        holder.itemView.setOnClickListener(v -> {
+            if (mContext instanceof MainActivity) {
+                MainActivity mainActivity = (MainActivity) mContext;
+                MovieFragment movieFragment = new MovieFragment();
+                mainActivity.replaceFragment(movieFragment);
+            }
+        });
     }
 
     @Override

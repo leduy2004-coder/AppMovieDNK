@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.example.appmoviednk.R;
 import com.example.appmoviednk.adapter.CardAdapter;
+import com.example.appmoviednk.databinding.CardMovieHomeBinding;
 import com.example.appmoviednk.databinding.FragmentShowingMovieHomeBinding;
 import com.example.appmoviednk.model.MovieModel;
 
@@ -21,6 +22,7 @@ public class ShowingMovieHomeFragment extends Fragment {
 
     FragmentShowingMovieHomeBinding binding;
     CardAdapter cardAdapter;
+    CardMovieHomeBinding cardMovieHomeBinding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
