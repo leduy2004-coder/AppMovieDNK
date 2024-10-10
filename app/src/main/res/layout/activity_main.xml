@@ -46,13 +46,16 @@
                     android:src="@drawable/img_user" />  <!-- Căn đều với trọng số -->
 
                 <!-- Căn đều với trọng số -->
-
                 <ImageView
                     android:id="@+id/img_logo"
-                    android:layout_width="307dp"
+                    android:layout_width="0dp"
                     android:layout_height="60dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="2"
+                    android:layout_marginLeft="120dp"
+                    android:layout_marginRight="120dp"
+                    android:layout_weight="40"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/img_logo" />
 
                 <ImageView
