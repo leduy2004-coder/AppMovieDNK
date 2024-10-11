@@ -47,7 +47,7 @@ public class HistoryBookAdapter  extends  RecyclerView.Adapter<HistoryBookAdapte
         if(ticket == null){
             return;
         }
-        holder.itemHistoryBookBinding.itemBook.setText(ticket.getMaVe() + ", " + ticket.getMaVe() + ", " + ticket.getTongTien());
+        holder.itemHistoryBookBinding.itemBook.setText(ticket.getMaVe() + "  " + ticket.getMaVe() + "  " + ticket.getTongTien());
 
         // Đổi màu nền xen kẽ: màu trắng cho vị trí chẵn và màu đen cho vị trí lẻ
         if (position % 2 == 0) {

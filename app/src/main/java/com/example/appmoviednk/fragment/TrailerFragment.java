@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.example.appmoviednk.activity.MainActivity;
 import com.example.appmoviednk.adapter.CommentAdapter;
 import com.example.appmoviednk.databinding.FragmentTrailerBinding;
 import com.example.appmoviednk.model.CustomerModel;
@@ -18,6 +19,7 @@ import java.util.List;
 public class TrailerFragment extends Fragment {
     FragmentTrailerBinding binding;
     CommentAdapter cmtAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -34,15 +36,25 @@ public class TrailerFragment extends Fragment {
         cmtAdapter.setData(getListComment());
         binding.listCmt.setAdapter(cmtAdapter);
 
+
+        binding.imgPrev.setOnClickListener(v -> {
+            MovieFragment movieFragment = new MovieFragment();
+            MainActivity mainActivity = (MainActivity) getActivity();
+            if (mainActivity != null) {
+                mainActivity.replaceFragment(movieFragment);
+
+            }
+        });
         // Return the root view from binding
         return binding.getRoot();
     }
+
     private List<CustomerModel> getListComment() {
         List<CustomerModel> list = new ArrayList<>();
-        list.add(new CustomerModel("123","444444444444444444444444444444444444444444444444444"));
-        list.add(new CustomerModel("123","444"));
-        list.add(new CustomerModel("123","444"));
-        list.add(new CustomerModel("123","444"));
+        list.add(new CustomerModel("123", "44444444444444444444444444"));
+        list.add(new CustomerModel("123", "444"));
+        list.add(new CustomerModel("123", "444"));
+        list.add(new CustomerModel("123", "444"));
 
         return list;
     }

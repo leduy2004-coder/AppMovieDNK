@@ -10,5 +10,6 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_history"
         android:padding="10dp"
+        android:textSize="20sp"
         android:text="text" />
 </LinearLayout>

@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center">
 
@@ -23,7 +23,7 @@
 
         <LinearLayout
             android:layout_width="350dp"
-            android:layout_height="401dp"
+            android:layout_height="wrap_content"
             android:background="#FFFFFF"
             android:elevation="19dp"
             android:orientation="vertical"
@@ -40,6 +40,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
+                    android:textSize="21sp"
                     android:text="Họ tên: Họ tên khách hàng" />
 
                 <TextView
@@ -47,6 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
+                    android:textSize="21sp"
                     android:text="Ngày sinh: 1/1/2000" />
 
                 <TextView
@@ -54,6 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
+                    android:textSize="21sp"
                     android:text="Email: abc@gmail.com" />
 
                 <TextView
@@ -61,12 +64,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
+                    android:textSize="21sp"
                     android:text="SDT: 09********" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="225dp"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -75,6 +79,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
+                    android:textSize="23sp"
                     android:text="LỊCH SỬ MUA VÉ"
                     android:textColor="@color/colorPrimary" />
 
@@ -88,7 +93,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:layout_marginBottom="10dp" />
+                        android:layout_marginBottom="20dp" />
                 </RelativeLayout>
 
                 </LinearLayout>
