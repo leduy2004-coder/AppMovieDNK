@@ -8,13 +8,29 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
 import com.example.appmoviednk.R;
+import com.example.appmoviednk.activity.MainActivity;
+import com.example.appmoviednk.databinding.FragmentBookTicketBinding;
+import com.example.appmoviednk.databinding.FragmentSuccessBinding;
 
 public class SuccessFragment extends Fragment {
+    FragmentSuccessBinding binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_success, container, false);
+        binding = FragmentSuccessBinding.inflate(inflater, container, false);
+
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MovieFragment movieFragment = new MovieFragment();
+
+                MainActivity mainActivity = (MainActivity) getActivity();
+                if (mainActivity != null) {
+                    mainActivity.replaceFragment(movieFragment);
+                }
+            }
+        });
+        return binding.getRoot();
     }
 }
