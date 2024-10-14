@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="10dp"
         android:orientation="vertical">
 
         <ImageView
@@ -28,26 +29,28 @@
             <LinearLayout
                 android:layout_width="33dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="20dp"
                 android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/imageView38"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
-                    android:src="@drawable/img_seat" />
+                    android:src="@drawable/img_seat"
+                    android:layout_marginBottom="10dp"/>
 
                 <ImageView
                     android:id="@+id/imageView39"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
+                    android:layout_marginBottom="10dp"
                     android:src="@drawable/img_seat" />
 
                 <ImageView
                     android:id="@+id/imageView40"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
-
+                    android:layout_marginBottom="10dp"
                     android:src="@drawable/img_seat" />
 
                 <ImageView
@@ -61,25 +64,28 @@
             <LinearLayout
                 android:layout_width="33dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="20dp"
                 android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/imageView8"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
+                    android:layout_marginBottom="10dp"
                     android:src="@drawable/img_seat" />
 
                 <ImageView
                     android:id="@+id/imageView9"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
+                    android:layout_marginBottom="10dp"
                     android:src="@drawable/img_seat" />
 
                 <ImageView
                     android:id="@+id/imageView10"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
+                    android:layout_marginBottom="10dp"
                     android:src="@drawable/img_seat" />
 
                 <ImageView
@@ -93,7 +99,7 @@
             <LinearLayout
                 android:layout_width="33dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="20dp"
                 android:orientation="vertical">
 
 
@@ -101,18 +107,21 @@
                     android:id="@+id/imageView13"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
+                    android:layout_marginBottom="10dp"
                     android:src="@drawable/img_seat" />
 
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
+                    android:layout_marginBottom="10dp"
                     android:src="@drawable/img_seat" />
 
                 <ImageView
                     android:id="@+id/imageView14"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
+                    android:layout_marginBottom="10dp"
                     android:src="@drawable/img_seat" />
 
                 <ImageView
@@ -126,7 +135,7 @@
             <LinearLayout
                 android:layout_width="33dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="20dp"
                 android:orientation="vertical">
 
 
@@ -134,18 +143,21 @@
                     android:id="@+id/imageView17"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
+                    android:layout_marginBottom="10dp"
                     android:src="@drawable/img_seat" />
 
                 <ImageView
                     android:id="@+id/imageView18"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
+                    android:layout_marginBottom="10dp"
                     android:src="@drawable/img_seat" />
 
                 <ImageView
                     android:id="@+id/imageView19"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
+                    android:layout_marginBottom="10dp"
                     android:src="@drawable/img_seat" />
 
                 <ImageView
@@ -179,7 +191,7 @@
                         android:id="@+id/imageView31"
                         android:layout_width="33dp"
                         android:layout_height="33dp"
-                        android:src="@drawable/img_seat" />
+                        android:src="@drawable/img_seat_book" />
 
                     <TextView
                         android:id="@+id/textView5"
@@ -192,7 +204,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="205dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:orientation="horizontal">
@@ -244,13 +256,15 @@
 
             <TextView
                 android:id="@+id/textView8"
-                android:layout_width="300dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
+                android:layout_marginRight="30dp"
                 android:text="Mã lượng giảm giá: 3"
                 android:textSize="20sp" />
 
-            <include layout="@layout/button_primary" />
+            <include layout="@layout/button_primary"
+                android:id="@+id/button_primary"/>
         </LinearLayout>
 
         <LinearLayout
@@ -302,6 +316,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
+            android:layout_marginBottom="20dp"
             android:gravity="center"
             android:orientation="horizontal">
 

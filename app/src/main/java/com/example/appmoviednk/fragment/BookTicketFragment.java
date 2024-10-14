@@ -8,6 +8,7 @@ import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -15,22 +16,26 @@ import androidx.fragment.app.Fragment;
 
 import com.example.appmoviednk.R;
 import com.example.appmoviednk.activity.MainActivity;
+import com.example.appmoviednk.databinding.ButtonPrimaryBinding;
 import com.example.appmoviednk.databinding.FragmentBookTicketBinding;
 
 
 public class BookTicketFragment extends Fragment {
 
     FragmentBookTicketBinding binding;
+    ButtonPrimaryBinding buttonPrimaryBinding;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate FragmentBookTicketBinding
         binding = FragmentBookTicketBinding.inflate(inflater, container, false);
 
+
+
+        // Đặt sự kiện cho nút btnBookTicket
         binding.btnBookTicket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Tạo SpannableString để thay đổi màu tiêu đề
                 SpannableString title = new SpannableString("Thông báo");
                 title.setSpan(new ForegroundColorSpan(Color.RED), 0, title.length(), 0);
                 new AlertDialog.Builder(requireContext())
@@ -44,22 +49,23 @@ public class BookTicketFragment extends Fragment {
                                 Toast.makeText(requireContext(), "Huỷ thành công", Toast.LENGTH_SHORT).show();
                             }
                         })
-
                         .setPositiveButton("Có", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 SuccessFragment successFragment = new SuccessFragment();
-
                                 MainActivity mainActivity = (MainActivity) getActivity();
                                 if (mainActivity != null) {
                                     mainActivity.replaceFragment(successFragment);
                                 }
-
                             }
                         })
                         .show();
             }
         });
+        // Bind layout button_primary.xml
+        buttonPrimaryBinding = ButtonPrimaryBinding.bind(binding.buttonPrimary.getRoot());
+        // Thay đổi text của nút trong button_primary.xml
+        buttonPrimaryBinding.btnPrimary.setText("Sử dụng");
 
         return binding.getRoot();
     }
