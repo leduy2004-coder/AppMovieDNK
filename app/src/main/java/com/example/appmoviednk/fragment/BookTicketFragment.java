@@ -33,7 +33,7 @@ public class BookTicketFragment extends Fragment {
 
 
         // Đặt sự kiện cho nút btnBookTicket
-        binding.btnBookTicket.setOnClickListener(new View.OnClickListener() {
+        binding.btnBook.btnPrimary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SpannableString title = new SpannableString("Thông báo");
@@ -62,11 +62,9 @@ public class BookTicketFragment extends Fragment {
                         .show();
             }
         });
-        // Bind layout button_primary.xml
-        buttonPrimaryBinding = ButtonPrimaryBinding.bind(binding.buttonPrimary.getRoot());
-        // Thay đổi text của nút trong button_primary.xml
-        buttonPrimaryBinding.btnPrimary.setText("Sử dụng");
 
+        binding.selectVoucherBtn.btnPrimary.setText("Sử dụng");
+        binding.btnBook.btnPrimary.setText("Đặt vé");
         return binding.getRoot();
     }
 }

@@ -38,6 +38,7 @@
             android:layout_height="106dp"
             android:src="@drawable/img_succes_2" />
 
-        <include layout="@layout/button_primary"/>
+        <include layout="@layout/button_primary"
+            android:id="@+id/succees_btn"/>
     </LinearLayout>
 </FrameLayout>

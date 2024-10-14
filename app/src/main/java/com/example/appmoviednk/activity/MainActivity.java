@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.appmoviednk.R;
 import com.example.appmoviednk.databinding.ActivityMainBinding;
 import com.example.appmoviednk.databinding.HeaderNavigationBinding;
+import com.example.appmoviednk.databinding.LoginRegisBinding;
 import com.example.appmoviednk.fragment.AccountFragment;
 import com.example.appmoviednk.fragment.BookTicketFragment;
 import com.example.appmoviednk.fragment.HomeFragment;
@@ -103,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.nav_calcu) {
                 replaceFragment(new VoucherFragment());
                 binding.bottomNavigationView.setSelectedItemId(R.id.bottom_gift);
+            } else if  (item.getItemId() == R.id.nav_accout) {
+                replaceFragment(new AccountFragment());
+                binding.bottomNavigationView.setSelectedItemId(R.id.bottom_ticket);
             }
             drawerLayout.closeDrawer(findViewById(R.id.navigation));
             return true;
@@ -138,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         Button loginButton = popupView.findViewById(R.id.login).findViewById(R.id.btn_primary);
         Button registerButton = popupView.findViewById(R.id.register).findViewById(R.id.btn_primary);
 
-        loginButton.setText("Dang nhap");
+        loginButton.setText("Đăng nhập");
         loginButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         // Gán sự kiện click cho nút Login
         loginButton.setOnClickListener(view -> {
@@ -146,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
             popupWindow.dismiss();
         });
 
-        registerButton.setText("Dang ky");
+        registerButton.setText("Đăng ký");
         registerButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         // Gán sự kiện click cho nút Register
         registerButton.setOnClickListener(view -> {

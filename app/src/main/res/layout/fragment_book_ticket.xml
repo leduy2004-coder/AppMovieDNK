@@ -264,7 +264,7 @@
                 android:textSize="20sp" />
 
             <include layout="@layout/button_primary"
-                android:id="@+id/button_primary"/>
+                android:id="@+id/select_voucher_btn"/>
         </LinearLayout>
 
         <LinearLayout
@@ -320,7 +320,8 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <include layout="@layout/button_primary" />
+            <include layout="@layout/button_primary"
+                android:id="@+id/btn_book"/>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

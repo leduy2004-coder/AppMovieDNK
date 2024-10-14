@@ -6,8 +6,8 @@
         android:title="Trang chủ" />
     <item
         android:id="@+id/bottom_ticket"
-        android:icon="@drawable/ic_baseline_book_online_24"
-        android:title="Đặt vé" />
+        android:icon="@drawable/img_user"
+        android:title="Lịch sử" />
     <item
         android:id="@+id/bottom_gift"
         android:icon="@drawable/ic_baseline_card_giftcard_24"
