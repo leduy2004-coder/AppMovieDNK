@@ -65,6 +65,18 @@ public class BookTicketFragment extends Fragment {
 
         binding.selectVoucherBtn.btnPrimary.setText("Sử dụng");
         binding.btnBook.btnPrimary.setText("Đặt vé");
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MovieFragment movieFragment = new MovieFragment();
+
+                MainActivity mainActivity = (MainActivity) getActivity();
+                if (mainActivity != null) {
+                    mainActivity.replaceFragment(movieFragment);
+
+                }
+            }
+        });
         return binding.getRoot();
     }
 }
