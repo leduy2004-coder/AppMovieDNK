@@ -235,6 +235,7 @@
                 android:layout_marginTop="10dp">
 
                 <include layout="@layout/button_primary"
+                    android:id="@+id/voucher_btn"
                     />
 
                 <TextView

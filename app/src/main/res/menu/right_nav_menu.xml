@@ -6,11 +6,8 @@
     <group android:id="@+id/gr2">
         <item android:title="Điểm danh" android:id="@+id/nav_calcu"/>
     </group>
-    <group android:id="@+id/gr3">
-        <item android:title="Phim" android:id="@+id/nav_movie"/>
-    </group>
     <group android:id="@+id/gr4">
-        <item android:title="Thông tin cá nhân" android:id="@+id/nav_infor"/>
+        <item android:title="Thông tin cá nhân" android:id="@+id/nav_accout"/>
     </group>
 
 

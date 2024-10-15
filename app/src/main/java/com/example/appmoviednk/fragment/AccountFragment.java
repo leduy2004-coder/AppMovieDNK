@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.appmoviednk.R;
 import com.example.appmoviednk.adapter.CommentAdapter;
@@ -24,6 +25,7 @@ import java.util.List;
 public class AccountFragment extends Fragment {
     FragmentAccountBinding binding;
     HistoryBookAdapter historyBookAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -37,14 +39,16 @@ public class AccountFragment extends Fragment {
         historyBookAdapter.setData(getListHistory());
         binding.listBooked.setAdapter(historyBookAdapter);
 
+        binding.accoutBtn.btnPrimary.setText("Xem thêm");
+
         // Return the root view from binding
         return binding.getRoot();
     }
     private List<BookTicketModel> getListHistory() {
         List<BookTicketModel> list = new ArrayList<>();
-        list.add(new BookTicketModel("123","444444444444444444444444",442323232));
-        list.add(new BookTicketModel("123","444444444444444444444444",442323232));
-        list.add(new BookTicketModel("123","444444444444444444444444",442323232));
+        list.add(new BookTicketModel("123","1",442323232));
+        list.add(new BookTicketModel("123","2",442323232));
+        list.add(new BookTicketModel("123","3",442323232));
 
         return list;
     }

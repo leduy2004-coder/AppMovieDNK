@@ -15,6 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+
             android:gravity="center">
 
             <ImageView
@@ -30,7 +31,11 @@
                 android:background="#FFFFFF"
                 android:elevation="19dp"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="40dp"
+                >
 
 
                 <LinearLayout
@@ -108,7 +113,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center">
-                    <include layout="@layout/button_primary" />
+                    <include layout="@layout/button_primary" android:id="@+id/accout_btn"/>
                 </LinearLayout>
 
             </LinearLayout>

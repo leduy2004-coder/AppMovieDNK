@@ -1,10 +1,16 @@
 package com.example.appmoviednk.fragment;
 
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.appmoviednk.R;
@@ -31,6 +37,20 @@ public class SuccessFragment extends Fragment {
                 }
             }
         });
+
+        binding.succeesBtn.btnPrimary.setText("Xem chi tiết");
+        binding.succeesBtn.btnPrimary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TicketInfFragment ticketInfFragment = new TicketInfFragment();
+                MainActivity mainActivity =(MainActivity) getActivity();
+                if (mainActivity != null) {
+                    mainActivity.replaceFragment(ticketInfFragment);
+                }
+            }
+        });
+
+
         return binding.getRoot();
     }
 }
