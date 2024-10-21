@@ -1,6 +1,6 @@
 package com.example.appmoviednk.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class BookTicketModel {
     private String maBook;
@@ -11,10 +11,22 @@ public class BookTicketModel {
     private int tongTien;
     private Date ngayMua;
 
+    public BookTicketModel() {
+    }
+
     public BookTicketModel(String maVe, String maKH, int tongTien) {
         this.maVe = maVe;
         this.maKH = maKH;
         this.tongTien = tongTien;
+    }
+
+    public BookTicketModel(String maBook, String maKH, String maSuat, String maVe, int tongTien, Date ngayMua) {
+        this.maBook = maBook;
+        this.maKH = maKH;
+        this.maSuat = maSuat;
+        this.maVe = maVe;
+        this.tongTien = tongTien;
+        this.ngayMua = ngayMua;
     }
 
     public String getMaBook() {

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.example.appmoviednk.activity.MainActivity;
 import com.example.appmoviednk.adapter.CommentAdapter;
 import com.example.appmoviednk.databinding.FragmentTrailerBinding;
-import com.example.appmoviednk.model.CustomerModel;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class TrailerFragment extends Fragment {
         binding.listCmt.setLayoutManager(gridLayoutManager);
 
         // Set data to adapter and bind to RecyclerView
-        cmtAdapter.setData(getListComment());
+
         binding.listCmt.setAdapter(cmtAdapter);
 
 
@@ -49,14 +49,6 @@ public class TrailerFragment extends Fragment {
         return binding.getRoot();
     }
 
-    private List<CustomerModel> getListComment() {
-        List<CustomerModel> list = new ArrayList<>();
-        list.add(new CustomerModel("123", "44444444444444444444444444"));
-        list.add(new CustomerModel("123", "444"));
-        list.add(new CustomerModel("123", "444"));
-        list.add(new CustomerModel("123", "444"));
 
-        return list;
-    }
 }
 

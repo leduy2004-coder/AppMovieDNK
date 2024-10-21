@@ -52,8 +52,8 @@ public class HomeFragment extends Fragment {
         movieAdapter.addDefaultItem("Chọn phim");
         scheduleAdapter = new SpinnerAdapter<>(requireContext(), R.layout.spinner_selected_home, getListSchedule());
         scheduleAdapter.addDefaultItem("Chọn ngày");
-        shiftAdapter = new SpinnerAdapter<>(requireContext(), R.layout.spinner_selected_home, getListShift());
-        shiftAdapter.addDefaultItem("Chọn ca");
+//        shiftAdapter = new SpinnerAdapter<>(requireContext(), R.layout.spinner_selected_home, getListShift());
+//        shiftAdapter.addDefaultItem("Chọn ca");
 
         binding.spnMovie.setAdapter(movieAdapter);
         binding.spnDate.setAdapter(scheduleAdapter);
@@ -123,22 +123,12 @@ public class HomeFragment extends Fragment {
     private List<ScheduleModel> getListSchedule() {
         List<ScheduleModel> list = new ArrayList<>();
 
-        list.add(new ScheduleModel("sc1", Date.valueOf("2004-10-02")));
-        list.add(new ScheduleModel("sc2", Date.valueOf("2001-12-02")));
+        list.add(new ScheduleModel("sc1", "2004-10-02"));
+        list.add(new ScheduleModel("sc2","2001-12-02"));
 
         return list;
     }
 
-    private List<ShiftModel> getListShift() {
-        List<ShiftModel> list = new ArrayList<>();
-
-        Time time1 = Time.valueOf("09:00:00"); // 09:00 AM
-        Time time2 = Time.valueOf("13:00:00");
-        list.add(new ShiftModel("ca1", time1));
-        list.add(new ShiftModel("ca2", time2));
-
-        return list;
-    }
 
     // Tạo đường kẻ trong tab view
     private void setTabDividers() {

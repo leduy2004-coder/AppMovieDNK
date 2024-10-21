@@ -2,6 +2,7 @@ package com.example.appmoviednk.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -11,8 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.appmoviednk.activity.MainActivity;
 import com.example.appmoviednk.databinding.ItemShiftShowingMovieBinding;
 import com.example.appmoviednk.fragment.BookTicketFragment;
-import com.example.appmoviednk.fragment.MovieFragment;
-import com.example.appmoviednk.model.CustomerModel;
+import com.example.appmoviednk.model.MovieModel;
 import com.example.appmoviednk.model.ShiftModel;
 
 import java.sql.Time;
@@ -22,8 +22,7 @@ import java.util.List;
 public class ShiftShowingAdapter extends RecyclerView.Adapter<ShiftShowingAdapter.ShiftShowingViewHolder> {
     private List<ShiftModel> shiftList;
     private Context mContext;
-
-
+    private String maPhim;
     @SuppressLint("NotifyDataSetChanged")
     public void setData(List<ShiftModel> shiftList) {
         this.shiftList = shiftList;
@@ -38,8 +37,9 @@ public class ShiftShowingAdapter extends RecyclerView.Adapter<ShiftShowingAdapte
         return new ShiftShowingViewHolder(binding);
     }
 
-    public ShiftShowingAdapter(Context mContext) {
+    public ShiftShowingAdapter(Context mContext, String maPhim) {
         this.mContext = mContext;
+        this.maPhim = maPhim; // Lưu maPhim
     }
 
     @Override
@@ -49,13 +49,17 @@ public class ShiftShowingAdapter extends RecyclerView.Adapter<ShiftShowingAdapte
             return;
         }
 
-        holder.itemShiftShowingMovieBinding.btnShift.setText(convertTimeToString(shift.getTgBD()));
+        holder.itemShiftShowingMovieBinding.btnShift.setText(shift.getThoiGianBatDau());
 
         // Click button
         holder.itemShiftShowingMovieBinding.btnShift.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("maSuat", shift.getMaSuat());
+            bundle.putString("maPhim", maPhim);
             if (mContext instanceof MainActivity) {
                 MainActivity mainActivity = (MainActivity) mContext;
                 BookTicketFragment bookTicketFragment = new BookTicketFragment();
+                bookTicketFragment.setArguments(bundle);
                 mainActivity.replaceFragment(bookTicketFragment);
             }
         });

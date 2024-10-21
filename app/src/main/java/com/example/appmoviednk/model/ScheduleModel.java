@@ -1,20 +1,55 @@
 package com.example.appmoviednk.model;
 
 import java.sql.Date;
+import java.util.List;
 
 public class ScheduleModel implements DisplayTextSpinner{
-    private String maSC;
-    private String maPhim;
-    private String maPhong;
-    private String maCa;
-    private Date ngayChieu;
-    private boolean tinhTrang;
-    private String dateString;
+        private String maSuat;
+        private String maPhim;
+        private String maPhong;
+        private String maCa;
+        private String ngayChieu;
+        private boolean tinhTrang;
+        private String dateString;
+    private List<ShiftModel> caChieu;
 
-    public ScheduleModel(String maSC, Date ngayChieu) {
-        this.maSC = maSC;
+    public ScheduleModel(String maSC, String ngayChieu, String maCa,  List<ShiftModel> caChieu) {
+        this.maSuat = maSC;
+        this.ngayChieu = ngayChieu;
+        this.maCa = maCa;
+        this.caChieu = caChieu; // Liên kết với ShiftModel
+    }
+
+    public ScheduleModel(String ngayChieu, List<ShiftModel> caChieu) {
+        this.ngayChieu = ngayChieu;
+        this.caChieu = caChieu;
+    }
+
+    public ScheduleModel(String maSC, String ngayChieu) {
+        this.maSuat = maSC;
         this.ngayChieu = ngayChieu;
     }
+
+    public String getMaSuat() {
+        return maSuat;
+    }
+
+    public List<ShiftModel> getCaChieu() {
+        return caChieu;
+    }
+
+    public void setCaChieu(List<ShiftModel> caChieu) {
+        this.caChieu = caChieu;
+    }
+
+    public void setMaSuat(String maSuat) {
+        this.maSuat = maSuat;
+    }
+
+
+
+    // Getters và Setters
+
 
     public boolean isTinhTrang() {
         return tinhTrang;
@@ -25,11 +60,11 @@ public class ScheduleModel implements DisplayTextSpinner{
     }
 
     public String getMaSC() {
-        return maSC;
+        return maSuat;
     }
 
     public void setMaSC(String maSC) {
-        this.maSC = maSC;
+        this.maSuat = maSC;
     }
 
     public String getMaPhim() {
@@ -56,11 +91,11 @@ public class ScheduleModel implements DisplayTextSpinner{
         this.maCa = maCa;
     }
 
-    public Date getNgayChieu() {
+    public String getNgayChieu() {
         return ngayChieu;
     }
 
-    public void setNgayChieu(Date ngayChieu) {
+    public void setNgayChieu(String ngayChieu) {
         this.ngayChieu = ngayChieu;
     }
 

@@ -8,19 +8,18 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.appmoviednk.databinding.ItemScheduleShowingMovieBinding;
-import com.example.appmoviednk.model.DateShowingModel;
+import com.example.appmoviednk.model.ScheduleModel;
 
 import java.util.List;
 
 public class ScheduleShowingAdapter extends RecyclerView.Adapter<ScheduleShowingAdapter.ScheduleShowingViewHolder> {
-    private List<DateShowingModel> dateShowingList;
+    private List<ScheduleModel> dateShowingList;
     private Context mContext;
     private ShiftShowingAdapter shiftShowingAdapter;
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<DateShowingModel> dateShowingList) {
+    public void setData(List<ScheduleModel> dateShowingList) {
         this.dateShowingList = dateShowingList;
         notifyDataSetChanged();
     }
@@ -39,18 +38,18 @@ public class ScheduleShowingAdapter extends RecyclerView.Adapter<ScheduleShowing
 
     @Override
     public void onBindViewHolder(@NonNull ScheduleShowingViewHolder holder, int position) {
-        DateShowingModel dateShowingModel = dateShowingList.get(position);
+        ScheduleModel dateShowingModel = dateShowingList.get(position);
         if (dateShowingModel == null) {
             return;
         }
 
-        holder.itemScheduleMovieBinding.tvDateScreening.setText(dateShowingModel.getDate().toString());
+        holder.itemScheduleMovieBinding.tvDateScreening.setText(dateShowingModel.getNgayChieu());
         
-        shiftShowingAdapter = new ShiftShowingAdapter(mContext);
+        shiftShowingAdapter = new ShiftShowingAdapter(mContext, dateShowingModel.getMaPhim());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 3);
         holder.itemScheduleMovieBinding.shiftsContainer.setLayoutManager(gridLayoutManager);
 
-        shiftShowingAdapter.setData(dateShowingModel.getListShift());
+        shiftShowingAdapter.setData(dateShowingModel.getCaChieu());
         holder.itemScheduleMovieBinding.shiftsContainer.setAdapter(shiftShowingAdapter);
     }
 

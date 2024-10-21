@@ -2,6 +2,7 @@ package com.example.appmoviednk.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,44 +12,66 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.example.appmoviednk.R;
 import com.example.appmoviednk.activity.MainActivity;
+import com.example.appmoviednk.adapter.CardAdapter;
 import com.example.appmoviednk.adapter.ScheduleShowingAdapter;
 import com.example.appmoviednk.databinding.FragmentMovieBinding;
 import com.example.appmoviednk.model.DateShowingModel;
-import com.example.appmoviednk.model.DetailMovieModel;
 import com.example.appmoviednk.model.MovieModel;
+import com.example.appmoviednk.model.ScheduleModel;
 import com.example.appmoviednk.model.ShiftModel;
+import com.example.appmoviednk.retrofit.RetrofitClient;
+import com.example.appmoviednk.service.ApiService;
 
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MovieFragment extends Fragment {
 
     FragmentMovieBinding binding;
     ScheduleShowingAdapter scheduleShowingAdapter;
+    CardAdapter cardAdapter;
+    ApiService apiService;
 
     @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentMovieBinding.inflate(inflater, container, false);
-        DetailMovieModel detailMovieModel = getDetailMovie();
-        binding.imgCover.setImageResource(detailMovieModel.getMovie().getImageResource());
-        binding.imgProfile.setImageResource(detailMovieModel.getMovie().getImageResource());
-        binding.tvName.setText(detailMovieModel.getMovie().getTenPhim());
-        binding.tvType.setText("Thể loại: " + detailMovieModel.getTypeMovie());
-        binding.tvDate.setText(detailMovieModel.getMovie().getNgayKhoiChieu().toString());
-        binding.tvDescription.setText(detailMovieModel.getMovie().getMoTa());
-        binding.tvDirector.setText(detailMovieModel.getMovie().getDaoDien());
-        binding.tvDuration.setText(String.valueOf(detailMovieModel.getMovie().getThoiLuong()));
+
 
         scheduleShowingAdapter = new ScheduleShowingAdapter(requireContext());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), 1);
         binding.listSchedule.setLayoutManager(gridLayoutManager);
 
-        scheduleShowingAdapter.setData(detailMovieModel.getListDate());
+
         binding.listSchedule.setAdapter(scheduleShowingAdapter);
+
+        if (getArguments() != null) {
+            MovieModel movie = (MovieModel) getArguments().getSerializable("movie_object");
+
+            if (movie != null) {
+                // Sử dụng đối tượng MovieModel
+                binding.tvName.setText(movie.getTenPhim().toString());
+                binding.tvType.setText("Thể loại: ");
+                binding.tvDescription.setText(movie.getMoTa().toString());
+                binding.tvDirector.setText(movie.getDaoDien());
+                binding.tvDate.setText(movie.getNgayKhoiChieu().toString());
+                binding.tvDuration.setText(String.valueOf(movie.getThoiLuong()));
+                Log.d("Ten phim dang chon: ", movie.getTenPhim().toString());
+
+                apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+                // Thay thế bằng ID phim thực tế
+                getSchedules(movie.getMaPhim());
+
+            }
+        }
+
 
         // Click trailer
         binding.frTrailer.setOnClickListener(v -> {
@@ -63,38 +86,65 @@ public class MovieFragment extends Fragment {
         return binding.getRoot();
     }
 
-    private DetailMovieModel getDetailMovie() {
-        String maPhim = "p1";
-        String tenPhim = "Chưa bao giờ";
-        String daoDien = "Nguyễn Văn A";
-        Date ngayKhoiChieu = Date.valueOf("2004-10-02");
-        int thoiLuong = 120;
-        String moTa = "Là một thanh tra cực kỳ nóng tính, dù có tỷ lệ bắt giữ tội phạm ấn tượng nhưng anh luôn gặp khó khăn trong việc kiểm soát cơn giận của mình. Vì liên tục tấn công các nghi phạm, Cho Su-gwang bị chuyển đến đảo Jeju.";
-        int imageResource = R.drawable.img_phim1;
 
-        MovieModel movie = new MovieModel(maPhim, tenPhim, daoDien, ngayKhoiChieu, thoiLuong, moTa, imageResource);
 
-        List<DateShowingModel> listDate = new ArrayList<>();
-        Date date1 = Date.valueOf("2024-10-06");
-        Date date2 = Date.valueOf("2023-05-20");
-        List<ShiftModel> listShift = getListShift();
 
-        listDate.add(new DateShowingModel(date1, listShift));
-        listDate.add(new DateShowingModel(date2, listShift));
+//    private void getSchedules(String phimId) {
+//        apiService.getSchedules(phimId).enqueue(new Callback<List<Map<String, Object>>>() {
+//            @Override
+//            public void onResponse(Call<List<Map<String, Object>>> call, Response<List<Map<String, Object>>> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    List<Map<String, Object>> schedules = response.body();
+//                    // Xử lý dữ liệu ở đây (hiển thị lên UI, lưu trữ, v.v.)
+//                    for (Map<String, Object> schedule : schedules) {
+//                        String ngayChieu = (String) schedule.get("ngayChieu");
+//                        Log.d("Schedule", "Ngày Chiếu: " + ngayChieu);
+//
+//                        List<Map<String, Object>> caChieuList = (List<Map<String, Object>>) schedule.get("caChieu");
+//                        for (Map<String, Object> caChieu : caChieuList) {
+//                            String thoiGianBatDau = (String) caChieu.get("thoiGianBatDau");
+//                            String maCa = (String) caChieu.get("maCa");
+//                            Log.d("Shift", "Thời gian bắt đầu: " + thoiGianBatDau + ", Mã ca: " + maCa);
+//                        }
+//                    }
+//                } else {
+//                    Log.d("loi log ne:", "111111111111111");
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Map<String, Object>>> call, Throwable t) {
+//                Log.d("API Error", t.getMessage());
+//            }
+//        });
+//    }
+    private void getSchedules(String phimId) {
+        apiService.getSchedules(phimId).enqueue(new Callback<List<ScheduleModel>>() {
+            @Override
+            public void onResponse(Call<List<ScheduleModel>> call, Response<List<ScheduleModel>> response) {
+                if (response.isSuccessful()) {
+                    List<ScheduleModel> schedules = response.body();
+                    Log.d("thong tin", schedules.toString());
+                    if (schedules != null) {
+                        for (ScheduleModel schedule : schedules) {
+                            schedule.setMaPhim(phimId); // Thiết lập maPhim cho từng đối tượng
+                        }
+                        // Gọi phương thức setData để cập nhật RecyclerView
+                        scheduleShowingAdapter.setData(schedules);
+                    } else {
+                        Log.d("Error", "Response body is null");
+                    }
+                } else {
+                    Log.d("Error", "Request failed with status: " + response.code());
+                }
+            }
 
-        return new DetailMovieModel(movie, listDate, "Hành động, Viễn tưởng");
-    }
-
-    private List<ShiftModel> getListShift() {
-        List<ShiftModel> list = new ArrayList<>();
-        Time time1 = Time.valueOf("09:00:00"); // 09:00 AM
-        Time time2 = Time.valueOf("13:00:00"); // 01:00 PM
-        Time time3 = Time.valueOf("15:00:00"); // 03:00 PM
-        list.add(new ShiftModel("ca1", time1));
-        list.add(new ShiftModel("ca2", time2));
-        list.add(new ShiftModel("ca3", time3));
-
-        return list;
+            @Override
+            public void onFailure(Call<List<ScheduleModel>> call, Throwable t) {
+                Log.d("API Error", t.getMessage());
+            }
+        });
     }
 
 }
+

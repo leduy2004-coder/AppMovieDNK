@@ -2,31 +2,20 @@ package com.example.appmoviednk.model;
 
 import java.sql.Time;
 
-public class ShiftModel implements DisplayTextSpinner{
-    private String maCa;
-    private String tenCa;
-    private Time tgBD;
-    private int status;
+public class ShiftModel implements DisplayTextSpinner {
+    private String maCa; // Mã ca
+    private String tenCa; // Tên ca
+    private String thoiGianBatDau; // Thời gian bắt đầu ca
+    private int status; // Trạng thái ca
+    private String maSuat;
 
-    public ShiftModel() {
-    }
 
-    public ShiftModel(String maCa, String tenCa) {
+    public ShiftModel(String maCa, String tenCa, String thoiGianBatDau, int status, String maSuat) {
         this.maCa = maCa;
         this.tenCa = tenCa;
-    }
-
-    public ShiftModel(String maCa, Time tgBD) {
-        this.maCa = maCa;
-        this.tgBD = tgBD;
-    }
-
-    public Time getTgBD() {
-        return tgBD;
-    }
-
-    public void setTgBD(Time tgBD) {
-        this.tgBD = tgBD;
+        this.thoiGianBatDau = thoiGianBatDau;
+        this.status = status;
+        this.maSuat = maSuat;
     }
 
     public String getMaCa() {
@@ -45,6 +34,14 @@ public class ShiftModel implements DisplayTextSpinner{
         this.tenCa = tenCa;
     }
 
+    public String getThoiGianBatDau() {
+        return thoiGianBatDau;
+    }
+
+    public void setThoiGianBatDau(String thoiGianBatDau) {
+        this.thoiGianBatDau = thoiGianBatDau;
+    }
+
     public int getStatus() {
         return status;
     }
@@ -53,9 +50,16 @@ public class ShiftModel implements DisplayTextSpinner{
         this.status = status;
     }
 
+    public String getMaSuat() {
+        return maSuat;
+    }
+
+    public void setMaSuat(String maSuat) {
+        this.maSuat = maSuat;
+    }
 
     @Override
     public String getDisplayText() {
-        return this.tgBD.toString();
+        return thoiGianBatDau;
     }
 }

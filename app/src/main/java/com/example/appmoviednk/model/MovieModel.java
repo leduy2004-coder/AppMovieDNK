@@ -1,9 +1,10 @@
 package com.example.appmoviednk.model;
 
+import java.io.Serializable;
 import java.sql.Blob;
 import java.util.Date;
 
-public class MovieModel implements DisplayTextSpinner{
+public class MovieModel implements DisplayTextSpinner, Serializable {
     private String maPhim;
     private String tenPhim;
     private String daoDien;
@@ -19,6 +20,10 @@ public class MovieModel implements DisplayTextSpinner{
     private int imageResource;
     private String encode;
     private String dateString;
+
+    public MovieModel() {
+
+    }
 
     public byte[] getImg() {
         return img;

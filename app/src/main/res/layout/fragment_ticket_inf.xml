@@ -13,6 +13,7 @@
         android:padding="20dp">
 
         <TextView
+            android:id="@+id/inf_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Tên phim"
@@ -21,6 +22,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/inf_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Thể loại"
@@ -39,6 +41,7 @@
             android:layout_marginTop="10dp">
 
             <TextView
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Đạo diễn:"
@@ -46,6 +49,7 @@
                 android:textColor="@color/colorPrimary" />
 
             <TextView
+                android:id="@+id/inf_director"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
@@ -67,6 +71,7 @@
                 android:textColor="@color/colorPrimary" />
 
             <TextView
+                android:id="@+id/inf_performer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
@@ -88,6 +93,7 @@
                 android:textColor="@color/colorPrimary" />
 
             <TextView
+                android:id="@+id/inf_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -109,6 +115,7 @@
                 android:textColor="@color/colorPrimary" />
 
             <TextView
+                android:id="@+id/inf_duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="13dp"
