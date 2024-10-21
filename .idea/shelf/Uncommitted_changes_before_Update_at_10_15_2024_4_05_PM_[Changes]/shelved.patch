@@ -1,0 +1,149 @@
+Index: app/src/main/java/com/example/appmoviednk/fragment/AccountFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.appmoviednk.fragment;\r\n\r\nimport android.os.Bundle;\r\n\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.recyclerview.widget.GridLayoutManager;\r\n\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\n\r\nimport com.example.appmoviednk.R;\r\nimport com.example.appmoviednk.adapter.CommentAdapter;\r\nimport com.example.appmoviednk.adapter.HistoryBookAdapter;\r\nimport com.example.appmoviednk.databinding.FragmentAccountBinding;\r\nimport com.example.appmoviednk.databinding.FragmentTrailerBinding;\r\nimport com.example.appmoviednk.model.BookTicketModel;\r\nimport com.example.appmoviednk.model.CustomerModel;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\n\r\npublic class AccountFragment extends Fragment {\r\n    FragmentAccountBinding binding;\r\n    HistoryBookAdapter historyBookAdapter;\r\n    @Override\r\n    public View onCreateView(LayoutInflater inflater, ViewGroup container,\r\n                             Bundle savedInstanceState) {\r\n        // Inflate the layout for this fragment\r\n        binding = FragmentAccountBinding.inflate(inflater, container, false);\r\n        historyBookAdapter = new HistoryBookAdapter(requireContext());\r\n        GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), 1);\r\n        binding.listBooked.setLayoutManager(gridLayoutManager);\r\n\r\n        // Set data to adapter and bind to RecyclerView\r\n        historyBookAdapter.setData(getListHistory());\r\n        binding.listBooked.setAdapter(historyBookAdapter);\r\n\r\n        // Return the root view from binding\r\n        return binding.getRoot();\r\n    }\r\n    private List<BookTicketModel> getListHistory() {\r\n        List<BookTicketModel> list = new ArrayList<>();\r\n        list.add(new BookTicketModel(\"123\",\"444444444444444444444444\",442323232));\r\n        list.add(new BookTicketModel(\"123\",\"444444444444444444444444\",442323232));\r\n        list.add(new BookTicketModel(\"123\",\"444444444444444444444444\",442323232));\r\n\r\n        return list;\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/appmoviednk/fragment/AccountFragment.java b/app/src/main/java/com/example/appmoviednk/fragment/AccountFragment.java
+--- a/app/src/main/java/com/example/appmoviednk/fragment/AccountFragment.java	
++++ b/app/src/main/java/com/example/appmoviednk/fragment/AccountFragment.java	
+@@ -2,28 +2,35 @@
+ 
+ import android.os.Bundle;
+ 
+-import androidx.fragment.app.Fragment;
+ import androidx.recyclerview.widget.GridLayoutManager;
+ 
++import android.util.Log;
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.view.ViewGroup;
++import android.widget.Toast;
+ 
+-import com.example.appmoviednk.R;
+-import com.example.appmoviednk.adapter.CommentAdapter;
++import com.example.appmoviednk.UserSession;
+ import com.example.appmoviednk.adapter.HistoryBookAdapter;
+ import com.example.appmoviednk.databinding.FragmentAccountBinding;
+-import com.example.appmoviednk.databinding.FragmentTrailerBinding;
++import com.example.appmoviednk.model.AccountModel;
+ import com.example.appmoviednk.model.BookTicketModel;
+ import com.example.appmoviednk.model.CustomerModel;
++import com.example.appmoviednk.retrofit.RetrofitClient;
++import com.example.appmoviednk.service.LoginService;
+ 
+-import java.util.ArrayList;
+ import java.util.List;
++import java.util.Map;
+ 
++import retrofit2.Call;
++import retrofit2.Callback;
++import retrofit2.Response;
+ 
+-public class AccountFragment extends Fragment {
++
++public class AccountFragment extends BaseFragment {
+     FragmentAccountBinding binding;
+     HistoryBookAdapter historyBookAdapter;
++    LoginService loginService;
+     @Override
+     public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                              Bundle savedInstanceState) {
+@@ -34,19 +41,87 @@
+         binding.listBooked.setLayoutManager(gridLayoutManager);
+ 
+         // Set data to adapter and bind to RecyclerView
+-        historyBookAdapter.setData(getListHistory());
+         binding.listBooked.setAdapter(historyBookAdapter);
+ 
++
++        CustomerModel loggedInAccount = UserSession.getInstance().getLoggedInAccount();
++
++        // Kiểm tra xem có tài khoản đã đăng nhập hay không
++        if (loggedInAccount != null) {
++            // Thiết lập dữ liệu vào TextView
++           binding.accountName.setText(loggedInAccount.getHoTen());
++           binding.accountPhone.setText(loggedInAccount.getSdt());
++           binding.accountEmail.setText(loggedInAccount.getEmail());
++           binding.accountDate.setText(loggedInAccount.getNgaySinh().toString());
++            String maKH = loggedInAccount.getMaKH().toString(); // Thay bằng mã khách hàng thực tế
++            fetchCustomerHistory(maKH);
++        } else {
++            // Nếu không có tài khoản đã đăng nhập, có thể hiển thị thông báo hoặc điều hướng
++            Toast.makeText(getContext(), "Bạn chưa đăng nhập!", Toast.LENGTH_SHORT).show();
++        }
++
+         // Return the root view from binding
+         return binding.getRoot();
+     }
+-    private List<BookTicketModel> getListHistory() {
+-        List<BookTicketModel> list = new ArrayList<>();
+-        list.add(new BookTicketModel("123","444444444444444444444444",442323232));
+-        list.add(new BookTicketModel("123","444444444444444444444444",442323232));
+-        list.add(new BookTicketModel("123","444444444444444444444444",442323232));
++
++//    private void fetchCustomerHistory(String maKH) {
++//        loginService  = RetrofitClient.getRetrofitInstance().create(LoginService.class);
++//        Call<List<BookTicketModel>> call = loginService.getCustomerHistory(maKH);
++//
++//        call.enqueue(new Callback<List<BookTicketModel>>() {
++//            @Override
++//            public void onResponse(Call<List<BookTicketModel>> call, Response<List<BookTicketModel>> response) {
++//
++//                Log.d("CustomerHistory", "Ma KH: " + maKH);
++//                Log.d("CustomerHistory1", "Response code: " + response.code());
++//                if (response.isSuccessful() && response.body() != null) {
++//                    List<BookTicketModel> historyList = response.body();
++//                    historyBookAdapter.setData(historyList);
++//                    Log.d("CustomerHistory", "Số lượng lịch sử: " + historyList.size());
++//                    // Xử lý dữ liệu lịch sử ở đây
++//                    for (BookTicketModel bookTicket : historyList) {
++//                        Log.d("Data", String.valueOf(bookTicket.getTongTien()));
++//                    }                    Toast.makeText(getContext(), "Lịch sử khách hàng đã được tải!", Toast.LENGTH_SHORT).show();
++//                } else {
++//                    Log.d("CustomerHistory", "Phản hồi không thành công: " + response.message());
++//                    Toast.makeText(getContext(), "Không có dữ liệu lịch sử!", Toast.LENGTH_SHORT).show();
++//                }
++//            }
++//
++//            @Override
++//            public void onFailure(Call<List<BookTicketModel>> call, Throwable t) {
++//                Log.e("CustomerHistory", "Lỗi khi gọi API: ", t);
++//                Toast.makeText(getContext(), "Lỗi kết nối, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
++//            }
++//        });
++//    }
++private void fetchCustomerHistory(String maKH) {
++    loginService = RetrofitClient.getRetrofitInstance().create(LoginService.class);
++    Call<List<Map<String, Object>>> call = loginService.getCustomerHistory(maKH);
+ 
+-        return list;
+-    }
++    call.enqueue(new Callback<List<Map<String, Object>>>() {
++        @Override
++        public void onResponse(Call<List<Map<String, Object>>> call, Response<List<Map<String, Object>>> response) {
++            if (response.isSuccessful() && response.body() != null) {
++                List<Map<String, Object>> historyList = response.body();
++                historyBookAdapter.setData(historyList);
++                for (Map<String, Object> history : historyList) {
++                    Log.d("CustomerHistory", "Mã KH: " + history.get("maKH"));
++                    Log.d("CustomerHistory", "Tên Phim: " + history.get("tenPhim"));
++                    Log.d("CustomerHistory", "Tổng Tiền: " + history.get("tongTien"));
++                    Log.d("CustomerHistory", "Ngày Mua: " + history.get("ngayMua"));
++                }
++                Toast.makeText(getContext(), "Lịch sử khách hàng đã được tải!", Toast.LENGTH_SHORT).show();
++            } else {
++                Toast.makeText(getContext(), "Không có dữ liệu lịch sử!", Toast.LENGTH_SHORT).show();
++            }
++        }
+ 
++        @Override
++        public void onFailure(Call<List<Map<String, Object>>> call, Throwable t) {
++            Log.e("CustomerHistory", "Lỗi khi gọi API: ", t);
++            Toast.makeText(getContext(), "Lỗi kết nối, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
++        }
++    });
++}
+ }
+\ No newline at end of file
