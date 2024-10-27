@@ -62,9 +62,6 @@ public class MainActivity extends AppCompatActivity  {
             return true;
         });
 
-
-
-
         // Thiết lập sự kiện click cho imgAccount
         ImageView imgAccount = findViewById(R.id.img_account);
         imgAccount.setOnClickListener(new View.OnClickListener() {

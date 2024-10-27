@@ -100,11 +100,7 @@ public class BookTicketFragment extends Fragment {
         movieTicketService = RetrofitClient.getRetrofitInstance().create(MovieTicketService.class);
         getTicketsByMovie(getArguments().getString("maPhim"));
 
-
                 // Sử dụng đối tượng MovieModel trong BookTicketFragment
-
-
-
 
         binding.btnBook.btnPrimary.setText("Đặt vé");
         // Đặt sự kiện cho nút btnBookTicket
