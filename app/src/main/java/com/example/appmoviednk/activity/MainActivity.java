@@ -1,20 +1,25 @@
 package com.example.appmoviednk.activity;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.appmoviednk.R;
 import com.example.appmoviednk.adapter.CardAdapter;
+import com.example.appmoviednk.adapter.ViewPagerAdapter;
 import com.example.appmoviednk.databinding.ActivityMainBinding;
 import com.example.appmoviednk.databinding.HeaderNavigationBinding;
 import com.example.appmoviednk.databinding.LoginRegisBinding;
@@ -27,13 +32,18 @@ import com.example.appmoviednk.fragment.RegisterFragment;
 import com.example.appmoviednk.fragment.TrailerFragment;
 import com.example.appmoviednk.fragment.VoucherFragment;
 import com.example.appmoviednk.model.MovieModel;
+import com.google.android.material.navigation.NavigationBarView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity  {
     //Không cần findViewById()
     ActivityMainBinding binding;
     PopupWindow popupWindow;
-
+    ViewPagerAdapter viewPagerAdapter;
+    List<Fragment> fragments = new ArrayList<>();
     // Đặt tên HeaderNavigationBinding vì phải đặt giống tên của xml
     HeaderNavigationBinding headerBinding;
 
@@ -48,16 +58,16 @@ public class MainActivity extends AppCompatActivity  {
         // Gán root view của layout vào Activity
         setContentView(binding.getRoot());
 
-        replaceFragment(new HomeFragment());
+        replaceFragment(new HomeFragment(), true);
 
         // chỉ cần binding.id là đươc
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.bottom_home) {
-                replaceFragment(new HomeFragment());
+                replaceFragment(new HomeFragment(), true);
             } else if (item.getItemId() == R.id.bottom_ticket) {
-                replaceFragment(new AccountFragment());
+                replaceFragment(new AccountFragment(), true);
             } else if (item.getItemId() == R.id.bottom_gift) {
-                replaceFragment(new VoucherFragment());
+                replaceFragment(new VoucherFragment(), true);
             }
             return true;
         });
@@ -74,7 +84,7 @@ public class MainActivity extends AppCompatActivity  {
 
         // Thiết lập sự kiện click cho imgLogo
         binding.imgLogo.setOnClickListener(v -> {
-            replaceFragment(new HomeFragment());
+            replaceFragment(new HomeFragment(), true);
             binding.bottomNavigationView.setSelectedItemId(R.id.bottom_home);
         });
 
@@ -102,13 +112,13 @@ public class MainActivity extends AppCompatActivity  {
         });
         binding.navigation.setNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_home) {
-                replaceFragment(new HomeFragment());
+                replaceFragment(new HomeFragment(), true);
                 binding.bottomNavigationView.setSelectedItemId(R.id.bottom_home);
             } else if (item.getItemId() == R.id.nav_calcu) {
-                replaceFragment(new VoucherFragment());
+                replaceFragment(new VoucherFragment(), true);
                 binding.bottomNavigationView.setSelectedItemId(R.id.bottom_gift);
             } else if  (item.getItemId() == R.id.nav_accout) {
-                replaceFragment(new AccountFragment());
+                replaceFragment(new AccountFragment(), true);
                 binding.bottomNavigationView.setSelectedItemId(R.id.bottom_ticket);
             }
             drawerLayout.closeDrawer(findViewById(R.id.navigation));
@@ -116,22 +126,33 @@ public class MainActivity extends AppCompatActivity  {
         });
     }
 
-    public void replaceFragment(Fragment fragment) {
+
+
+
+    public void replaceFragment(Fragment fragment, boolean isFromRight) {
         // Lấy FragmentManager
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         // Bắt đầu một giao dịch Fragment
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
+        // Thiết lập animation
+        if (isFromRight) {
+            fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+        } else {
+            fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+        }
+
         // Thay thế Fragment hiện tại
         fragmentTransaction.replace(R.id.frameLayout, fragment);
 
         // Thêm giao dịch vào back stack
-        fragmentTransaction.addToBackStack(null); // Gọi addToBackStack() ở đây
+        fragmentTransaction.addToBackStack(null);
 
         // Cam kết giao dịch
         fragmentTransaction.commit();
     }
+
 
     private void showAccountPopup(View anchorView) {
         // Inflate layout từ file XML
@@ -151,7 +172,7 @@ public class MainActivity extends AppCompatActivity  {
         loginButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         // Gán sự kiện click cho nút Login
         loginButton.setOnClickListener(view -> {
-            replaceFragment(new LoginFragment());
+            replaceFragment(new LoginFragment(), true);
             popupWindow.dismiss();
         });
 
@@ -159,7 +180,7 @@ public class MainActivity extends AppCompatActivity  {
         registerButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         // Gán sự kiện click cho nút Register
         registerButton.setOnClickListener(view -> {
-            replaceFragment(new RegisterFragment());
+            replaceFragment(new RegisterFragment(),true);
             popupWindow.dismiss();
         });
 
@@ -172,7 +193,7 @@ public class MainActivity extends AppCompatActivity  {
         if (currentFragment instanceof BookTicketFragment) {
             // Nếu BookTicketFragment đang hiển thị, chuyển về MovieFragment
             Fragment movieFragment = new MovieFragment();
-            replaceFragment(movieFragment);
+            replaceFragment(movieFragment, false);
         } else {
             // Nếu không có fragment nào đặc biệt, gọi phương thức mặc định
             super.onBackPressed();

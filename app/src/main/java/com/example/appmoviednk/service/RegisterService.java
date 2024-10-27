@@ -1,4 +1,6 @@
 package com.example.appmoviednk.service;
+import com.example.appmoviednk.model.CustomerModel;
+
 import java.util.HashMap;
 
 import okhttp3.ResponseBody;
@@ -10,12 +12,13 @@ import retrofit2.http.Path;
 
 public interface RegisterService {
 
-    @POST("api/send-verification")
+    @POST("email/send-verification")
     Call<ResponseBody> sendVerification(@Body HashMap<String, String> email);
 
-    @POST("api/register")
-    Call<ResponseBody> registerUser(@Body HashMap<String, String> registrationData);
+    @POST("email/register")
+    Call<ResponseBody> registerUser(@Body CustomerModel registrationData);
 
-    @GET("api/get-verification-code/{email}")
-    Call<ResponseBody> getVerificationCode(@Path("email") String email);
+    @POST("email/verify-code")
+    Call<ResponseBody> verifyCode(@Body HashMap<String, String> codeMap);
+
 }

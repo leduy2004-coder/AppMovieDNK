@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.appmoviednk.MovieSession;
 import com.example.appmoviednk.R;
@@ -20,6 +21,7 @@ import com.example.appmoviednk.activity.MainActivity;
 import com.example.appmoviednk.databinding.FragmentBookTicketBinding;
 import com.example.appmoviednk.databinding.FragmentSuccessBinding;
 import com.example.appmoviednk.model.MovieModel;
+import com.example.appmoviednk.model.SharedViewModel;
 
 public class SuccessFragment extends Fragment {
     FragmentSuccessBinding binding;
@@ -29,6 +31,8 @@ public class SuccessFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentSuccessBinding.inflate(inflater, container, false);
 
+
+
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -36,7 +40,7 @@ public class SuccessFragment extends Fragment {
 
                 MainActivity mainActivity = (MainActivity) getActivity();
                 if (mainActivity != null) {
-                    mainActivity.replaceFragment(movieFragment);
+                    mainActivity.replaceFragment(movieFragment,true);
                 }
             }
         });
@@ -48,10 +52,11 @@ public class SuccessFragment extends Fragment {
                 TicketInfFragment ticketInfFragment = new TicketInfFragment();
                 MainActivity mainActivity =(MainActivity) getActivity();
                 if (mainActivity != null) {
-                    mainActivity.replaceFragment(ticketInfFragment);
+                    mainActivity.replaceFragment(ticketInfFragment,true);
                 }
             }
         });
+
 
 
         return binding.getRoot();

@@ -8,19 +8,32 @@ public class CustomerModel {
     private String sdt;
     private Date ngaySinh;
     private String email;
-    private String authentication;
+    private String maDangKi;
 	private Date time;
 	private int statusAuthen;
 
-    public String getAuthentication() {
-		return authentication;
-	}
+    public CustomerModel(String tenTK, String matKhau) {
+        this.tenTK = tenTK;
+        this.matKhau = matKhau;
+    }
 
-	public void setAuthentication(String authentication) {
-		this.authentication = authentication;
-	}
+    public CustomerModel(String email, String hoTen, String tenTK, String matKhau, String sdt) {
+        this.email = email;
+        this.hoTen = hoTen;
+        this.tenTK = tenTK;
+        this.matKhau = matKhau;
+        this.sdt = sdt;
+    }
 
-	public Date getTime() {
+    public String getMaDangKi() {
+        return maDangKi;
+    }
+
+    public void setMaDangKi(String maDangKi) {
+        this.maDangKi = maDangKi;
+    }
+
+    public Date getTime() {
 		return time;
 	}
 
@@ -53,6 +66,14 @@ public class CustomerModel {
 
     public String getMaKH() {
         return maKH;
+    }
+
+    public String getTenTK() {
+        return tenTK;
+    }
+
+    public void setTenTK(String tenTK) {
+        this.tenTK = tenTK;
     }
 
     public void setMaKH(String maKH) {

@@ -2,6 +2,7 @@ package com.example.appmoviednk.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -9,14 +10,19 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.appmoviednk.DateUtils;
 import com.example.appmoviednk.R;
+import com.example.appmoviednk.activity.MainActivity;
 import com.example.appmoviednk.databinding.ItemHistoryBookBinding;
+import com.example.appmoviednk.fragment.SuccessFragment;
+import com.example.appmoviednk.fragment.TicketInfFragment;
 import com.example.appmoviednk.model.BookTicketModel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,7 +68,7 @@ public class HistoryBookAdapter  extends  RecyclerView.Adapter<HistoryBookAdapte
         String ngayMua = (String) ticket.get("ngayMua");
 
         // Định dạng lại chuỗi ngày
-        String formattedDate = formatDate(ngayMua);
+        String formattedDate = DateUtils.formatDateString(ngayMua);
 
         holder.itemHistoryBookBinding.textMaKH.setText(""+ ticket.get("maKH"));
         holder.itemHistoryBookBinding.textTenPhim.setText(""+ ticket.get("tenPhim"));
@@ -77,7 +83,21 @@ public class HistoryBookAdapter  extends  RecyclerView.Adapter<HistoryBookAdapte
         }
 
         holder.itemView.setOnClickListener(v -> {
-            Log.d("HistoryBookAdapter", "1111");
+
+            if ((mContext instanceof MainActivity)) {
+                MainActivity mainActivity = (MainActivity) mContext;
+                TicketInfFragment ticketInfFragment = new TicketInfFragment();
+
+                Bundle bundle = new Bundle();
+
+
+                bundle.putString("maBook", ticket.get("maBook").toString() ); // Truyền MovieModel dưới dạng Serializable
+                // Gán Bundle vào Fragment
+                ticketInfFragment.setArguments(bundle);
+                // Chuyển Fragment
+                mainActivity.replaceFragment(ticketInfFragment ,true);
+            }
+
 
         });
     }
@@ -102,17 +122,4 @@ public class HistoryBookAdapter  extends  RecyclerView.Adapter<HistoryBookAdapte
         }
     }
 
-    private String formatDate(String dateStr) {
-        try {
-            // Định dạng chuỗi ban đầu
-            SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-            // Định dạng mong muốn
-            SimpleDateFormat targetFormat = new SimpleDateFormat("dd-MM-yyyy"); // Ngày-Tháng-Năm
-            Date date = originalFormat.parse(dateStr);
-            return targetFormat.format(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return dateStr; // Nếu có lỗi, trả về chuỗi gốc
-        }
-    }
 }

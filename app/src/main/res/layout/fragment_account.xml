@@ -59,7 +59,7 @@
                         android:layout_margin="5dp"
                         android:textColor="@color/black"
                         android:textSize="21sp"
-                        android:text="Ngày sinh: 1/1/2000" />
+                        android:text="Số điểm: 36" />
 
                     <TextView
                         android:id="@+id/account_email"

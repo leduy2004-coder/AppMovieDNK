@@ -39,6 +39,7 @@ public class HomeFragment extends Fragment {
     private SpinnerAdapter<MovieModel> movieAdapter;
     private SpinnerAdapter<ScheduleModel> scheduleAdapter;
     private SpinnerAdapter<ShiftModel> shiftAdapter;
+
     private TagViewMovieAdapter tagViewAdapter;
     private SlideAdapter slideAdapter;
     // auto slide

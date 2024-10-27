@@ -60,7 +60,7 @@ public class ShiftShowingAdapter extends RecyclerView.Adapter<ShiftShowingAdapte
                 MainActivity mainActivity = (MainActivity) mContext;
                 BookTicketFragment bookTicketFragment = new BookTicketFragment();
                 bookTicketFragment.setArguments(bundle);
-                mainActivity.replaceFragment(bookTicketFragment);
+                mainActivity.replaceFragment(bookTicketFragment,true);
             }
         });
     }

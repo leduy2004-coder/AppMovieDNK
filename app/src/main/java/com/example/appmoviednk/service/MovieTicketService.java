@@ -13,17 +13,17 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface MovieTicketService {
-    @GET("api/movie/ticket/{maPhim}")
+    @GET("movie-tickets/{maPhim}")
     Call<List<Map<String, Object>>> getTicketsByMovie(@Path("maPhim") String maPhim);
 
-    @POST("api/movie/bookve")
+    @POST("movie-tickets/bookve")
     Call<JsonObject> insertBookVe(@Body BookTicketModel bookTicketModel);
 
 //    @POST("api/movie/bookghe")
 //    Call<JsonObject> insertBookGhe( @Body String maBook, List<String> maGheList);
 
 
-        @POST("api/movie/bookghe")
+        @POST("movie-tickets/bookghe")
         Call<JsonObject> insertBookGhe(@Body Map<String, Object> bookGheData);
 
 }

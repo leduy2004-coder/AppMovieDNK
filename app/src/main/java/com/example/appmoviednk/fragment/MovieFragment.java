@@ -37,7 +37,7 @@ public class MovieFragment extends Fragment {
     ScheduleShowingAdapter scheduleShowingAdapter;
     CardAdapter cardAdapter;
     ApiService apiService;
-
+    MovieModel movie;
     @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,17 +53,11 @@ public class MovieFragment extends Fragment {
         binding.listSchedule.setAdapter(scheduleShowingAdapter);
 
         if (getArguments() != null) {
-            MovieModel movie = (MovieModel) getArguments().getSerializable("movie_object");
+             movie = (MovieModel) getArguments().getSerializable("movie_object");
 
             if (movie != null) {
-                // Sử dụng đối tượng MovieModel
-                binding.tvName.setText(movie.getTenPhim().toString());
-                binding.tvType.setText("Thể loại: ");
-                binding.tvDescription.setText(movie.getMoTa().toString());
-                binding.tvDirector.setText(movie.getDaoDien());
-                binding.tvDate.setText(movie.getNgayKhoiChieu().toString());
-                binding.tvDuration.setText(String.valueOf(movie.getThoiLuong()));
-                Log.d("Ten phim dang chon: ", movie.getTenPhim().toString());
+                // set text
+                setTextTitle();
 
                 apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
                 // Thay thế bằng ID phim thực tế
@@ -79,7 +73,7 @@ public class MovieFragment extends Fragment {
 
             MainActivity mainActivity = (MainActivity) getActivity();
             if (mainActivity != null) {
-                mainActivity.replaceFragment(trailerFragment);
+                mainActivity.replaceFragment(trailerFragment,true);
 
             }
         });
@@ -87,37 +81,6 @@ public class MovieFragment extends Fragment {
     }
 
 
-
-
-//    private void getSchedules(String phimId) {
-//        apiService.getSchedules(phimId).enqueue(new Callback<List<Map<String, Object>>>() {
-//            @Override
-//            public void onResponse(Call<List<Map<String, Object>>> call, Response<List<Map<String, Object>>> response) {
-//                if (response.isSuccessful() && response.body() != null) {
-//                    List<Map<String, Object>> schedules = response.body();
-//                    // Xử lý dữ liệu ở đây (hiển thị lên UI, lưu trữ, v.v.)
-//                    for (Map<String, Object> schedule : schedules) {
-//                        String ngayChieu = (String) schedule.get("ngayChieu");
-//                        Log.d("Schedule", "Ngày Chiếu: " + ngayChieu);
-//
-//                        List<Map<String, Object>> caChieuList = (List<Map<String, Object>>) schedule.get("caChieu");
-//                        for (Map<String, Object> caChieu : caChieuList) {
-//                            String thoiGianBatDau = (String) caChieu.get("thoiGianBatDau");
-//                            String maCa = (String) caChieu.get("maCa");
-//                            Log.d("Shift", "Thời gian bắt đầu: " + thoiGianBatDau + ", Mã ca: " + maCa);
-//                        }
-//                    }
-//                } else {
-//                    Log.d("loi log ne:", "111111111111111");
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Map<String, Object>>> call, Throwable t) {
-//                Log.d("API Error", t.getMessage());
-//            }
-//        });
-//    }
     private void getSchedules(String phimId) {
         apiService.getSchedules(phimId).enqueue(new Callback<List<ScheduleModel>>() {
             @Override
@@ -144,6 +107,16 @@ public class MovieFragment extends Fragment {
                 Log.d("API Error", t.getMessage());
             }
         });
+    }
+
+    private void setTextTitle(){
+        binding.tvName.setText(movie.getTenPhim().toString());
+        binding.tvType.setText("Thể loại: ");
+        binding.tvDescription.setText(movie.getMoTa().toString());
+        binding.tvDirector.setText(movie.getDaoDien());
+        binding.tvDate.setText(movie.getNgayKhoiChieu().toString());
+        binding.tvDuration.setText(String.valueOf(movie.getThoiLuong()));
+
     }
 
 }
