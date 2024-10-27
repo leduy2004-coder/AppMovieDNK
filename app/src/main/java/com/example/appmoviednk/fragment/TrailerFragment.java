@@ -41,7 +41,7 @@ public class TrailerFragment extends Fragment {
             MovieFragment movieFragment = new MovieFragment();
             MainActivity mainActivity = (MainActivity) getActivity();
             if (mainActivity != null) {
-                mainActivity.replaceFragment(movieFragment);
+                mainActivity.replaceFragment(movieFragment,true);
 
             }
         });

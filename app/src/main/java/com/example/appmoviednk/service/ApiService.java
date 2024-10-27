@@ -18,19 +18,18 @@ import retrofit2.http.Query;
 
 public interface ApiService {
 
-    @GET("api/movies")
-    Call<List<MovieModel>> getAllStudents();
 
-    @GET("api/movies/phimdangchieu")
+
+    @GET("movies/phimdangchieu")
     Call<List<MovieModel>> getMoviesDangChieu();
 
-    @GET("api/movies/phimchuachieu")
+    @GET("movies/phimchuachieu")
     Call<List<MovieModel>> getMoviesChuaChieu();
 
-    @GET("api/get-schedule/{id}")
+    @GET("movies/get-schedule/{id}")
     Call<List<ScheduleModel>> getSchedules(@Path("id") String maPhim);
 
-//    @GET("api/get-schedule/{id}")
-//    Call<List<Map<String, Object>>> getSchedules(@Path("id") String maPhim);
+    @GET("movies/ticket-details/{maBook}")
+    Call<List<Map<String, Object>>> getTicketDetails(@Path("maBook") String maBook);
 }
 

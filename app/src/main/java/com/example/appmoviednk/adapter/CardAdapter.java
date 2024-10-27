@@ -4,6 +4,8 @@ import static java.security.AccessController.getContext;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appmoviednk.MovieSession;
+import com.example.appmoviednk.R;
 import com.example.appmoviednk.activity.MainActivity;
 import com.example.appmoviednk.databinding.CardMovieHomeBinding;
 import com.example.appmoviednk.fragment.BookTicketFragment;
@@ -71,7 +74,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         }
 
         holder.cardMovieHomeBinding.tvName.setText(movie.getTenPhim());
-        holder.cardMovieHomeBinding.ivImg.setImageResource(movie.getImageResource());
+        holder.cardMovieHomeBinding.ivImg.setImageResource(movie.getImageResource()); // Thay đổi thành ảnh mặc định của bạn
+
 
         // Click card
         holder.itemView.setOnClickListener(v -> {
@@ -90,7 +94,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
                 // Gán Bundle vào Fragment
                 movieFragment.setArguments(moveBundle);
                 // Chuyển Fragment
-                mainActivity.replaceFragment(movieFragment);
+                mainActivity.replaceFragment(movieFragment ,true);
             }
 
             if (onItemClickListener != null) {

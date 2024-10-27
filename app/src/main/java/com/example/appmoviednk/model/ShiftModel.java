@@ -18,6 +18,8 @@ public class ShiftModel implements DisplayTextSpinner {
         this.maSuat = maSuat;
     }
 
+
+
     public String getMaCa() {
         return maCa;
     }

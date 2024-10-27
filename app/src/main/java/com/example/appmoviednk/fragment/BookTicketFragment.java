@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.example.appmoviednk.MovieSession;
@@ -29,6 +30,7 @@ import com.example.appmoviednk.model.BookTicketModel;
 import com.example.appmoviednk.model.CustomerModel;
 import com.example.appmoviednk.model.DateShowingModel;
 import com.example.appmoviednk.model.MovieModel;
+import com.example.appmoviednk.model.SharedViewModel;
 import com.example.appmoviednk.retrofit.RetrofitClient;
 import com.example.appmoviednk.service.ApiService;
 import com.example.appmoviednk.service.BookService;
@@ -54,6 +56,7 @@ public class BookTicketFragment extends Fragment {
     ButtonPrimaryBinding buttonPrimaryBinding;
     BookChairAdapter bookChairAdapter;
     CustomerModel loggedInAccount;
+    SharedViewModel sharedViewModel;
 
     BookService bookService;
     MovieTicketService movieTicketService;
@@ -69,7 +72,7 @@ public class BookTicketFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate FragmentBookTicketBinding
         binding = FragmentBookTicketBinding.inflate(inflater, container, false);
-
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         bookChairAdapter = new BookChairAdapter(requireContext(), seat -> {
             if (seat.isTinhTrang()) return; // Nếu ghế đã bán, không làm gì
 
@@ -126,6 +129,8 @@ public class BookTicketFragment extends Fragment {
             }
         });
 
+
+        binding.selectPointBtn.btnPrimary.setText("Sử dụng");
         binding.selectVoucherBtn.btnPrimary.setText("Sử dụng");
         binding.btnBack.setOnClickListener(view -> {
             handleBackButtonClick();
@@ -169,6 +174,8 @@ public class BookTicketFragment extends Fragment {
         });
     }
 
+
+    //set data insert ve
     private void setBookticket() {
         bookTicketModel.setMaSuat(getArguments().getString("maSuat"));
         bookTicketModel.setMaKH(loggedInAccount.getMaKH());
@@ -224,6 +231,7 @@ public class BookTicketFragment extends Fragment {
         });
     }
 
+    //insert dữ liệu vé đặt
     private void insertSelectedChairs(String maBook, List<String> maGheList) {
         Map<String, Object> bookGheData = new HashMap<>();
         bookGheData.put("maBook", maBook);
@@ -255,6 +263,7 @@ public class BookTicketFragment extends Fragment {
 
     private void showSelectedChairsDialog() {
         StringBuilder selectedChairsString = new StringBuilder("Ghế đã chọn: ");
+        String chairString ="";
         for (BookChairModel chair : selectedChairs) {
             selectedChairsString.append(chair.getMaGhe()).append(" ");
         }
@@ -272,17 +281,20 @@ public class BookTicketFragment extends Fragment {
                             if (response.isSuccessful() && response.body() != null) {
                                 JsonObject jsonResponse = response.body();
 
+
+
                                 // Lấy thông tin từ JsonObject
                                 String maBook = jsonResponse.get("maBook").getAsString();
                                 String message = jsonResponse.get("message").getAsString();
 
                                 Log.d("maBook", maBook);
+                                sharedViewModel.mabook(maBook);
                                 Toast.makeText(getContext(), message + " Mã vé: " + maBook, Toast.LENGTH_SHORT).show();
 
                                 insertSelectedChairs(maBook, maGhe);
                                 // Chuyển tới SuccessFragment sau khi đặt vé thành công
                                 SuccessFragment successFragment = new SuccessFragment();
-                                ((MainActivity) getActivity()).replaceFragment(successFragment);
+                                ((MainActivity) getActivity()).replaceFragment(successFragment,true);
                             } else {
                                 // Xử lý lỗi nếu không thành công
                                 Log.e("API aaa1", "Error code: " + response.code() + ", message: " + response.message());
