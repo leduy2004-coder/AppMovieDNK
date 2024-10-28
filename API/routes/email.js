@@ -3,7 +3,7 @@ const express = require('express');
 const axios = require('axios');
 const router = express.Router();
 const sql = require('mssql');
-const config = require('../dbConfig'); // Import cấu hình
+const config = require('../config/dbConfig'); // Import cấu hình
 const nodemailer = require('nodemailer');
 
 let verificationCode = {};  // Lưu mã xác nhận theo email

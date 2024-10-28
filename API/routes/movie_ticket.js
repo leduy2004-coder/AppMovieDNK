@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const sql = require('mssql');
-const config = require('../dbConfig'); // Import cấu hình
+const config = require('../config/dbConfig'); // Import cấu hình
 
 // Route để lấy thông tin về vé của phim
 router.get('/:maPhim', async (req, res) => {
