@@ -5,7 +5,8 @@ const router = express.Router();
 const sql = require('mssql');
 const config = require('../config/dbConfig'); // Import cấu hình
 const nodemailer = require('nodemailer');
-
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 let verificationCode = {};  // Lưu mã xác nhận theo email
 
 // Cấu hình transporter để gửi email
@@ -61,11 +62,10 @@ router.post('/verify-code', (req, res) => {
 router.post('/register', async (req, res) => {
   const { email, hoTen, tenTK, matKhau, sdt } = req.body;
 
-
-
   // Kiểm tra mã xác nhận
 
     try {
+      const hashPassword = await bcrypt.hash(matKhau, saltRounds);
       // Kết nối đến cơ sở dữ liệu
       let pool = await sql.connect(config);
 
@@ -79,7 +79,7 @@ router.post('/register', async (req, res) => {
         .input('Email', sql.NVarChar(50), email)
         .input('tinhTrang', sql.Int, 1) // Giả sử trạng thái là 1
         .input('tenTK', sql.NVarChar(50), tenTK)
-        .input('matKhau', sql.NVarChar(100), matKhau)
+        .input('matKhau', sql.NVarChar(100), hashPassword)
         .input('sdt', sql.NVarChar(15), sdt)
 
       // Thực hiện truy vấn

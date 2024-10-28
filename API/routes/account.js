@@ -7,19 +7,29 @@ const config = require('../config/dbConfig'); // Import cấu hình
 
 
 router.post('/login', async (req, res) => {
-    const {tenTK, matKhau } = req.body;
+    const { tenTK, matKhau } = req.body;
+
     try {
         let pool = await sql.connect(config);
+        
+        // Lấy thông tin người dùng dựa trên tài khoản
         let result = await pool.request()
             .input('tenTK', sql.VarChar, tenTK)
-            .input('matKhau', sql.VarChar, matKhau)
-            .query('SELECT * FROM KhachHang WHERE tenTK = @tenTK AND matKhau = @matKhau');
+            .query('SELECT * FROM KhachHang WHERE tenTK = @tenTK');
 
         if (result.recordset.length > 0) {
-            // Đăng nhập thành công, trả về dữ liệu của khách hàng
-            res.json(result.recordset[0]);
+            const user = result.recordset[0]; 
+
+            // So sánh mật khẩu nhập vào với mật khẩu đã băm trong cơ sở dữ liệu
+            const isMatch = await bcrypt.compare(matKhau, user.matKhau); 
+
+            if (isMatch) {
+                res.json(user);
+            } else {
+                res.status(401).json({ message: "Sai tài khoản hoặc mật khẩu" });
+            }
         } else {
-            // Đăng nhập thất bại
+            // Không tìm thấy người dùng
             res.status(401).json({ message: "Sai tài khoản hoặc mật khẩu" });
         }
     } catch (err) {
@@ -29,6 +39,7 @@ router.post('/login', async (req, res) => {
         await sql.close();
     }
 });
+
 
 
 // Route để lấy lịch sử khách hàng
