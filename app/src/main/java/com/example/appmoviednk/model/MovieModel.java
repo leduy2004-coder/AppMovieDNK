@@ -13,7 +13,7 @@ public class MovieModel extends ViewModel implements DisplayTextSpinner, Seriali
     private String tenPhim;
     private String daoDien;
     private int doTuoi;
-    private Date ngayKhoiChieu;
+    private String ngayKhoiChieu;
     private int thoiLuong;
     private boolean tinhTrang;
     private Blob hinhDaiDien;
@@ -86,11 +86,11 @@ public class MovieModel extends ViewModel implements DisplayTextSpinner, Seriali
         this.doTuoi = doTuoi;
     }
 
-    public Date getNgayKhoiChieu() {
+    public String getNgayKhoiChieu() {
         return ngayKhoiChieu;
     }
 
-    public void setNgayKhoiChieu(Date ngayKhoiChieu) {
+    public void setNgayKhoiChieu(String ngayKhoiChieu) {
         this.ngayKhoiChieu = ngayKhoiChieu;
     }
 
@@ -140,7 +140,7 @@ public class MovieModel extends ViewModel implements DisplayTextSpinner, Seriali
         this.imageResource = imageResource;
     }
 
-    public MovieModel(String maPhim, String tenPhim, String daoDien, Date ngayKhoiChieu, int thoiLuong, String moTa, int imageResource) {
+    public MovieModel(String maPhim, String tenPhim, String daoDien, String ngayKhoiChieu, int thoiLuong, String moTa, int imageResource) {
         this.maPhim = maPhim;
         this.tenPhim = tenPhim;
         this.daoDien = daoDien;

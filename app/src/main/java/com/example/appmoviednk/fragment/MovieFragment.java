@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.example.appmoviednk.DateUtils;
 import com.example.appmoviednk.R;
 import com.example.appmoviednk.activity.MainActivity;
 import com.example.appmoviednk.adapter.CardAdapter;
@@ -59,7 +60,7 @@ public class MovieFragment extends Fragment {
             @Override
             public void onChanged(MovieModel selectedMovie) {
                 if (selectedMovie != null) {
-//                    setTextTitle(selectedMovie);
+                    setTextTitle(selectedMovie);
                     getSchedules(selectedMovie.getMaPhim().toString().trim());
                     Log.d("23232323", selectedMovie.getMaPhim());
                 } else {
@@ -115,7 +116,8 @@ public class MovieFragment extends Fragment {
         binding.tvType.setText("Thể loại: " );
         binding.tvDescription.setText(movie.getMoTa());
         binding.tvDirector.setText(movie.getDaoDien());
-//        binding.tvDate.setText(movie.getNgayKhoiChieu());
+        String formatDate = DateUtils.formatDateString(movie.getNgayKhoiChieu());
+        binding.tvDate.setText(formatDate);
         binding.tvDuration.setText(String.valueOf(movie.getThoiLuong()));
     }
 }
