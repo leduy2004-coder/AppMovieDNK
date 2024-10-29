@@ -70,7 +70,6 @@ public class HistoryBookAdapter  extends  RecyclerView.Adapter<HistoryBookAdapte
         // Định dạng lại chuỗi ngày
         String formattedDate = DateUtils.formatDateString(ngayMua);
 
-        holder.itemHistoryBookBinding.textMaKH.setText(""+ ticket.get("maKH"));
         holder.itemHistoryBookBinding.textTenPhim.setText(""+ ticket.get("tenPhim"));
         holder.itemHistoryBookBinding.textTongTien.setText(""+ ticket.get("tongTien"));
         holder.itemHistoryBookBinding.textNgayMua.setText(""+ formattedDate);

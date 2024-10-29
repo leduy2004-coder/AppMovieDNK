@@ -190,13 +190,18 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     public void onBackPressed() {
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.main);
+
         if (currentFragment instanceof BookTicketFragment) {
-            // Nếu BookTicketFragment đang hiển thị, chuyển về MovieFragment
             Fragment movieFragment = new MovieFragment();
-            replaceFragment(movieFragment, false);
+            replaceFragment(movieFragment, true); // Có hiệu ứng
+        } else if (currentFragment instanceof TrailerFragment) {
+            Fragment movieFragment = new MovieFragment();
+            replaceFragment(movieFragment, true); // Không có hiệu ứng
+        } else if (currentFragment instanceof LoginFragment) {
+            Fragment bookticket = new BookTicketFragment();
+            replaceFragment(bookticket, true); // Không có hiệu ứng
         } else {
-            // Nếu không có fragment nào đặc biệt, gọi phương thức mặc định
-            super.onBackPressed();
+                super.onBackPressed();
+            }
         }
-    }
 }

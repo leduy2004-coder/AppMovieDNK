@@ -273,10 +273,11 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_book_ticket"
                 android:gravity="center"
+                android:paddingLeft="10dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView33"
+                    android:id="@+id/tv_point"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
@@ -293,10 +294,11 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_book_ticket"
                 android:gravity="center"
+                android:paddingLeft="10dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView8"
+                    android:id="@+id/tv_voucher"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
@@ -325,7 +327,7 @@
                     android:paddingLeft="10dp">
 
                     <TextView
-                        android:id="@+id/textView9"
+                        android:id="@+id/inf_seats"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
@@ -333,21 +335,13 @@
 
                         android:textSize="20sp" />
 
-                    <TextView
-                        android:id="@+id/textView10"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="5dp"
-                        android:text="Combo: 0"
-
-                        android:textSize="20sp" />
 
                     <TextView
                         android:id="@+id/totalAmountTv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
-                        android:text="Tổng tiền: 100.000 VNĐ"
+                        android:text="Tổng tiền: 0 VNĐ"
                         android:textSize="20sp" />
                 </LinearLayout>
 

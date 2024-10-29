@@ -1,15 +1,19 @@
 package com.example.appmoviednk.model;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
 import java.io.Serializable;
 import java.sql.Blob;
 import java.util.Date;
 
-public class MovieModel implements DisplayTextSpinner, Serializable {
+public class MovieModel extends ViewModel implements DisplayTextSpinner, Serializable {
     private String maPhim;
     private String tenPhim;
     private String daoDien;
     private int doTuoi;
-    private Date ngayKhoiChieu;
+    private String ngayKhoiChieu;
     private int thoiLuong;
     private boolean tinhTrang;
     private Blob hinhDaiDien;
@@ -23,6 +27,15 @@ public class MovieModel implements DisplayTextSpinner, Serializable {
 
     public MovieModel() {
 
+    }
+    private final MutableLiveData<MovieModel> selectedMovie = new MutableLiveData<>();
+
+    public void setSelectedMovie(MovieModel movie) {
+        selectedMovie.setValue(movie);
+    }
+
+    public LiveData<MovieModel> getSelectedMovie() {
+        return selectedMovie;
     }
 
     public byte[] getImg() {
@@ -73,11 +86,11 @@ public class MovieModel implements DisplayTextSpinner, Serializable {
         this.doTuoi = doTuoi;
     }
 
-    public Date getNgayKhoiChieu() {
+    public String getNgayKhoiChieu() {
         return ngayKhoiChieu;
     }
 
-    public void setNgayKhoiChieu(Date ngayKhoiChieu) {
+    public void setNgayKhoiChieu(String ngayKhoiChieu) {
         this.ngayKhoiChieu = ngayKhoiChieu;
     }
 
@@ -127,7 +140,7 @@ public class MovieModel implements DisplayTextSpinner, Serializable {
         this.imageResource = imageResource;
     }
 
-    public MovieModel(String maPhim, String tenPhim, String daoDien, Date ngayKhoiChieu, int thoiLuong, String moTa, int imageResource) {
+    public MovieModel(String maPhim, String tenPhim, String daoDien, String ngayKhoiChieu, int thoiLuong, String moTa, int imageResource) {
         this.maPhim = maPhim;
         this.tenPhim = tenPhim;
         this.daoDien = daoDien;

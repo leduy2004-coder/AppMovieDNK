@@ -1,8 +1,10 @@
 package com.example.appmoviednk.model;
 
+import androidx.lifecycle.ViewModel;
+
 import java.util.Date;
 
-public class BookTicketModel {
+public class BookTicketModel extends ViewModel {
     private String maBook;
     private String maKH;
     private String maNV;
@@ -11,7 +13,7 @@ public class BookTicketModel {
     private int tongTien;
     private Date ngayMua;
 
-    public BookTicketModel() {
+    public BookTicketModel(){
     }
 
     public BookTicketModel(String maVe, String maKH, int tongTien) {

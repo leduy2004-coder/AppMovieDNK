@@ -38,12 +38,8 @@ public class TrailerFragment extends Fragment {
 
 
         binding.imgPrev.setOnClickListener(v -> {
-            MovieFragment movieFragment = new MovieFragment();
             MainActivity mainActivity = (MainActivity) getActivity();
-            if (mainActivity != null) {
-                mainActivity.replaceFragment(movieFragment,true);
-
-            }
+            mainActivity.replaceFragment(new MovieFragment(),true);
         });
         // Return the root view from binding
         return binding.getRoot();

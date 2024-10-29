@@ -84,7 +84,7 @@ public class LoginFragment extends Fragment {
         String password = binding.editPass.getText().toString().trim();
 
         if (tenTK.isEmpty() || password.isEmpty()) {
-            Toast.makeText(getContext(), "Vui lòng nhập tài khoản và mật khẩu", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Vui lòng nhập tài khoản và mật khẩu", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -99,22 +99,29 @@ public class LoginFragment extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     UserSession.getInstance().setLoggedInAccount(response.body());
 
-                    SharedPreferences sharedPreferences = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    if(binding.cbCheck.isChecked()){
-                        editor.putString(KEY_EMAIL, tenTK);
-                        editor.putString(KEY_PASSWORD, password);
-                        editor.putBoolean(KEY_REMEMBER_ME,true);
-                    } else {
-                        editor.remove(KEY_EMAIL);
-                        editor.remove(KEY_PASSWORD);
-                        editor.putBoolean(KEY_REMEMBER_ME, false);
-                    }
-                    editor.apply();
+                    SharedPreferences sharedPreferences = getContext() != null
+                            ? getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                            : null;
 
+                    if (sharedPreferences != null) {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        if(binding.cbCheck.isChecked()){
+                            editor.putString(KEY_EMAIL, tenTK);
+                            editor.putString(KEY_PASSWORD, password);
+                            editor.putBoolean(KEY_REMEMBER_ME,true);
+                        } else {
+                            editor.remove(KEY_EMAIL);
+                            editor.remove(KEY_PASSWORD);
+                            editor.putBoolean(KEY_REMEMBER_ME, false);
+                        }
+                        editor.apply();
+                    }
 
                     changeFragment();
-                    Toast.makeText(getContext(), "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+                    if (getContext() != null) {
+                        Toast.makeText(getContext(), "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+                        Log.d("thanh conggg", "ỵtanhh congg ");
+                    }
 
                 } else {
                     String message = "Sai tài khoản hoặc mật khẩu";
@@ -126,13 +133,18 @@ public class LoginFragment extends Fragment {
                             e.printStackTrace();
                         }
                     }
-                    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                    if (getContext() != null) {
+                        Log.d("thattt bvaiii", "ythattt bvaiii ");
+                        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
+
 
             @Override
             public void onFailure(Call<CustomerModel> call, Throwable t) {
                 Log.e("LoginFragment", "Lỗi khi gọi API: ", t);
+                Log.d("thattt bvaiii api", "ythattt bvaiii ");
                 Toast.makeText(getContext(), "Lỗi kết nối, vui lòng thử lại", Toast.LENGTH_SHORT).show();
             }
         });
@@ -153,12 +165,19 @@ public class LoginFragment extends Fragment {
     }
 
     private void changeFragment () {
-        HomeFragment homeFragment = new HomeFragment();
+        boolean returnToBookTicket = getArguments() != null && getArguments().getBoolean("returnToBookTicket", false);
 
-        MainActivity mainActivity = (MainActivity) getActivity();
-        if (mainActivity != null) {
-            mainActivity.replaceFragment(homeFragment,true);
 
+        if (returnToBookTicket) {
+            MainActivity mainActivity = (MainActivity) getActivity();
+            if (mainActivity != null && mainActivity.getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                mainActivity.onBackPressed(); // Quay lại nếu có Fragment trong ngăn xếp
+            }
+        } else {
+            MainActivity mainActivity = (MainActivity) getActivity();
+            if (mainActivity != null) {
+                mainActivity.replaceFragment(new HomeFragment(), true);
+            }
         }
     }
 
