@@ -24,42 +24,43 @@ router.get('/:maPhim', async (req, res) => {
 
 
 
-router.post('/bookve', async (req, res) => {
-    const {  maKH, maVe, maSuat, tongTien } = req.body; // Lấy dữ liệu từ request body
 
+// API để chèn bản ghi vào bảng BookVe
+router.post('/bookve', async (req, res) => {
+    const { maKH, maVe, maSuat, tongTien } = req.body; // Lấy dữ liệu từ request body
+
+    // Kiểm tra xem có đủ thông tin không
     if (!maKH || !maVe || !maSuat || !tongTien) {
         return res.status(400).json({ error: 'Thiếu thông tin maKH, maVe, maSuat hoặc tongTien.' });
     }
 
     try {
-        let pool = await sql.connect(config);
- const result = await pool.request()
+        let pool = await sql.connect(config); // Kết nối đến cơ sở dữ liệu
+        const result = await pool.request()
             .input('maKH', sql.VarChar(20), maKH)
             .input('maVe', sql.VarChar(20), maVe)
             .input('maSuat', sql.VarChar(20), maSuat)
             .input('tongTien', sql.Decimal(18, 2), tongTien)
             .query(`
-                INSERT INTO [Cinema].[dbo].[BookVe] ([maKH], [maVe], [maSuat], [tongTien]) 
-                VALUES (@maKH, @maVe, @maSuat, @tongTien)
+                INSERT INTO [BookVe] ([maKH], [maVe], [maSuat], [tongTien]) 
+                VALUES (@maKH, @maVe, @maSuat, @tongTien);
 
-                SELECT SCOPE_IDENTITY() AS maBook;
+                SELECT SCOPE_IDENTITY() AS maBook; -- Lấy ID của bản ghi mới
             `);
 
-            
-        
-        // Lấy maBook từ kết quả truy vấn
-        const maBook = result.recordset[0].maBook;
+        const maBook = result.recordset[0].maBook; // Lấy maBook từ kết quả truy vấn
 
         res.status(200).json({
             message: 'Insert thành công!',
             maBook: maBook // Trả về maBook mới tạo
         });
 
-    } catch (error) {
-        console.error('Lỗi khi insert dữ liệu:', error);
-        res.status(500).send('Có lỗi xảy ra khi insert dữ liệu vào cơ sở dữ liệu.');
+    } catch (err) {
+        res.status(500).json({ error: 'Có lỗi xảy ra khi thực hiện insert.' });
+        console.error("Error: ", err);
     }
 });
+
 
 
 //insert ghe da dat

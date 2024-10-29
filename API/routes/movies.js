@@ -4,22 +4,49 @@ const axios = require('axios');
 const router = express.Router();
 const sql = require('mssql');
 const config = require('../config/dbConfig'); // Import cấu hình
+const axiosRetry = require('axios-retry');
 
+
+// Cấu hình retry và timeout cho axios để xử lý lỗi và gián đoạn kết nối
+axios.defaults.timeout = 5000; // Đặt timeout 5 giây cho mỗi yêu cầu
+axios.defaults.retry = 3;
+axios.defaults.retryDelay = 1000; // Thử lại sau 1 giây nếu gặp lỗi
+
+axios.interceptors.response.use(null, async (error) => {
+    const config = error.config;
+    if (!config || config._retry) return Promise.reject(error);
+
+    config._retry = true;
+    return axios(config);
+});
+
+// Hàm để lấy chi tiết của từng phim với retry và timeout
 const fetchMovieDetails = async (movies) => {
     const movieDetailsPromises = movies.map(async (movie) => {
         try {
-            const movieResponse = await axios.get(`http://localhost:3000/movies/phim/${movie.maPhim}`); // Gọi API lấy thông tin phim
-            return movieResponse.data; // Trả về thông tin chi tiết của phim
+            const movieResponse = await axios.get(`http://localhost:3000/movies/phim/${movie.maPhim}`);
+            return movieResponse.data;
         } catch (err) {
-            console.error(`Lỗi khi lấy thông tin phim ${movie.maPhim}:`, err);
-            return null; // Hoặc xử lý theo cách bạn muốn
+            console.error(`Lỗi khi lấy thông tin phim ${movie.maPhim}:`, err.message);
+            return null; // Trả về null nếu có lỗi
         }
     });
 
-    // Chờ tất cả các yêu cầu hoàn thành
     return await Promise.all(movieDetailsPromises);
 };
 
+const fetchMovieDetailsSequential = async (movies) => {
+    const movieDetails = [];
+    for (const movie of movies) {
+        try {
+            const movieResponse = await axios.get(`http://localhost:3000/movies/phim/${movie.maPhim}`);
+            movieDetails.push(movieResponse.data);
+        } catch (err) {
+            console.error(`Lỗi khi lấy thông tin phim ${movie.maPhim}:`, err.message);
+        }
+    }
+    return movieDetails;
+};
 // Route để lấy những phim đang chiếu
 router.get('/phimdangchieu', async (req, res) => {
     let pool;
@@ -32,7 +59,7 @@ router.get('/phimdangchieu', async (req, res) => {
         console.log(result.recordset);
 
         // Lấy thông tin chi tiết của các phim
-        const movieDetails = await fetchMovieDetails(result.recordset);
+        const movieDetails = await fetchMovieDetailsSequential(result.recordset);
 
         // Trả về danh sách thông tin chi tiết của các phim
         res.json(movieDetails.filter(movie => movie !== null));
@@ -81,7 +108,7 @@ router.get('/phim/:maPhim', async (req, res) => {
         let result = await pool.request()
             .input('maPhim', sql.NVarChar, maPhim)
             .query('SELECT * FROM Phim WHERE maPhim = @maPhim');
-
+           
         if (result.recordset.length > 0) {
             res.json(result.recordset[0]); // Trả về thông tin chi tiết của phim
         } else {
@@ -133,7 +160,7 @@ router.get('/get-schedule/:id', async (req, res) => {
         // Truy vấn để lấy ngày chiếu
         let result = await pool.request()
             .input('id', sql.NVarChar(50), phimId) // Truyền phimId vào hàm fXuatNgayChieu
-            .query('SELECT * FROM fXuatNgayChieu1(@id)'); // Gọi hàm SQL
+            .query('SELECT * FROM fXuatNgayChieu(@id)'); // Gọi hàm SQL
 
         console.log("result recordst" + result.recordset); // Ghi log kết quả nhận được
 
