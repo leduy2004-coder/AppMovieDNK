@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.example.appmoviednk.R;
@@ -35,51 +37,48 @@ public class MovieFragment extends Fragment {
 
     FragmentMovieBinding binding;
     ScheduleShowingAdapter scheduleShowingAdapter;
-    CardAdapter cardAdapter;
     ApiService apiService;
     MovieModel movie;
+
     @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentMovieBinding.inflate(inflater, container, false);
+        movie = new ViewModelProvider(requireActivity()).get(MovieModel.class);
 
+        // Khởi tạo apiService
+        apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
 
         scheduleShowingAdapter = new ScheduleShowingAdapter(requireContext());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), 1);
         binding.listSchedule.setLayoutManager(gridLayoutManager);
-
-
         binding.listSchedule.setAdapter(scheduleShowingAdapter);
 
-        if (getArguments() != null) {
-             movie = (MovieModel) getArguments().getSerializable("movie_object");
-
-            if (movie != null) {
-                // set text
-                setTextTitle();
-
-                apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
-                // Thay thế bằng ID phim thực tế
-                getSchedules(movie.getMaPhim());
-
-            }
-        }
-
-
-        // Click trailer
-        binding.frTrailer.setOnClickListener(v -> {
-            TrailerFragment trailerFragment = new TrailerFragment();
-
-            MainActivity mainActivity = (MainActivity) getActivity();
-            if (mainActivity != null) {
-                mainActivity.replaceFragment(trailerFragment,true);
-
+        movie.getSelectedMovie().observe(getViewLifecycleOwner(), new Observer<MovieModel>() {
+            @Override
+            public void onChanged(MovieModel selectedMovie) {
+                if (selectedMovie != null) {
+//                    setTextTitle(selectedMovie);
+                    getSchedules(selectedMovie.getMaPhim().toString().trim());
+                    Log.d("23232323", selectedMovie.getMaPhim());
+                } else {
+                    Log.e("MovieFragment", "Nhận được MovieModel null");
+                }
             }
         });
+
+        // Nhấn vào trailer
+        binding.frTrailer.setOnClickListener(v -> {
+            TrailerFragment trailerFragment = new TrailerFragment();
+            MainActivity mainActivity = (MainActivity) getActivity();
+            if (mainActivity != null) {
+                mainActivity.replaceFragment(trailerFragment, true);
+            }
+        });
+
         return binding.getRoot();
     }
-
 
     private void getSchedules(String phimId) {
         apiService.getSchedules(phimId).enqueue(new Callback<List<ScheduleModel>>() {
@@ -87,12 +86,14 @@ public class MovieFragment extends Fragment {
             public void onResponse(Call<List<ScheduleModel>> call, Response<List<ScheduleModel>> response) {
                 if (response.isSuccessful()) {
                     List<ScheduleModel> schedules = response.body();
-                    Log.d("thong tin", schedules.toString());
+                    // Kiểm tra schedules có khác null không trước khi ghi log
                     if (schedules != null) {
+                        Log.d("thong tin", schedules.toString());
                         for (ScheduleModel schedule : schedules) {
                             schedule.setMaPhim(phimId); // Thiết lập maPhim cho từng đối tượng
+                            Log.d("yonh yin 2", schedule.getMaPhim());
                         }
-                        // Gọi phương thức setData để cập nhật RecyclerView
+//                        // Gọi phương thức setData để cập nhật RecyclerView
                         scheduleShowingAdapter.setData(schedules);
                     } else {
                         Log.d("Error", "Response body is null");
@@ -109,15 +110,13 @@ public class MovieFragment extends Fragment {
         });
     }
 
-    private void setTextTitle(){
-        binding.tvName.setText(movie.getTenPhim().toString());
-        binding.tvType.setText("Thể loại: ");
-        binding.tvDescription.setText(movie.getMoTa().toString());
+    private void setTextTitle(MovieModel movie) {
+        binding.tvName.setText(movie.getTenPhim());
+        binding.tvType.setText("Thể loại: " );
+        binding.tvDescription.setText(movie.getMoTa());
         binding.tvDirector.setText(movie.getDaoDien());
-        binding.tvDate.setText(movie.getNgayKhoiChieu().toString());
+//        binding.tvDate.setText(movie.getNgayKhoiChieu());
         binding.tvDuration.setText(String.valueOf(movie.getThoiLuong()));
-
     }
-
 }
 

@@ -1,14 +1,30 @@
 package com.example.appmoviednk.model;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
 import java.sql.Time;
 
-public class ShiftModel implements DisplayTextSpinner {
+public class ShiftModel extends ViewModel implements DisplayTextSpinner {
     private String maCa; // Mã ca
     private String tenCa; // Tên ca
     private String thoiGianBatDau; // Thời gian bắt đầu ca
     private int status; // Trạng thái ca
     private String maSuat;
 
+    private final MutableLiveData<ShiftModel> selectedShift = new MutableLiveData<>();
+
+    public void setSelectedShift(ShiftModel movie) {
+        selectedShift.setValue(movie);
+    }
+
+    public LiveData<ShiftModel> getSelectedShift() {
+        return selectedShift;
+    }
+
+    public ShiftModel() {
+    }
 
     public ShiftModel(String maCa, String tenCa, String thoiGianBatDau, int status, String maSuat) {
         this.maCa = maCa;

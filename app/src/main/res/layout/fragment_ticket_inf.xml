@@ -16,7 +16,7 @@
             android:id="@+id/inf_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tên phim"
+            android:text="Đại chiến thiên hà"
             android:textColor="@color/black"
             android:textSize="25sp"
             android:textStyle="bold" />
@@ -25,7 +25,7 @@
             android:id="@+id/inf_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Thể loại"
+            android:text="Khoa học viễn tưởng"
             android:textColor="@color/black"
             android:textSize="20sp" />
 
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:layout_marginStart="25dp"
-                android:text="Tên"
+                android:text="Jacky LaySion"
                 android:textColor="@color/black" />
         </LinearLayout>
 
@@ -78,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:textSize="16sp"
-                android:text="Tên"
+                android:text="15/10/2024"
                 android:textColor="@color/black" />
         </LinearLayout>
 
@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="13dp"
                 android:textSize="16sp"
-                android:text="Tên"
+                android:text="180"
                 android:textColor="@color/black" />
         </LinearLayout>
 

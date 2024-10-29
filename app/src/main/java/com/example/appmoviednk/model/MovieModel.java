@@ -1,10 +1,14 @@
 package com.example.appmoviednk.model;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
 import java.io.Serializable;
 import java.sql.Blob;
 import java.util.Date;
 
-public class MovieModel implements DisplayTextSpinner, Serializable {
+public class MovieModel extends ViewModel implements DisplayTextSpinner, Serializable {
     private String maPhim;
     private String tenPhim;
     private String daoDien;
@@ -23,6 +27,15 @@ public class MovieModel implements DisplayTextSpinner, Serializable {
 
     public MovieModel() {
 
+    }
+    private final MutableLiveData<MovieModel> selectedMovie = new MutableLiveData<>();
+
+    public void setSelectedMovie(MovieModel movie) {
+        selectedMovie.setValue(movie);
+    }
+
+    public LiveData<MovieModel> getSelectedMovie() {
+        return selectedMovie;
     }
 
     public byte[] getImg() {

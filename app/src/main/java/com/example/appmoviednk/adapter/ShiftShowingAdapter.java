@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appmoviednk.activity.MainActivity;
@@ -23,6 +24,8 @@ public class ShiftShowingAdapter extends RecyclerView.Adapter<ShiftShowingAdapte
     private List<ShiftModel> shiftList;
     private Context mContext;
     private String maPhim;
+    private ShiftModel shiftModel; // Khai báo ViewModel
+
     @SuppressLint("NotifyDataSetChanged")
     public void setData(List<ShiftModel> shiftList) {
         this.shiftList = shiftList;
@@ -40,6 +43,7 @@ public class ShiftShowingAdapter extends RecyclerView.Adapter<ShiftShowingAdapte
     public ShiftShowingAdapter(Context mContext, String maPhim) {
         this.mContext = mContext;
         this.maPhim = maPhim; // Lưu maPhim
+        this.shiftModel = new ViewModelProvider((MainActivity) mContext).get(ShiftModel.class);
     }
 
     @Override
@@ -53,13 +57,12 @@ public class ShiftShowingAdapter extends RecyclerView.Adapter<ShiftShowingAdapte
 
         // Click button
         holder.itemShiftShowingMovieBinding.btnShift.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            bundle.putString("maSuat", shift.getMaSuat());
-            bundle.putString("maPhim", maPhim);
+
+            shiftModel.setSelectedShift(shift);
             if (mContext instanceof MainActivity) {
                 MainActivity mainActivity = (MainActivity) mContext;
                 BookTicketFragment bookTicketFragment = new BookTicketFragment();
-                bookTicketFragment.setArguments(bundle);
+
                 mainActivity.replaceFragment(bookTicketFragment,true);
             }
         });
