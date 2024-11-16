@@ -20,15 +20,18 @@
             android:layout_height="130dp"
             android:src="@drawable/img_phim1"
             android:scaleType="fitXY"/>
-        
+
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:padding="16dp"
-            android:text="@string/app_name"/>
+            android:padding="13dp"
+            android:text="@string/app_name"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:lines="2" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

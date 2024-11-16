@@ -42,7 +42,7 @@ public class RegisterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding= FragmentRegisterBinding.inflate(inflater, container, false);
+        binding = FragmentRegisterBinding.inflate(inflater, container, false);
 
         binding.linkLogin.setOnClickListener(v -> {
             LoginFragment loginFragment = new LoginFragment();
@@ -50,7 +50,7 @@ public class RegisterFragment extends Fragment {
             // Lấy MainActivity từ Fragment
             MainActivity mainActivity = (MainActivity) getActivity();
             if (mainActivity != null) {
-                mainActivity.replaceFragment(loginFragment ,true); // Gọi phương thức replaceFragment
+                mainActivity.replaceFragment(loginFragment, true); // Gọi phương thức replaceFragment
             }
         });
 
@@ -60,8 +60,17 @@ public class RegisterFragment extends Fragment {
         binding.btnRegister.btnPrimary.setText(getString(R.string.register));
         binding.btnRegister.btnPrimary.setOnClickListener(view -> {
             String email = binding.regisEmail.getText().toString();
-            sendVerificationCode(email);
-            showVerificationDialog(); // Hiện hộp thoại xác nhận
+            String name = binding.regisPhone.getText().toString();
+            String phone = binding.regisHoten.getText().toString();
+            String account = binding.regisAccoutName.getText().toString();
+            String pass = binding.regisPass.getText().toString();
+            if (!email.isEmpty() && !name.isEmpty() && !phone.isEmpty() && !account.isEmpty() && !pass.isEmpty()) {
+                sendVerificationCode(email); // Gửi mã xác minh qua email
+                showVerificationDialog();   // Hiện hộp thoại xác nhận
+            } else {
+                Toast.makeText(getContext(), "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+            }
+
         });
 
 
@@ -120,7 +129,7 @@ public class RegisterFragment extends Fragment {
         dialog.show(); // Hiện hộp thoại
     }
 
-    private void verifyCode(String email, String verificationCode,  AlertDialog dialog) {
+    private void verifyCode(String email, String verificationCode, AlertDialog dialog) {
         // Tạo một đối tượng HashMap để gửi dữ liệu
         HashMap<String, String> codeMap = new HashMap<>();
         codeMap.put("email", email);
@@ -150,13 +159,13 @@ public class RegisterFragment extends Fragment {
         });
     }
 
-    private void dataRegister (){
+    private void dataRegister() {
         String hoTen = binding.regisHoten.getText().toString(); // Sửa ở đây
         String email = binding.regisEmail.getText().toString(); // Sửa ở đây
         String tenTK = binding.regisAccoutName.getText().toString(); // Sửa ở đây
         String matKhau = binding.regisPass.getText().toString(); // Sửa ở đây
         String sdt = binding.regisPhone.getText().toString();
-        customerModel = new CustomerModel(email,hoTen,tenTK,matKhau,sdt);
+        customerModel = new CustomerModel(email, hoTen, tenTK, matKhau, sdt);
     }
 
     private void register() {
@@ -186,12 +195,12 @@ public class RegisterFragment extends Fragment {
     }
 
 
-    private void changeFragment () {
-        HomeFragment homeFragment = new HomeFragment();
+    private void changeFragment() {
+        LoginFragment loginFragment = new LoginFragment();
 
         MainActivity mainActivity = (MainActivity) getActivity();
         if (mainActivity != null) {
-            mainActivity.replaceFragment(homeFragment,true);
+            mainActivity.replaceFragment(loginFragment, true);
 
         }
     }

@@ -1,13 +1,17 @@
 package com.example.appmoviednk.activity;
 
+import static java.security.AccessController.getContext;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.appmoviednk.R;
+import com.example.appmoviednk.UserSession;
 import com.example.appmoviednk.adapter.CardAdapter;
 import com.example.appmoviednk.adapter.ViewPagerAdapter;
 import com.example.appmoviednk.databinding.ActivityMainBinding;
@@ -156,34 +161,75 @@ public class MainActivity extends AppCompatActivity  {
 
     private void showAccountPopup(View anchorView) {
         // Inflate layout từ file XML
-        View popupView = getLayoutInflater().inflate(R.layout.login_regis, null);
+        View popupView;
+        if(UserSession.getInstance().getLoggedInAccount() == null){
+            popupView = getLayoutInflater().inflate(R.layout.login_regis, null);
+            // Tạo PopupWindow
+            popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
 
-        // Tạo PopupWindow
-        popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
+            // Hiển thị PopupWindow
+            popupWindow.showAsDropDown(anchorView, 0, 60);
 
-        // Hiển thị PopupWindow
-        popupWindow.showAsDropDown(anchorView, 0, 60);
+            // Lấy button từ layout của button_primary
+            Button loginButton = popupView.findViewById(R.id.login).findViewById(R.id.btn_primary);
+            Button registerButton = popupView.findViewById(R.id.register).findViewById(R.id.btn_primary);
 
-        // Lấy button từ layout của button_primary
-        Button loginButton = popupView.findViewById(R.id.login).findViewById(R.id.btn_primary);
-        Button registerButton = popupView.findViewById(R.id.register).findViewById(R.id.btn_primary);
+            loginButton.setText("Đăng nhập");
 
-        loginButton.setText("Đăng nhập");
-        loginButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        // Gán sự kiện click cho nút Login
-        loginButton.setOnClickListener(view -> {
-            replaceFragment(new LoginFragment(), true);
-            popupWindow.dismiss();
-        });
+            loginButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            // Gán sự kiện click cho nút Login
+            loginButton.setOnClickListener(view -> {
+                replaceFragment(new LoginFragment(), true);
+                popupWindow.dismiss();
+            });
 
-        registerButton.setText("Đăng ký");
-        registerButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        // Gán sự kiện click cho nút Register
-        registerButton.setOnClickListener(view -> {
-            replaceFragment(new RegisterFragment(),true);
-            popupWindow.dismiss();
-        });
+            registerButton.setText("Đăng ký");
+            registerButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            // Gán sự kiện click cho nút Register
+            registerButton.setOnClickListener(view -> {
+                replaceFragment(new RegisterFragment(),true);
+                popupWindow.dismiss();
+            });
+            int widthInPx = (int) (150 * getResources().getDisplayMetrics().density);
 
+            // Lấy LayoutParams cho các nút
+            ViewGroup.LayoutParams paramsLogin = loginButton.getLayoutParams();
+            ViewGroup.LayoutParams paramsRegister = registerButton.getLayoutParams();
+
+            // Gắn chiều dài 50dp cho cả hai nút
+            paramsLogin.width = widthInPx;
+            paramsRegister.width = widthInPx;
+
+            loginButton.setLayoutParams(paramsLogin);
+            registerButton.setLayoutParams(paramsRegister);
+
+        }else {
+             popupView = getLayoutInflater().inflate(R.layout.logout, null);
+            // Tạo PopupWindow
+            popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
+
+            // Hiển thị PopupWindow
+            popupWindow.showAsDropDown(anchorView, 0, 60);
+            Button logoutButton = popupView.findViewById(R.id.logout).findViewById(R.id.btn_primary);
+
+            logoutButton.setText("Đăng xuất");
+
+            logoutButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            // Gán sự kiện click cho nút Login
+            logoutButton.setOnClickListener(view -> {
+                UserSession.getInstance().clearSession();
+                replaceFragment(new LoginFragment(), true);
+                popupWindow.dismiss();
+                Toast.makeText(this, "Đăng xuất thành công", Toast.LENGTH_SHORT).show();
+            });
+            int widthInPx = (int) (150 * getResources().getDisplayMetrics().density);
+
+            // Lấy LayoutParams cho các nút
+            ViewGroup.LayoutParams paramsLogin = logoutButton.getLayoutParams();
+            paramsLogin.width = widthInPx;
+
+            logoutButton.setLayoutParams(paramsLogin);
+        }
 
     }
 

@@ -63,7 +63,6 @@ public class LoginFragment extends Fragment {
             MainActivity mainActivity = (MainActivity) getActivity();
             if (mainActivity != null) {
                 mainActivity.replaceFragment(registerFragment,true); // Gọi phương thức replaceFragment
-
             }
         });
         loginService = RetrofitClient.getRetrofitInstance().create(LoginService.class);
@@ -139,7 +138,6 @@ public class LoginFragment extends Fragment {
                     }
                 }
             }
-
 
             @Override
             public void onFailure(Call<CustomerModel> call, Throwable t) {

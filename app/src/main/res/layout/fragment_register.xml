@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.RegisterFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -15,20 +15,18 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:gravity="center"
-            >
+            android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="6dp"
-                android:layout_marginTop="60dp"
-                android:layout_marginBottom="60dp"
-                android:layout_marginRight="24dp"
                 android:layout_marginLeft="24dp"
-                >
+                android:layout_marginTop="60dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginBottom="60dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="6dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -86,8 +84,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginTop="20dp">
+                        android:layout_marginTop="20dp"
+                        android:orientation="vertical">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -99,15 +97,19 @@
                                 android:layout_height="wrap_content"
                                 android:text="Họ tên"
                                 android:textColor="@color/black"
-                                android:textSize="18sp"></TextView>
+                                android:textSize="18sp">
+
+                            </TextView>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="8sp"
+                                android:layout_marginLeft="8dp"
                                 android:text="(*)"
                                 android:textColor="@color/colorPrimary"
-                                android:textSize="18sp"></TextView>
+                                android:textSize="18sp">
+
+                            </TextView>
                         </LinearLayout>
 
                         <EditText
@@ -127,17 +129,21 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Emai;"
+                                android:text="Email"
                                 android:textColor="@color/black"
-                                android:textSize="18sp"></TextView>
+                                android:textSize="18sp">
+
+                            </TextView>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="8sp"
+                                android:layout_marginLeft="8dp"
                                 android:text="(*)"
                                 android:textColor="@color/colorPrimary"
-                                android:textSize="18sp"></TextView>
+                                android:textSize="18sp">
+
+                            </TextView>
                         </LinearLayout>
 
                         <EditText
@@ -148,6 +154,7 @@
                             android:background="@drawable/bg_edittext"
                             android:hint="Nhập"
                             android:padding="10dp" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -158,15 +165,19 @@
                                 android:layout_height="wrap_content"
                                 android:text="Số điện thoại"
                                 android:textColor="@color/black"
-                                android:textSize="18sp"></TextView>
+                                android:textSize="18sp">
+
+                            </TextView>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="8sp"
+                                android:layout_marginLeft="8dp"
                                 android:text="(*)"
                                 android:textColor="@color/colorPrimary"
-                                android:textSize="18sp"></TextView>
+                                android:textSize="18sp">
+
+                            </TextView>
                         </LinearLayout>
 
                         <EditText
@@ -189,15 +200,19 @@
                                 android:layout_height="wrap_content"
                                 android:text="Tên tài khoản"
                                 android:textColor="@color/black"
-                                android:textSize="18sp"></TextView>
+                                android:textSize="18sp">
+
+                            </TextView>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="8sp"
+                                android:layout_marginLeft="8dp"
                                 android:text="(*)"
                                 android:textColor="@color/colorPrimary"
-                                android:textSize="18sp"></TextView>
+                                android:textSize="18sp">
+
+                            </TextView>
                         </LinearLayout>
 
                         <EditText
@@ -217,17 +232,21 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Nhập lại mật khẩu"
+                                android:text="Nhập mật khẩu"
                                 android:textColor="@color/black"
-                                android:textSize="18sp"></TextView>
+                                android:textSize="18sp">
+
+                            </TextView>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="8sp"
+                                android:layout_marginLeft="8dp"
                                 android:text="(*)"
                                 android:textColor="@color/colorPrimary"
-                                android:textSize="18sp"></TextView>
+                                android:textSize="18sp">
+
+                            </TextView>
                         </LinearLayout>
 
                         <EditText
@@ -245,16 +264,15 @@
 
 
                     <include
-                        layout="@layout/button_primary"
                         android:id="@+id/btn_register"
-                        />
+                        layout="@layout/button_primary" />
 
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 
 
-            <include layout="@layout/footer"/>
+            <include layout="@layout/footer" />
             <!-- Và thêm các nội dung khác ở đây -->
 
         </LinearLayout>

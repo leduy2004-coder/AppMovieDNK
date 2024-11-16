@@ -10,7 +10,12 @@ public class CustomerModel {
     private String email;
     private String maDangKi;
 	private Date time;
-	private int statusAuthen;
+    private boolean tinhTrang;
+    private String tenTK;
+    private String matKhau;
+
+    public CustomerModel() {
+    }
 
     public CustomerModel(String tenTK, String matKhau) {
         this.tenTK = tenTK;
@@ -41,13 +46,6 @@ public class CustomerModel {
 		this.time = time;
 	}
 
-	public int getStatusAuthen() {
-		return statusAuthen;
-	}
-
-	public void setStatusAuthen(int statusAuthen) {
-		this.statusAuthen = statusAuthen;
-	}
 
 	public boolean isTinhTrang() {
         return tinhTrang;
@@ -55,13 +53,6 @@ public class CustomerModel {
 
     public void setTinhTrang(boolean tinhTrang) {
         this.tinhTrang = tinhTrang;
-    }
-
-    private boolean tinhTrang;
-    private String tenTK;
-    private String matKhau;
-
-    public CustomerModel() {
     }
 
     public String getMaKH() {
