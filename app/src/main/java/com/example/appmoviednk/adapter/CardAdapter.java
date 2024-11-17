@@ -14,7 +14,7 @@ import com.example.appmoviednk.activity.MainActivity;
 import com.example.appmoviednk.databinding.CardMovieHomeBinding;
 import com.example.appmoviednk.fragment.MovieFragment;
 import com.example.appmoviednk.model.MovieModel;
-import com.example.appmoviednk.service.ApiService;
+import com.example.appmoviednk.service.MovieService;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     private Context mContext;
     private OnItemClickListener onItemClickListener;
     private MovieModel movieModel;
-    ApiService apiService;
+    MovieService apiService;
     // Interface để lắng nghe sự kiện click item
     public interface OnItemClickListener {
         void onItemClick(MovieModel movie);

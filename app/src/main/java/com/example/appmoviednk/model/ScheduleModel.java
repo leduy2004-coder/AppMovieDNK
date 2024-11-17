@@ -109,6 +109,6 @@ public class ScheduleModel implements DisplayTextSpinner{
 
     @Override
     public String getDisplayText() {
-        return this.ngayChieu.toString();
+        return this.dateString;
     }
 }

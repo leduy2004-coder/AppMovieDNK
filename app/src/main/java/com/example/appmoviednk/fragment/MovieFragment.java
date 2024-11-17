@@ -13,21 +13,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.example.appmoviednk.DateUtils;
-import com.example.appmoviednk.R;
 import com.example.appmoviednk.activity.MainActivity;
-import com.example.appmoviednk.adapter.CardAdapter;
 import com.example.appmoviednk.adapter.ScheduleShowingAdapter;
 import com.example.appmoviednk.databinding.FragmentMovieBinding;
-import com.example.appmoviednk.model.DateShowingModel;
 import com.example.appmoviednk.model.MovieModel;
 import com.example.appmoviednk.model.ScheduleModel;
-import com.example.appmoviednk.model.ShiftModel;
 import com.example.appmoviednk.retrofit.RetrofitClient;
-import com.example.appmoviednk.service.ApiService;
+import com.example.appmoviednk.service.MovieService;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -38,7 +31,7 @@ public class MovieFragment extends Fragment {
 
     FragmentMovieBinding binding;
     ScheduleShowingAdapter scheduleShowingAdapter;
-    ApiService apiService;
+    MovieService apiService;
     MovieModel movie;
 
     @SuppressLint("SetTextI18n")
@@ -49,7 +42,7 @@ public class MovieFragment extends Fragment {
         movie = new ViewModelProvider(requireActivity()).get(MovieModel.class);
 
         // Khởi tạo apiService
-        apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+        apiService = RetrofitClient.getRetrofitInstance().create(MovieService.class);
 
         scheduleShowingAdapter = new ScheduleShowingAdapter(requireContext());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), 1);

@@ -33,7 +33,10 @@ public class ShiftModel extends ViewModel implements DisplayTextSpinner {
         this.status = status;
         this.maSuat = maSuat;
     }
-
+    public ShiftModel(String maCa,String thoiGianBatDau) {
+        this.maCa = maCa;
+        this.thoiGianBatDau = thoiGianBatDau;
+    }
 
 
     public String getMaCa() {

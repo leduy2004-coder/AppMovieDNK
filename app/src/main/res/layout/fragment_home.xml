@@ -51,12 +51,7 @@
                         android:layout_margin="10dp"
                         android:background="@android:color/transparent" />
 
-                    <Spinner
-                        android:id="@+id/spn_shift"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:background="@android:color/transparent" />
+
 
                 </LinearLayout>
 
@@ -80,8 +75,7 @@
                     <androidx.viewpager2.widget.ViewPager2
                         android:id="@+id/view_pager"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal" />
                 </LinearLayout>
 

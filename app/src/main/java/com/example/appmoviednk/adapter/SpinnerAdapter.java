@@ -1,6 +1,7 @@
 package com.example.appmoviednk.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,15 +26,25 @@ public class SpinnerAdapter<T extends DisplayTextSpinner> extends ArrayAdapter<T
         TextView textView;
     }
     public void addDefaultItem(String defaultDisplayText) {
-        DisplayTextSpinner defaultItem = new DisplayTextSpinner() {
-            @Override
-            public String getDisplayText() {
-                return defaultDisplayText;
+        boolean hasDefault = false;
+        for (int i = 0; i < getCount(); i++) {
+            T item = getItem(i);
+            if (item != null && defaultDisplayText.equals(item.getDisplayText())) {
+                hasDefault = true;
+                break;
             }
-        };
-        // Thêm vào đầu danh sách
-        insert((T) defaultItem, 0);
+        }
+        if (!hasDefault) {
+            DisplayTextSpinner defaultItem = new DisplayTextSpinner() {
+                @Override
+                public String getDisplayText() {
+                    return defaultDisplayText;
+                }
+            };
+            insert((T) defaultItem, 0); // Thêm mục mặc định vào vị trí đầu tiên
+        }
     }
+
 
 
     @NonNull
@@ -50,6 +61,7 @@ public class SpinnerAdapter<T extends DisplayTextSpinner> extends ArrayAdapter<T
         }
 
         T item = getItem(position);
+        Log.d("SpinnerAdapter", "Vị trí: " + position + ", Mục: " + (item != null ? item.getDisplayText() : "null"));
         if (item != null) {
             holder.textView.setText(item.getDisplayText());
         }

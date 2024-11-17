@@ -4,62 +4,68 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.appmoviednk.DateUtils;
 import com.example.appmoviednk.R;
 import com.example.appmoviednk.activity.MainActivity;
 import com.example.appmoviednk.adapter.SlideAdapter;
 import com.example.appmoviednk.adapter.SpinnerAdapter;
 import com.example.appmoviednk.adapter.TagViewMovieAdapter;
-import com.example.appmoviednk.databinding.CardMovieHomeBinding;
 import com.example.appmoviednk.databinding.FragmentHomeBinding;
+
+import com.example.appmoviednk.model.DisplayTextSpinner;
 import com.example.appmoviednk.model.MovieModel;
 import com.example.appmoviednk.model.ScheduleModel;
 import com.example.appmoviednk.model.ShiftModel;
+import com.example.appmoviednk.retrofit.RetrofitClient;
+import com.example.appmoviednk.service.MovieService;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeFragment extends Fragment {
     FragmentHomeBinding binding;
     private SpinnerAdapter<MovieModel> movieAdapter;
     private SpinnerAdapter<ScheduleModel> scheduleAdapter;
     private SpinnerAdapter<ShiftModel> shiftAdapter;
-
+    private MovieModel selectedMovie;
+    private String selectedDate;
     private TagViewMovieAdapter tagViewAdapter;
     private SlideAdapter slideAdapter;
+    // Biến cờ để kiểm soát lần đầu spinner được chọn
+    private boolean isMovieSpinnerInitialized = false;
+    private boolean isDateSpinnerInitialized = false;
     // auto slide
     private Handler slideHandle = new Handler();
+    MovieService apiService;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+        apiService = RetrofitClient.getRetrofitInstance().create(MovieService.class);
 
-        movieAdapter = new SpinnerAdapter<>(requireContext(), R.layout.spinner_selected_home, getListMovie());
-        movieAdapter.addDefaultItem("Chọn phim");
-        scheduleAdapter = new SpinnerAdapter<>(requireContext(), R.layout.spinner_selected_home, getListSchedule());
-        scheduleAdapter.addDefaultItem("Chọn ngày");
-//        shiftAdapter = new SpinnerAdapter<>(requireContext(), R.layout.spinner_selected_home, getListShift());
-//        shiftAdapter.addDefaultItem("Chọn ca");
-
-        binding.spnMovie.setAdapter(movieAdapter);
-        binding.spnDate.setAdapter(scheduleAdapter);
-        binding.spnShift.setAdapter(shiftAdapter);
-
+        getMoviesFromApi();
+        getDateShowingFromApi();
         // Khởi tạo TabLayout và ViewPager2
         tagViewAdapter = new TagViewMovieAdapter(requireActivity(), 2);
         binding.viewPager.setAdapter(tagViewAdapter);
@@ -108,24 +114,82 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        binding.spnMovie.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!isMovieSpinnerInitialized) {
+                    isMovieSpinnerInitialized = true;
+                    return;
+                }
+                DisplayTextSpinner selectedItem = (DisplayTextSpinner) parent.getItemAtPosition(position);
+                if (selectedItem != null) {
+                    String displayText = selectedItem.getDisplayText();
+                    if (displayText.equals("Chọn phim")) {
+                        Log.d("Spinner", "Mục mặc định được chọn.");
+//                        getDateShowingFromApi();
+                    } else if (selectedItem instanceof MovieModel) {
+                        MovieModel movie = ((MovieModel) selectedItem);
+                        // Gọi API lấy danh sách ngày chiếu theo mã phim
+                        getDateShowingFromApi(movie.getMaPhim());
+
+                        // Lưu mã phim vào biến toàn cục hoặc SharedPreferences để kiểm tra ở spinner tiếp theo
+                        selectedMovie = movie;
+
+                        // Kiểm tra xem cả hai Spinner đều được chọn chưa
+                        checkSelectionAndNavigate();
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Không làm gì nếu không có mục nào được chọn
+            }
+        });
+        binding.spnDate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (!isDateSpinnerInitialized) {
+                    isDateSpinnerInitialized = true;
+                    return;
+                }
+                DisplayTextSpinner selectedItem = (DisplayTextSpinner) parent.getItemAtPosition(position);
+                if (selectedItem != null) {
+                    String displayText = selectedItem.getDisplayText();
+                    if (displayText.equals("Chọn ngày")) {
+                        Log.d("Spinner", "Mục mặc định được chọn.");
+//                        getMoviesFromApi();
+                    } else if (selectedItem instanceof ScheduleModel) {
+                        String date = ((ScheduleModel) selectedItem).getNgayChieu();
+                        Log.d("Spinner", "Đã chọn: " + displayText + ", Ngày: " + date);
+                        // Gọi API lấy danh sách phim chiếu theo ngày
+                        getMoviesFromApi(date);
+
+                        // Lưu ngày đã chọn vào biến toàn cục hoặc SharedPreferences để kiểm tra ở spinner tiếp theo
+                        selectedDate = date;
+
+                        // Kiểm tra xem cả hai Spinner đều được chọn chưa
+                        checkSelectionAndNavigate();
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Không làm gì nếu không có mục nào được chọn
+            }
+        });
+
         return binding.getRoot();
     }
 
     private List<MovieModel> getListMovie() {
         List<MovieModel> list = new ArrayList<>();
-
         list.add(new MovieModel("p1", "Chua bao gio", R.drawable.img_phim1));
         list.add(new MovieModel("p2", "hay la la ", R.drawable.img_phim2));
         list.add(new MovieModel("p3", "toi la ai ", R.drawable.img_phim3));
-
-        return list;
-    }
-
-    private List<ScheduleModel> getListSchedule() {
-        List<ScheduleModel> list = new ArrayList<>();
-
-        list.add(new ScheduleModel("sc1", "2004-10-02"));
-        list.add(new ScheduleModel("sc2","2001-12-02"));
 
         return list;
     }
@@ -162,5 +226,144 @@ public class HomeFragment extends Fragment {
         slideHandle.removeCallbacks(slideRunnable);
         binding = null;
     }
+
+    private void getMoviesFromApi() {
+        apiService.getMoviesDangChieu().enqueue(new Callback<List<MovieModel>>() {
+            @Override
+            public void onResponse(Call<List<MovieModel>> call, Response<List<MovieModel>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<MovieModel> list = response.body();
+
+                    movieAdapter = new SpinnerAdapter<>(requireContext(), R.layout.spinner_selected_home, new ArrayList<>());
+
+                    movieAdapter.clear();
+                    movieAdapter.addDefaultItem("Chọn phim");
+                    movieAdapter.addAll(list);
+
+                    movieAdapter.notifyDataSetChanged();
+                    binding.spnMovie.setAdapter(movieAdapter);
+
+
+                    Log.d("API_SUCCESS", "Danh sách phim đã được cập nhật");
+                } else {
+                    Log.e("API_ERROR", "Không lấy được danh sách phim: " + response.errorBody());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<MovieModel>> call, Throwable t) {
+                Log.e("API_ERROR", "Lỗi khi gọi API: " + t.getMessage(), t);
+            }
+        });
+    }
+
+    private void getDateShowingFromApi() {
+        apiService.getNgayDangChieu().enqueue(new Callback<List<ScheduleModel>>() {
+            @Override
+            public void onResponse(Call<List<ScheduleModel>> call, Response<List<ScheduleModel>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<ScheduleModel> list = response.body();
+                    // Chuyển đổi định dạng ngày
+                    for (ScheduleModel schedule : list) {
+                        String originalDate = schedule.getNgayChieu();
+                        String formattedDate = DateUtils.formatDateString(originalDate);
+                        schedule.setDateString(formattedDate);
+                    }
+                    scheduleAdapter = new SpinnerAdapter<>(requireContext(), R.layout.spinner_selected_home, new ArrayList<>());
+
+                    scheduleAdapter.clear();
+                    scheduleAdapter.addDefaultItem("Chọn ngày");
+                    scheduleAdapter.addAll(list);
+                    scheduleAdapter.notifyDataSetChanged();
+
+                    binding.spnDate.setAdapter(scheduleAdapter);
+                    Log.d("API_SUCCESS", "Danh sách ngày đã được cập nhật");
+                } else {
+                    Log.e("API_ERROR", "Không lấy được danh sách phim: " + response.errorBody());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ScheduleModel>> call, Throwable t) {
+                Log.e("API_ERROR", "Lỗi khi gọi API: " + t.getMessage(), t);
+            }
+        });
+    }
+    //Gọi API lấy danh sách ngày theo phim
+    private void getDateShowingFromApi(String movieCode) {
+        apiService.getDateSchedules(movieCode).enqueue(new Callback<List<ScheduleModel>>() {
+            @Override
+            public void onResponse(Call<List<ScheduleModel>> call, Response<List<ScheduleModel>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<ScheduleModel> list = response.body();
+                    for (ScheduleModel schedule : list) {
+                        String originalDate = schedule.getNgayChieu();
+                        String formattedDate = DateUtils.formatDateString(originalDate);
+                        schedule.setDateString(formattedDate);
+                    }
+                    // Cập nhật Spinner với danh sách ngày
+                    scheduleAdapter = new SpinnerAdapter<>(requireContext(), R.layout.spinner_selected_home, new ArrayList<>());
+                    scheduleAdapter.clear();
+                    scheduleAdapter.addDefaultItem("Chọn ngày");
+                    scheduleAdapter.addAll(list);
+                    scheduleAdapter.notifyDataSetChanged();
+                    binding.spnDate.setAdapter(scheduleAdapter);
+
+                    Log.d("API_SUCCESS", "Danh sách ngày đã được cập nhật");
+                } else {
+                    Log.e("API_ERROR", "Không lấy được danh sách ngày: " + response.errorBody());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ScheduleModel>> call, Throwable t) {
+                Log.e("API_ERROR", "Lỗi khi gọi API: " + t.getMessage(), t);
+            }
+        });
+    }
+    //Gọi API lấy danh sách phim chiếu theo ngày
+    private void getMoviesFromApi(String date) {
+        apiService.getMoviesByDate(date).enqueue(new Callback<List<MovieModel>>() {
+            @Override
+            public void onResponse(Call<List<MovieModel>> call, Response<List<MovieModel>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<MovieModel> list = response.body();
+
+                    // Cập nhật Spinner với danh sách phim
+                    movieAdapter = new SpinnerAdapter<>(requireContext(), R.layout.spinner_selected_home, new ArrayList<>());
+                    movieAdapter.clear();
+                    movieAdapter.addDefaultItem("Chọn phim");
+                    movieAdapter.addAll(list);
+                    movieAdapter.notifyDataSetChanged();
+                    binding.spnMovie.setAdapter(movieAdapter);
+
+                    Log.d("API_SUCCESS", "Danh sách phim đã được cập nhật");
+                } else {
+                    Log.e("API_ERROR", "Không lấy được danh sách phim: " + response.errorBody());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<MovieModel>> call, Throwable t) {
+                Log.e("API_ERROR", "Lỗi khi gọi API: " + t.getMessage(), t);
+            }
+        });
+    }
+
+    private void checkSelectionAndNavigate() {
+        // Kiểm tra nếu cả mã phim và ngày đều đã được chọn
+        if (selectedMovie != null && !selectedMovie.getMaPhim().isEmpty() && selectedDate != null && !selectedDate.isEmpty()) {
+            // Cả hai đã được chọn, chuyển hướng đến Activity khác
+            MainActivity mainActivity = (MainActivity) getActivity(); // Assuming mContext is MainActivity
+            assert mainActivity != null;
+            MovieModel movieModel = new ViewModelProvider(mainActivity).get(MovieModel.class);
+            movieModel.setSelectedMovie(selectedMovie); // Lưu movie vào ViewModel
+
+            // Chuyển hướng đến MovieFragment
+            mainActivity.replaceFragment(new MovieFragment(), true);
+        }
+    }
+
+
 
 }

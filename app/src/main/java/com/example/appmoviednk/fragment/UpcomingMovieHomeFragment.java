@@ -9,15 +9,12 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.example.appmoviednk.R;
 import com.example.appmoviednk.adapter.CardAdapter;
-import com.example.appmoviednk.databinding.FragmentShowingMovieHomeBinding;
 import com.example.appmoviednk.databinding.FragmentUpcomingMovieHomeBinding;
 import com.example.appmoviednk.model.MovieModel;
 import com.example.appmoviednk.retrofit.RetrofitClient;
-import com.example.appmoviednk.service.ApiService;
+import com.example.appmoviednk.service.MovieService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -29,7 +26,7 @@ public class UpcomingMovieHomeFragment extends Fragment {
 
     FragmentUpcomingMovieHomeBinding binding;
     CardAdapter cardAdapter;
-    ApiService apiService;
+    MovieService apiService;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,7 +41,7 @@ public class UpcomingMovieHomeFragment extends Fragment {
 
         // Set data to adapter and bind to RecyclerView
         binding.rcvShowingMovie.setAdapter(cardAdapter);
-        apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+        apiService = RetrofitClient.getRetrofitInstance().create(MovieService.class);
 
         getMoviesFromApi();
         // Return the root view from binding

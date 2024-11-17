@@ -11,15 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.appmoviednk.DateUtils;
-import com.example.appmoviednk.R;
-import com.example.appmoviednk.databinding.FragmentAccountBinding;
 import com.example.appmoviednk.databinding.FragmentTicketInfBinding;
 import com.example.appmoviednk.model.SharedViewModel;
 import com.example.appmoviednk.retrofit.RetrofitClient;
-import com.example.appmoviednk.service.ApiService;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.example.appmoviednk.service.MovieService;
 
 import java.util.List;
 import java.util.Map;
@@ -30,7 +25,7 @@ import retrofit2.Response;
 
 public class TicketInfFragment extends Fragment {
     FragmentTicketInfBinding binding;
-    ApiService apiService;
+    MovieService apiService;
     SharedViewModel sharedViewModel;
 
     @Override
@@ -49,7 +44,7 @@ public class TicketInfFragment extends Fragment {
             }
         });
 
-        apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+        apiService = RetrofitClient.getRetrofitInstance().create(MovieService.class);
         if (getArguments() != null){
 
             getTicketDetails(getArguments().getString("maBook"));
