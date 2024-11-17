@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const sql = require('mssql');
-const config = require('../config/dbConfig'); 
+const { connectToDatabase } = require('../config/dbConfig');
 const multer = require('multer');
 const fs = require('fs');
 const { uploadImage, uploadMultipleImages } = require('../utils/uploadImage');

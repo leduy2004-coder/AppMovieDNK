@@ -2,42 +2,46 @@
 const express = require('express');
 const router = express.Router();
 const sql = require('mssql');
-const config = require('../config/dbConfig'); // Import cấu hình
-
+const { connectToDatabase } = require('../config/dbConfig');
+const bcrypt = require('bcrypt')
 
 
 router.post('/login', async (req, res) => {
     const { tenTK, matKhau } = req.body;
 
     try {
-        let pool = await sql.connect(config);
+        let pool = await connectToDatabase();
         
         // Lấy thông tin người dùng dựa trên tài khoản
-        let result = await pool.request()
-            .input('tenTK', sql.VarChar, tenTK)
-            .query('SELECT * FROM KhachHang WHERE tenTK = @tenTK');
+        let results = await pool.request()
+    .input('tenTK', sql.VarChar, tenTK)
+    .query('SELECT * FROM KhachHang WHERE tenTK = @tenTK');
 
-        if (result.recordset.length > 0) {
-            const user = result.recordset[0]; 
+    if (results.recordset.length > 0) {
+        const users = results.recordset; // Lấy danh sách tất cả người dùng
 
-            // So sánh mật khẩu nhập vào với mật khẩu đã băm trong cơ sở dữ liệu
-            const isMatch = await bcrypt.compare(matKhau, user.matKhau); 
+        for (let i = 0; i < users.length; i++) {
+            const user = users[i];
+
+            // So sánh mật khẩu nhập vào với mật khẩu đã băm
+            const isMatch = await bcrypt.compare(matKhau, user.matKhau);
 
             if (isMatch) {
-                res.json(user);
-            } else {
-                res.status(401).json({ message: "Sai tài khoản hoặc mật khẩu" });
+                return res.json(user); 
             }
-        } else {
-            // Không tìm thấy người dùng
-            res.status(401).json({ message: "Sai tài khoản hoặc mật khẩu" });
         }
+
+        // Nếu không có tài khoản nào khớp
+        res.status(401).json({ message: "Sai tài khoản hoặc mật khẩu" });
+    } else {
+        // Không có người dùng trong bảng
+        res.status(401).json({ message: "Không tìm thấy người dùng" });
+    }
+
     } catch (err) {
         console.error('Lỗi:', err);
         res.status(500).json({ message: 'Lỗi khi xử lý yêu cầu' });
-    } finally {
-        await sql.close();
-    }
+    } 
 });
 
 
@@ -46,7 +50,7 @@ router.post('/login', async (req, res) => {
 router.get('/history/:maKH', async (req, res) => {
     const maKH = req.params.maKH; // Lấy mã khách hàng từ URL
     try {
-        let pool = await sql.connect(config);
+        let pool = await connectToDatabase();
         let result = await pool.request()
         
         .input('maKH', sql.VarChar(20), maKH) // Đặt giá trị cho tham số maKH
@@ -56,9 +60,7 @@ router.get('/history/:maKH', async (req, res) => {
     } catch (err) {
         console.error('Lỗi khi lấy lịch sử:', err);
         res.status(500).send('Lỗi khi lấy dữ liệu lịch sử');
-    } finally {
-        await sql.close();
-    }
+    } 
 });
 
 module.exports = router; // Đảm bảo export router

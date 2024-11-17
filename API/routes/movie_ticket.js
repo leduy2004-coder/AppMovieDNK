@@ -2,14 +2,14 @@
 const express = require('express');
 const router = express.Router();
 const sql = require('mssql');
-const config = require('../config/dbConfig'); // Import cấu hình
+const { connectToDatabase } = require('../config/dbConfig');
 
 // Route để lấy thông tin về vé của phim
 router.get('/:maPhim', async (req, res) => {
     const { maPhim } = req.params;
 
         try {
-             let pool = await sql.connect(config);
+             let pool = await connectToDatabase();
 
             const result = await pool.request()
                 .input('maPhim', sql.VarChar(20), maPhim)
@@ -35,7 +35,7 @@ router.post('/bookve', async (req, res) => {
     }
 
     try {
-        let pool = await sql.connect(config); // Kết nối đến cơ sở dữ liệu
+        let pool = await connectToDatabase();
         const result = await pool.request()
             .input('maKH', sql.VarChar(20), maKH)
             .input('maVe', sql.VarChar(20), maVe)
@@ -75,7 +75,7 @@ router.post('/bookghe', async (req, res) => {
     let pool;
 
     try {
-        pool = await sql.connect(config); // Kết nối với cơ sở dữ liệu
+        pool = await connectToDatabase();
 
         // Bắt đầu giao dịch
         const transaction = new sql.Transaction(pool);
@@ -102,12 +102,7 @@ router.post('/bookghe', async (req, res) => {
     } catch (error) {
         console.error('Lỗi khi kết nối:', error.message);
         res.status(500).json({ message: 'Lỗi khi kết nối tới cơ sở dữ liệu.', error: error.message });
-    } finally {
-        // Đảm bảo đóng kết nối
-        if (pool) {
-            await pool.close();
-        }
-    }
+    } 
 });
 
 

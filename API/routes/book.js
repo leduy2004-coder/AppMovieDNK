@@ -2,14 +2,15 @@
 const express = require('express');
 const router = express.Router();
 const sql = require('mssql');
-const config = require('../config/dbConfig'); // Import cấu hình
+const { connectToDatabase } = require('../config/dbConfig');
+
 
 // Route để lấy danh sách tài khoản
 router.get('/:maSuat', async (req, res) => {
     const { maSuat } = req.params;
 
         try {
-             let pool = await sql.connect(config);
+             let pool = await connectToDatabase();
 
             const result = await pool.request()
                 .input('maSuat', sql.VarChar(20), maSuat)

@@ -3,22 +3,9 @@ const express = require('express');
 const axios = require('axios');
 const router = express.Router();
 const sql = require('mssql');
-const config = require('../config/dbConfig'); // Import cấu hình
+const { connectToDatabase } = require('../config/dbConfig');
 const axiosRetry = require('axios-retry');
 
-
-// Cấu hình retry và timeout cho axios để xử lý lỗi và gián đoạn kết nối
-axios.defaults.timeout = 5000; // Đặt timeout 5 giây cho mỗi yêu cầu
-axios.defaults.retry = 3;
-axios.defaults.retryDelay = 1000; // Thử lại sau 1 giây nếu gặp lỗi
-
-axios.interceptors.response.use(null, async (error) => {
-    const config = error.config;
-    if (!config || config._retry) return Promise.reject(error);
-
-    config._retry = true;
-    return axios(config);
-});
 
 // Hàm để lấy chi tiết của từng phim với retry và timeout
 const fetchMovieDetails = async (movies) => {
@@ -52,11 +39,10 @@ router.get('/phimdangchieu', async (req, res) => {
     let pool;
 
     try {
-        pool = await sql.connect(config);
+        pool = await connectToDatabase();
 
         // Lấy danh sách maPhim từ stored procedure GetSuatChieu
         let result = await pool.request().execute('GetSuatChieu');
-        console.log(result.recordset);
 
         // Lấy thông tin chi tiết của các phim
         const movieDetails = await fetchMovieDetailsSequential(result.recordset);
@@ -66,11 +52,7 @@ router.get('/phimdangchieu', async (req, res) => {
     } catch (err) {
         console.error('Lỗi khi lấy dữ liệu phim đang chiếu:', err);
         res.status(500).send('Lỗi khi lấy dữ liệu phim đang chiếu');
-    } finally {
-        if (pool) {
-            await sql.close();
-        }
-    }
+    } 
 });
 
 // Route để lấy những phim chưa chiếu
@@ -78,10 +60,11 @@ router.get('/phimchuachieu', async (req, res) => {
     let pool;
 
     try {
-        pool = await sql.connect(config);
+        pool = await connectToDatabase();
 
         // Lấy danh sách maPhim từ stored procedure GetSuatChuaChieu
         let result = await pool.request().execute('GetSuatChuaChieu');
+
         console.log(result.recordset);
 
         // Lấy thông tin chi tiết của các phim
@@ -92,19 +75,36 @@ router.get('/phimchuachieu', async (req, res) => {
     } catch (err) {
         console.error('Lỗi khi lấy dữ liệu phim chưa chiếu:', err);
         res.status(500).send('Lỗi khi lấy dữ liệu phim chưa chiếu');
-    } finally {
-        if (pool) {
-            await sql.close();
-        }
     }
 });
 
+// Route để lấy những ngày đang chiếu
+router.get('/ngaydangchieu', async (req, res) => {
+    let pool;
 
+    try {
+        pool = await connectToDatabase();
+
+        // Lấy danh sách maPhim từ stored procedure GetSuatChieu
+        let result = await pool.request().execute('GetNgayChieu');
+
+        const data = result.recordset;
+        // Trả về danh sách thông tin chi tiết của các phim
+        console.log('data442424224244242')
+
+        console.log(data)
+        res.json(data);
+    } catch (err) {
+        console.error('Lỗi khi lấy dữ liệu phim đang chiếu ppp:', err);
+        res.status(500).send('Lỗi khi lấy dữ liệu phim đang chiếu');
+    } 
+});
 // Route để lấy thông tin của phim thông qua maPhim
 router.get('/phim/:maPhim', async (req, res) => {
     const { maPhim } = req.params; // Lấy mã phim từ URL
+    let pool;
     try {
-        let pool = await sql.connect(config);
+        pool = await connectToDatabase();
         let result = await pool.request()
             .input('maPhim', sql.NVarChar, maPhim)
             .query('SELECT * FROM Phim WHERE maPhim = @maPhim');
@@ -117,18 +117,16 @@ router.get('/phim/:maPhim', async (req, res) => {
     } catch (err) {
         console.error('Lỗi khi lấy dữ liệu phim:', err);
         res.status(500).send('Lỗi khi lấy dữ liệu phim');
-    } finally {
-        await sql.close();
     }
 });
 
 // Route để lấy ngay chieu cua phim
 router.get('/ngaychieu/:maPhim', async (req, res) => {
     const maPhim = req.params.maPhim; // Lấy maPhim từ URL
-
+    let pool;
     try {
         // Kết nối SQL
-        let pool = await sql.connect(config);
+        pool = await connectToDatabase();
 
         // Gọi hàm fXuatNgayChieu với tham số maPhim
         let result = await pool.request()
@@ -145,24 +143,39 @@ router.get('/ngaychieu/:maPhim', async (req, res) => {
     } catch (err) {
         console.error('Lỗi khi lấy dữ liệu ngày chiếu:', err);
         res.status(500).send('Lỗi khi lấy dữ liệu ngày chiếu');
-    } finally {
-        // Đóng kết nối SQL
-        await sql.close();
-    }
+    } 
 
 });
+// Route để lấy thông tin của phim thông qua ngày chiếu
+router.get('/phim/:ngay', async (req, res) => {
+    const { ngay } = req.params; // Lấy mã phim từ URL
+    let pool;
+    try {
+        pool = await connectToDatabase();
+        
+        let result = await pool.request()
+            .input('ngay', sql.VarChar(20), ngay) 
+            .query('SELECT * FROM fXuatNgayChieu(@ngay)'); 
+        // Lấy thông tin chi tiết của các phim
+        const movieDetails = await fetchMovieDetailsSequential(result.recordset);
 
+        // Trả về danh sách thông tin chi tiết của các phim
+        res.json(movieDetails.filter(movie => movie !== null));
+  
+    } catch (err) {
+        console.error('Lỗi khi lấy dữ liệu phim:', err);
+        res.status(500).send('Lỗi khi lấy dữ liệu phim');
+    } 
+});
 router.get('/get-schedule/:id', async (req, res) => {
     const phimId = req.params.id;
+    let pool;
     try {
-
-        let pool = await sql.connect(config)
+        pool = await connectToDatabase();
         // Truy vấn để lấy ngày chiếu
         let result = await pool.request()
             .input('id', sql.NVarChar(50), phimId) // Truyền phimId vào hàm fXuatNgayChieu
             .query('SELECT * FROM fXuatNgayChieu(@id)'); // Gọi hàm SQL
-
-        console.log("result recordst" + result.recordset); // Ghi log kết quả nhận được
 
         const ngayChieuList = result.recordset.map(item => {
             return {
@@ -208,11 +221,27 @@ router.get('/get-schedule/:id', async (req, res) => {
     }
 });
 
+router.get('/get-date-schedule/:id', async (req, res) => {
+    const phimId = req.params.id;
+    let pool;
+    try {
+        pool = await connectToDatabase();
+        // Truy vấn để lấy ngày chiếu
+        let result = await pool.request()
+            .input('id', sql.NVarChar(50), phimId) // Truyền phimId vào hàm fXuatNgayChieu
+            .query('SELECT * FROM fXuatNgayChieu(@id)'); // Gọi hàm SQL
 
+        res.json(result.recordset);
+    } catch (error) {
+        console.error('Lỗi khi truy vấn:', error);
+        res.status(500).send('Đã xảy ra lỗi.');
+    } 
+});
 router.get('/ticket-details/:maBook', async (req, res) => {
     const maBook = req.params.maBook; // Lấy mã đặt vé từ URL
+    let pool;
     try {
-        let pool = await sql.connect(config);
+        pool = await connectToDatabase();
         let result = await pool.request()
             .input('maBook', sql.VarChar(20), maBook) // Đặt giá trị cho tham số maBook
             .query('SELECT * FROM fChiTietTicket(@maBook)'); // Gọi hàm fChiTietTicket
@@ -226,8 +255,6 @@ router.get('/ticket-details/:maBook', async (req, res) => {
     } catch (err) {
         console.error('Lỗi khi lấy chi tiết vé:', err);
         res.status(500).send('Lỗi khi lấy dữ liệu chi tiết vé');
-    } finally {
-        await sql.close(); // Đóng kết nối
     }
 });
 

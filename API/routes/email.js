@@ -3,7 +3,7 @@ const express = require('express');
 const axios = require('axios');
 const router = express.Router();
 const sql = require('mssql');
-const config = require('../config/dbConfig'); // Import cấu hình
+const { connectToDatabase } = require('../config/dbConfig');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -17,8 +17,6 @@ const transporter = nodemailer.createTransport({
     pass: 'vmqpxvjghtsuygfs'   // Thay bằng mật khẩu của bạn
   }
 });
-
-
 
 
 router.post('/send-verification', (req, res) => {
@@ -67,7 +65,7 @@ router.post('/register', async (req, res) => {
     try {
       const hashPassword = await bcrypt.hash(matKhau, saltRounds);
       // Kết nối đến cơ sở dữ liệu
-      let pool = await sql.connect(config);
+      let pool = await connectToDatabase();
 
       // Thực hiện insert vào cơ sở dữ liệu
       const insertQuery = `INSERT INTO KhachHang (hoTen, email, tinhTrang, tenTK, matKhau, sdt)
