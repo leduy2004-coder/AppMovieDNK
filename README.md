@@ -1,8 +1,8 @@
-Thành viên nhóm:
+# Thành viên nhóm:
 - Lê Duy 221105053122206
 - Bùi Quốc Nam 22115053122230
 - Lê Công Khánh 22115053122220
-Lớp HP: 124LTTD03
+# Lớp HP: 124LTTD03
 
 # Ứng dụng Đặt Vé Xem Phim 
 
