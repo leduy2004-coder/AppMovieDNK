@@ -258,6 +258,44 @@ router.get('/ticket-details/:maBook', async (req, res) => {
     }
 });
 
+router.post('/insert', async (req, res) => {
+    const {tenPhim, daoDien, doTuoiYeuCau, ngayKhoiChieu, thoiLuong, maLPhim, moTa, video } = req.body; 
+    let pool;
+    
+    try {
+        pool = await connectToDatabase();
+
+        // Kiểm tra dữ liệu có đầy đủ không
+        if (!tenPhim || !daoDien || !doTuoiYeuCau || !ngayKhoiChieu || !thoiLuong || !maLPhim) {
+            return res.status(400).json({ message: 'Dữ liệu không đầy đủ, vui lòng kiểm tra lại' });
+        }
+
+        // Thực hiện câu lệnh INSERT vào cơ sở dữ liệu
+        let result = await pool.request()
+            .input('tenPhim', sql.NVarChar(50), tenPhim)
+            .input('daoDien', sql.NVarChar(50), daoDien)
+            .input('doTuoiYeuCau', sql.Int, doTuoiYeuCau)
+            .input('ngayKhoiChieu', sql.Date, ngayKhoiChieu)
+            .input('thoiLuong', sql.Int, thoiLuong)
+            .input('maLPhim', sql.VarChar(20), maLPhim)
+            .input('tinhTrang', sql.Int, 1)
+            .input('moTa', sql.NVarChar(sql.MAX), moTa) 
+            .input('video', sql.NVarChar(sql.MAX), video) 
+            .query(`
+                INSERT INTO Phim 
+                ( tenPhim, daoDien, doTuoiYeuCau, ngayKhoiChieu, thoiLuong, maLPhim, moTa, video, tinhTrang)
+                VALUES 
+                ( @tenPhim, @daoDien, @doTuoiYeuCau, @ngayKhoiChieu, @thoiLuong, @maLPhim, @moTa, @video,@tinhTrang)
+            `);
+
+        // Trả về kết quả thành công
+        res.status(201).json({ message: 'Dữ liệu đã được chèn thành công!' });
+
+    } catch (err) {
+        console.error('Lỗi khi chèn dữ liệu:', err);
+        res.status(500).send('Lỗi khi chèn dữ liệu vào cơ sở dữ liệu');
+    }
+});
 
 
 module.exports = router;

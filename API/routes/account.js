@@ -45,7 +45,6 @@ router.post('/login', async (req, res) => {
 });
 
 
-
 // Route để lấy lịch sử khách hàng
 router.get('/history/:maKH', async (req, res) => {
     const maKH = req.params.maKH; // Lấy mã khách hàng từ URL
@@ -63,4 +62,4 @@ router.get('/history/:maKH', async (req, res) => {
     } 
 });
 
-module.exports = router; // Đảm bảo export router
+module.exports = router;
