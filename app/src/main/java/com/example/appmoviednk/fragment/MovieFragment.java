@@ -53,7 +53,8 @@ public class MovieFragment extends Fragment {
             @Override
             public void onChanged(MovieModel selectedMovie) {
                 if (selectedMovie != null) {
-                    setTextTitle(selectedMovie);
+                    movie = selectedMovie;
+                    setContent(selectedMovie);
                     getSchedules(selectedMovie.getMaPhim().toString().trim());
                     Log.d("23232323", selectedMovie.getMaPhim());
                 } else {
@@ -67,6 +68,8 @@ public class MovieFragment extends Fragment {
             TrailerFragment trailerFragment = new TrailerFragment();
             MainActivity mainActivity = (MainActivity) getActivity();
             if (mainActivity != null) {
+                MovieModel movieModel = new ViewModelProvider(mainActivity).get(MovieModel.class);
+                movieModel.setSelectedMovie(movie);
                 mainActivity.replaceFragment(trailerFragment, true);
             }
         });
@@ -104,7 +107,7 @@ public class MovieFragment extends Fragment {
         });
     }
 
-    private void setTextTitle(MovieModel movie) {
+    private void setContent(MovieModel movie) {
         binding.tvName.setText(movie.getTenPhim());
         binding.tvType.setText("Thể loại: " );
         binding.tvDescription.setText(movie.getMoTa());

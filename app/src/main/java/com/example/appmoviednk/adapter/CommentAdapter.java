@@ -9,22 +9,27 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appmoviednk.databinding.ItemCommentBinding;
+import com.example.appmoviednk.model.CommentModel;
 import com.example.appmoviednk.model.CustomerModel;
 
 import java.util.List;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
-    private List<CustomerModel> cmtList;
+    private List<CommentModel> cmtList;
     private Context mContext;
-
-
+    private boolean showAll = false;
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<CustomerModel> cmtList) {
+    public void setData(List<CommentModel> cmtList) {
         this.cmtList = cmtList;
         notifyDataSetChanged();
     }
-
+    // Hàm cập nhật trạng thái hiển thị
+    @SuppressLint("NotifyDataSetChanged")
+    public void setShowAll(boolean showAll) {
+        this.showAll = showAll;
+        notifyDataSetChanged();
+    }
     @NonNull
     @Override
     public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -39,22 +44,27 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-        CustomerModel cmt = cmtList.get(position);
+        CommentModel cmt = cmtList.get(position);
         if(cmt == null){
             return;
         }
-        holder.commentBinding.cmtUser.setText(cmt.getHoTen());
-        holder.commentBinding.cmtContent.setText(cmt.getEmail());
+        holder.commentBinding.cmtUser.setText(cmt.getKhachHang().getHoTen());
+        holder.commentBinding.cmtContent.setText(cmt.getNoiDung());
     }
 
     @Override
     public int getItemCount() {
-        if (cmtList != null)
+        // Nếu showAll là true, trả về toàn bộ số lượng item
+        if (showAll) {
             return cmtList.size();
-        return 0;
+        } else
+        // Nếu showAll là false, chỉ trả về tối đa 4 item
+        {
+            return cmtList != null ? 4 : 0;
+        }
     }
 
-    public class CommentViewHolder extends RecyclerView.ViewHolder {
+    public static class CommentViewHolder extends RecyclerView.ViewHolder {
     ItemCommentBinding commentBinding;
 
         public CommentViewHolder(@NonNull ItemCommentBinding binding) {

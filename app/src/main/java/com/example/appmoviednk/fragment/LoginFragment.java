@@ -50,7 +50,7 @@ public class LoginFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        binding= FragmentLoginBinding.inflate(inflater, container, false);
+        binding = FragmentLoginBinding.inflate(inflater, container, false);
 
 
         checkLoginStatus();
@@ -62,7 +62,7 @@ public class LoginFragment extends Fragment {
             // Lấy MainActivity từ Fragment
             MainActivity mainActivity = (MainActivity) getActivity();
             if (mainActivity != null) {
-                mainActivity.replaceFragment(registerFragment,true); // Gọi phương thức replaceFragment
+                mainActivity.replaceFragment(registerFragment, true); // Gọi phương thức replaceFragment
             }
         });
         loginService = RetrofitClient.getRetrofitInstance().create(LoginService.class);
@@ -104,10 +104,10 @@ public class LoginFragment extends Fragment {
 
                     if (sharedPreferences != null) {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        if(binding.cbCheck.isChecked()){
+                        if (binding.cbCheck.isChecked()) {
                             editor.putString(KEY_EMAIL, tenTK);
                             editor.putString(KEY_PASSWORD, password);
-                            editor.putBoolean(KEY_REMEMBER_ME,true);
+                            editor.putBoolean(KEY_REMEMBER_ME, true);
                         } else {
                             editor.remove(KEY_EMAIL);
                             editor.remove(KEY_PASSWORD);
@@ -147,9 +147,10 @@ public class LoginFragment extends Fragment {
             }
         });
     }
+
     private void checkLoginStatus() {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        boolean rememberMe = sharedPreferences.getBoolean(KEY_REMEMBER_ME,false);
+        boolean rememberMe = sharedPreferences.getBoolean(KEY_REMEMBER_ME, false);
         if (rememberMe) {
             String email = sharedPreferences.getString(KEY_EMAIL, null);
             String password = sharedPreferences.getString(KEY_PASSWORD, null);
@@ -162,11 +163,11 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    private void changeFragment () {
+    private void changeFragment() {
         boolean returnToBookTicket = getArguments() != null && getArguments().getBoolean("returnToBookTicket", false);
+        boolean returnToTrailer = getArguments() != null && getArguments().getBoolean("returnToTrailer", false);
 
-
-        if (returnToBookTicket) {
+        if (returnToBookTicket || returnToTrailer) {
             MainActivity mainActivity = (MainActivity) getActivity();
             if (mainActivity != null && mainActivity.getSupportFragmentManager().getBackStackEntryCount() > 0) {
                 mainActivity.onBackPressed(); // Quay lại nếu có Fragment trong ngăn xếp
@@ -178,10 +179,6 @@ public class LoginFragment extends Fragment {
             }
         }
     }
-
-
-
-
 
 
 }

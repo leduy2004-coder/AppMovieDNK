@@ -37,6 +37,7 @@ public class HistoryBookAdapter  extends  RecyclerView.Adapter<HistoryBookAdapte
         notifyDataSetChanged();
     }
     // Hàm cập nhật trạng thái hiển thị
+    @SuppressLint("NotifyDataSetChanged")
     public void setShowAll(boolean showAll) {
         this.showAll = showAll;
         notifyDataSetChanged();
@@ -55,6 +56,7 @@ public class HistoryBookAdapter  extends  RecyclerView.Adapter<HistoryBookAdapte
         this.mContext = mContext;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull HistoryBookViewHolder holder, int position) {
         if (position < 0 || position >= listBooked.size()) {
@@ -108,7 +110,9 @@ public class HistoryBookAdapter  extends  RecyclerView.Adapter<HistoryBookAdapte
             return listBooked.size();
         } else
         // Nếu showAll là false, chỉ trả về tối đa 3 item
-        return listBooked != null ? 3 : 0;
+        {
+            return listBooked != null ? 3 : 0;
+        }
     }
 
 

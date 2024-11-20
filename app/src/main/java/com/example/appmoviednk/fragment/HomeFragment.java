@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
@@ -27,7 +26,6 @@ import com.example.appmoviednk.adapter.SlideAdapter;
 import com.example.appmoviednk.adapter.SpinnerAdapter;
 import com.example.appmoviednk.adapter.TagViewMovieAdapter;
 import com.example.appmoviednk.databinding.FragmentHomeBinding;
-
 import com.example.appmoviednk.model.DisplayTextSpinner;
 import com.example.appmoviednk.model.MovieModel;
 import com.example.appmoviednk.model.ScheduleModel;
@@ -126,7 +124,7 @@ public class HomeFragment extends Fragment {
                     String displayText = selectedItem.getDisplayText();
                     if (displayText.equals("Chọn phim")) {
                         Log.d("Spinner", "Mục mặc định được chọn.");
-//                        getDateShowingFromApi();
+                        getDateShowingFromApi();
                     } else if (selectedItem instanceof MovieModel) {
                         MovieModel movie = ((MovieModel) selectedItem);
                         // Gọi API lấy danh sách ngày chiếu theo mã phim
@@ -158,7 +156,7 @@ public class HomeFragment extends Fragment {
                     String displayText = selectedItem.getDisplayText();
                     if (displayText.equals("Chọn ngày")) {
                         Log.d("Spinner", "Mục mặc định được chọn.");
-//                        getMoviesFromApi();
+                        getMoviesFromApi();
                     } else if (selectedItem instanceof ScheduleModel) {
                         String date = ((ScheduleModel) selectedItem).getNgayChieu();
                         Log.d("Spinner", "Đã chọn: " + displayText + ", Ngày: " + date);
@@ -289,6 +287,7 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
     //Gọi API lấy danh sách ngày theo phim
     private void getDateShowingFromApi(String movieCode) {
         apiService.getDateSchedules(movieCode).enqueue(new Callback<List<ScheduleModel>>() {
@@ -321,6 +320,7 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
     //Gọi API lấy danh sách phim chiếu theo ngày
     private void getMoviesFromApi(String date) {
         apiService.getMoviesByDate(date).enqueue(new Callback<List<MovieModel>>() {
@@ -363,7 +363,6 @@ public class HomeFragment extends Fragment {
             mainActivity.replaceFragment(new MovieFragment(), true);
         }
     }
-
 
 
 }
