@@ -10,7 +10,7 @@ router.get('/:maPhim', async (req, res) => {
     const { maPhim } = req.params;
     try {
         const pool = await connectToDatabase();
-        console.log('23425325346536')
+ 
         // Lấy danh sách bình luận từ database với `maPhim`
         const result = await pool.request()
             .input('maPhim', sql.NVarChar, maPhim)
@@ -21,8 +21,7 @@ router.get('/:maPhim', async (req, res) => {
         if (comments.length > 0) {
             // Gọi hàm fetchCommentsWithUserInfo để lấy thông tin khách hàng
             const commentsWithUserInfo = await fetchCommentsWithUserInfo(comments);
-            console.log('00000000')
-            console.log('Fetched users:', commentsWithUserInfo);
+
             res.json(commentsWithUserInfo); // Trả về danh sách bình luận kèm thông tin khách hàng
         } else {
             res.status(404).send('Không tìm thấy bình luận cho phim này.');

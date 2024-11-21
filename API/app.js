@@ -19,6 +19,7 @@ const bookRoute = require('./routes/book');
 const movieTicketRoute = require('./routes/movie_ticket');
 const emailRoute = require('./routes/email');
 const uploadImage = require('./routes/image');
+const voucher = require('./routes/voucher');
 const comment = require('./routes/comment');
 
 // Sử dụng route
@@ -29,6 +30,7 @@ app.use('/email', emailRoute);
 app.use('/account', accountRoute);
 app.use('/image', uploadImage);
 app.use('/comment', comment);
+app.use('/voucher', voucher);
 
 // Định tuyến API
 app.get('/', (req, res) => {

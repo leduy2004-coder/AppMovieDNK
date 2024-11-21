@@ -22,11 +22,12 @@ router.post('/login', async (req, res) => {
 
         for (let i = 0; i < users.length; i++) {
             const user = users[i];
-
+            
             // So sánh mật khẩu nhập vào với mật khẩu đã băm
             const isMatch = await bcrypt.compare(matKhau, user.matKhau);
 
             if (isMatch) {
+                console.log(user)
                 return res.json(user); 
             }
         }
