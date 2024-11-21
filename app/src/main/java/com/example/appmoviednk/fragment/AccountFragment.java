@@ -1,5 +1,6 @@
 package com.example.appmoviednk.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -69,6 +70,7 @@ public class AccountFragment extends Fragment {
         Call<List<Map<String, Object>>> call = loginService.getCustomerHistory(maKH);
 
         call.enqueue(new Callback<List<Map<String, Object>>>() {
+            @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
             @Override
             public void onResponse(Call<List<Map<String, Object>>> call, Response<List<Map<String, Object>>> response) {
                 if (response.isSuccessful() && response.body() != null) {

@@ -89,7 +89,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     }
 
     // ViewHolder class
-    public class CardViewHolder extends RecyclerView.ViewHolder {
+    public static class CardViewHolder extends RecyclerView.ViewHolder {
         CardMovieHomeBinding cardMovieHomeBinding;
 
         public CardViewHolder(@NonNull CardMovieHomeBinding binding) {

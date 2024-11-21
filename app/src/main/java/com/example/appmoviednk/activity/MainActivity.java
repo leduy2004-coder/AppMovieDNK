@@ -1,10 +1,6 @@
 package com.example.appmoviednk.activity;
 
-import static java.security.AccessController.getContext;
-
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -13,21 +9,17 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.appmoviednk.R;
 import com.example.appmoviednk.UserSession;
-import com.example.appmoviednk.adapter.CardAdapter;
 import com.example.appmoviednk.adapter.ViewPagerAdapter;
 import com.example.appmoviednk.databinding.ActivityMainBinding;
 import com.example.appmoviednk.databinding.HeaderNavigationBinding;
-import com.example.appmoviednk.databinding.LoginRegisBinding;
 import com.example.appmoviednk.fragment.AccountFragment;
 import com.example.appmoviednk.fragment.BookTicketFragment;
 import com.example.appmoviednk.fragment.HomeFragment;
@@ -36,8 +28,6 @@ import com.example.appmoviednk.fragment.MovieFragment;
 import com.example.appmoviednk.fragment.RegisterFragment;
 import com.example.appmoviednk.fragment.TrailerFragment;
 import com.example.appmoviednk.fragment.VoucherFragment;
-import com.example.appmoviednk.model.MovieModel;
-import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -156,6 +146,7 @@ public class MainActivity extends AppCompatActivity  {
 
         // Cam kết giao dịch
         fragmentTransaction.commit();
+
     }
 
 
@@ -246,7 +237,7 @@ public class MainActivity extends AppCompatActivity  {
         } else if (currentFragment instanceof LoginFragment) {
             Fragment bookticket = new BookTicketFragment();
             replaceFragment(bookticket, true); // Không có hiệu ứng
-        } else {
+        }else {
                 super.onBackPressed();
             }
         }

@@ -1,5 +1,6 @@
 package com.example.appmoviednk.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -63,6 +64,7 @@ public class BookTicketFragment extends Fragment {
 
     BookTicketModel bookTicketModel = new BookTicketModel();
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Khởi tạo FragmentBookTicketBinding

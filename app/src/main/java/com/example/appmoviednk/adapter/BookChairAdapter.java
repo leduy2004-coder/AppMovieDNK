@@ -75,8 +75,6 @@ public class BookChairAdapter extends RecyclerView.Adapter<BookChairAdapter.Seat
 
         });
 
-
-
     }
 
     @Override

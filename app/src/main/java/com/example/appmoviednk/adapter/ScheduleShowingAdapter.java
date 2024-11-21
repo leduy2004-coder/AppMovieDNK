@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.appmoviednk.DateUtils;
 import com.example.appmoviednk.databinding.ItemScheduleShowingMovieBinding;
 import com.example.appmoviednk.model.ScheduleModel;
 
@@ -42,8 +44,8 @@ public class ScheduleShowingAdapter extends RecyclerView.Adapter<ScheduleShowing
         if (dateShowingModel == null) {
             return;
         }
-
-        holder.itemScheduleMovieBinding.tvDateScreening.setText(dateShowingModel.getNgayChieu());
+        String formatDate = DateUtils.formatDateString(dateShowingModel.getNgayChieu());
+        holder.itemScheduleMovieBinding.tvDateScreening.setText(formatDate);
         
         shiftShowingAdapter = new ShiftShowingAdapter(mContext, dateShowingModel.getMaPhim());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 3);

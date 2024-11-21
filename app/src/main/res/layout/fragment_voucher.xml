@@ -42,190 +42,15 @@
                 android:paddingBottom="20dp"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/view_voucher"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-
-                        android:layout_marginRight="8dp"
-                        android:gravity="center"
-                        android:background="@drawable/bg_rounded_background">
-                        <ImageView
-                            android:layout_width="wrap_content"
-
-                            android:id="@+id/imageView17"
-                            android:padding="15dp"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/img_voucher"
-                            />
-
-                        <TextView
-                            android:id="@+id/textView16"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Ngày 1"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="16sp"
-                            android:layout_marginBottom="14dp"
-                            app:layout_constraintVertical_bias="0.677" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-
-                        android:layout_marginRight="8dp"
-                        android:gravity="center"
-                        android:background="@drawable/bg_rounded_background">
-                        <ImageView
-                            android:padding="15dp"
-
-                            android:id="@+id/imageView19"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/img_voucher"
-                            />
-
-                        <TextView
-                            android:id="@+id/textView18"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Ngày 2"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="16sp"
-                            android:layout_marginBottom="14dp"
-
-                            app:layout_constraintVertical_bias="0.677" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginRight="8dp"
-                        android:gravity="center"
-                        android:background="@drawable/bg_rounded_background">
-                        <ImageView
-                            android:id="@+id/imageView20"
-                            android:layout_width="wrap_content"
-                            android:padding="15dp"
-
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/img_voucher"
-                            />
-
-                        <TextView
-                            android:id="@+id/textView17"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Ngày 3"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="16sp"
-                            android:layout_marginBottom="14dp"
-
-                            app:layout_constraintVertical_bias="0.677" />
-                    </LinearLayout>
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight="1"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center"
-                        android:background="@drawable/bg_rounded_background">
-                        <ImageView
-                            android:id="@+id/imageView22"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="15dp"
-                            android:src="@drawable/img_voucher"
-                            />
-
-                        <TextView
-                            android:id="@+id/textView20"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="14dp"
-                            android:text="Ngày 4"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="16sp"
-                            app:layout_constraintVertical_bias="0.677" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight="1"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center"
-                        android:background="@drawable/bg_rounded_background">
-                        <ImageView
-                            android:id="@+id/imageView23"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="15dp"
-                            android:src="@drawable/img_voucher"
-                            />
-
-                        <TextView
-                            android:id="@+id/textView21"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="14dp"
-                            android:text="Ngày 5"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="16sp"
-                            app:layout_constraintVertical_bias="0.677" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight="1"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginRight="8dp"
-                        android:gravity="center"
-                        android:background="@drawable/bg_rounded_background">
-                        <ImageView
-                            android:id="@+id/imageView24"
-                            android:padding="15dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/img_voucher" />
-
-                        <TextView
-                            android:id="@+id/textView22"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="14dp"
-                            android:text="Ngày 6"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="16sp"
-                            app:layout_constraintVertical_bias="0.677" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
 
 
             </LinearLayout>
-
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -243,11 +68,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="Điểm danh liên tiếp 8 ngày để chạy voucher siêu khủng !!!"
+                    android:text="Điểm danh liên tiếp 6 ngày để chạy voucher siêu khủng !!!"
                     android:textColor="@color/colorPrimary"
                     android:textAlignment="center"
                     android:textSize="16sp"
-                    />
+                    tools:ignore="HardcodedText" />
             </LinearLayout>
 
 

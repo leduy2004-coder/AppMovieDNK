@@ -2,6 +2,7 @@ package com.example.appmoviednk.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.example.appmoviednk.R;
@@ -26,6 +28,8 @@ import com.example.appmoviednk.service.LoginService;
 
 import org.json.JSONObject;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,10 +97,21 @@ public class LoginFragment extends Fragment {
         CustomerModel customerModel = new CustomerModel(tenTK, password);
 
         loginService.loginAccount(customerModel).enqueue(new Callback<CustomerModel>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
-            public void onResponse(Call<CustomerModel> call, Response<CustomerModel> response) {
+            public void onResponse(@NonNull Call<CustomerModel> call, @NonNull Response<CustomerModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    UserSession.getInstance().setLoggedInAccount(response.body());
+                    CustomerModel newCustomerModel = response.body();
+                    if (newCustomerModel.getNgayDiemDanhCuoi() != null) {
+                        newCustomerModel.setNgay(newCustomerModel.getNgayDiemDanhCuoi()
+                                .toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDate());
+                    } else {
+                        newCustomerModel.setNgay(null);
+                    }
+
+                    UserSession.getInstance().setLoggedInAccount(newCustomerModel);
 
                     SharedPreferences sharedPreferences = getContext() != null
                             ? getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -166,16 +181,22 @@ public class LoginFragment extends Fragment {
     private void changeFragment() {
         boolean returnToBookTicket = getArguments() != null && getArguments().getBoolean("returnToBookTicket", false);
         boolean returnToTrailer = getArguments() != null && getArguments().getBoolean("returnToTrailer", false);
+        boolean returnToVoucher = getArguments() != null && getArguments().getBoolean("returnToVoucher", false);
+        MainActivity mainActivity = (MainActivity) getActivity();
+
 
         if (returnToBookTicket || returnToTrailer) {
-            MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity = (MainActivity) getActivity();
             if (mainActivity != null && mainActivity.getSupportFragmentManager().getBackStackEntryCount() > 0) {
                 mainActivity.onBackPressed(); // Quay lại nếu có Fragment trong ngăn xếp
             }
+        } else if (returnToVoucher) {
+            assert mainActivity != null;
+            mainActivity.replaceFragment(new VoucherFragment(), true);
         } else {
-            MainActivity mainActivity = (MainActivity) getActivity();
             if (mainActivity != null) {
                 mainActivity.replaceFragment(new HomeFragment(), true);
+
             }
         }
     }

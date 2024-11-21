@@ -1,5 +1,6 @@
 package com.example.appmoviednk.adapter;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -47,6 +48,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     }
 
     // Hàm cập nhật danh sách Fragment mới
+    @SuppressLint("NotifyDataSetChanged")
     public void setFragments(List<Fragment> fragments) {
         this.fragments = fragments;
         notifyDataSetChanged();

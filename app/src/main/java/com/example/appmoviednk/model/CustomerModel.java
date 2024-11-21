@@ -1,5 +1,6 @@
 package com.example.appmoviednk.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class CustomerModel {
@@ -13,6 +14,10 @@ public class CustomerModel {
     private boolean tinhTrang;
     private String tenTK;
     private String matKhau;
+    private int diemDanh;
+    private int soLuongVoucher;
+    private Date ngayDiemDanhCuoi;
+    private LocalDate ngay;
 
     public CustomerModel() {
     }
@@ -117,5 +122,37 @@ public class CustomerModel {
 
     public void setMatKhau(String matKhau) {
         this.matKhau = matKhau;
+    }
+
+    public int getDiemDanh() {
+        return diemDanh;
+    }
+
+    public void setDiemDanh(int diemDanh) {
+        this.diemDanh = diemDanh;
+    }
+
+    public int getSoLuongVoucher() {
+        return soLuongVoucher;
+    }
+
+    public void setSoLuongVoucher(int soLuongVoucher) {
+        this.soLuongVoucher = soLuongVoucher;
+    }
+
+    public Date getNgayDiemDanhCuoi() {
+        return ngayDiemDanhCuoi;
+    }
+
+    public void setNgayDiemDanhCuoi(Date ngayDiemDanhCuoi) {
+        this.ngayDiemDanhCuoi = ngayDiemDanhCuoi;
+    }
+
+    public LocalDate getNgay() {
+        return ngay;
+    }
+
+    public void setNgay(LocalDate ngay) {
+        this.ngay = ngay;
     }
 }
