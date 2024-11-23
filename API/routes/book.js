@@ -23,4 +23,5 @@ router.get('/:maSuat', async (req, res) => {
         }
 });
 
+
 module.exports = router; // Đảm bảo export router

@@ -27,27 +27,30 @@ router.get('/:maPhim', async (req, res) => {
 
 // API để chèn bản ghi vào bảng BookVe
 router.post('/bookve', async (req, res) => {
-    const { maKH, maVe, maSuat, tongTien } = req.body; // Lấy dữ liệu từ request body
-
+    const { maKH, maVe, maSuat, tongTien, suDungVoucher } = req.body; // Lấy dữ liệu từ request body
+    console.log(req.body)
     // Kiểm tra xem có đủ thông tin không
     if (!maKH || !maVe || !maSuat || !tongTien) {
+ 
         return res.status(400).json({ error: 'Thiếu thông tin maKH, maVe, maSuat hoặc tongTien.' });
     }
-
+   
     try {
         let pool = await connectToDatabase();
-        const result = await pool.request()
+        
+            const result = await pool.request()
             .input('maKH', sql.VarChar(20), maKH)
             .input('maVe', sql.VarChar(20), maVe)
             .input('maSuat', sql.VarChar(20), maSuat)
             .input('tongTien', sql.Decimal(18, 2), tongTien)
+            .input('suDungVoucher', sql.Int, suDungVoucher)
             .query(`
-                INSERT INTO [BookVe] ([maKH], [maVe], [maSuat], [tongTien]) 
-                VALUES (@maKH, @maVe, @maSuat, @tongTien);
+                INSERT INTO [BookVe] ([maKH], [maVe], [maSuat], [tongTien], [suDungVoucher]) 
+                VALUES (@maKH, @maVe, @maSuat, @tongTien, @suDungVoucher);
 
                 SELECT SCOPE_IDENTITY() AS maBook; -- Lấy ID của bản ghi mới
             `);
-
+        
         const maBook = result.recordset[0].maBook; // Lấy maBook từ kết quả truy vấn
 
         res.status(200).json({

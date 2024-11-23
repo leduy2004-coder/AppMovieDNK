@@ -21,6 +21,7 @@ const emailRoute = require('./routes/email');
 const uploadImage = require('./routes/image');
 const voucher = require('./routes/voucher');
 const comment = require('./routes/comment');
+const customer = require('./routes/customer');
 
 // Sử dụng route
 app.use('/movies', moviesRoute);
@@ -31,6 +32,7 @@ app.use('/account', accountRoute);
 app.use('/image', uploadImage);
 app.use('/comment', comment);
 app.use('/voucher', voucher);
+app.use('/customer', customer);
 
 // Định tuyến API
 app.get('/', (req, res) => {
