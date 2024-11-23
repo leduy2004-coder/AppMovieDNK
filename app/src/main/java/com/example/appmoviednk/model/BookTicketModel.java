@@ -12,6 +12,7 @@ public class BookTicketModel extends ViewModel {
     private String maVe;
     private int tongTien;
     private Date ngayMua;
+    private int suDungVoucher;
 
     public BookTicketModel(){
     }
@@ -85,5 +86,13 @@ public class BookTicketModel extends ViewModel {
 
     public void setNgayMua(Date ngayMua) {
         this.ngayMua = ngayMua;
+    }
+
+    public int getSuDungVoucher() {
+        return suDungVoucher;
+    }
+
+    public void setSuDungVoucher(int suDungVoucher) {
+        this.suDungVoucher = suDungVoucher;
     }
 }

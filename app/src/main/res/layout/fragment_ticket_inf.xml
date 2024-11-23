@@ -137,6 +137,7 @@
                 android:text="Tổng tiền: 20000"/>
         </LinearLayout>
         <ImageView
+            android:id="@+id/img_qr"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"

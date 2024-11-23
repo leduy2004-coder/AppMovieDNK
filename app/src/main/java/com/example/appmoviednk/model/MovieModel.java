@@ -16,11 +16,9 @@ public class MovieModel extends ViewModel implements DisplayTextSpinner, Seriali
     private String ngayKhoiChieu;
     private int thoiLuong;
     private boolean tinhTrang;
-    private Blob hinhDaiDien;
+    private String hinhDaiDien;
     private String video;
     private String moTa;
-    private String s;
-    private byte[] img;
     private int imageResource;
     private String encode;
     private String dateString;
@@ -36,22 +34,6 @@ public class MovieModel extends ViewModel implements DisplayTextSpinner, Seriali
 
     public LiveData<MovieModel> getSelectedMovie() {
         return selectedMovie;
-    }
-
-    public byte[] getImg() {
-        return img;
-    }
-
-    public void setImg(byte[] img) {
-        this.img = img;
-    }
-
-    public String getS() {
-        return s;
-    }
-
-    public void setS(String s) {
-        this.s = s;
     }
 
     public String getMaPhim() {
@@ -110,11 +92,11 @@ public class MovieModel extends ViewModel implements DisplayTextSpinner, Seriali
         this.tinhTrang = tinhTrang;
     }
 
-    public Blob getHinhDaiDien() {
+    public String getHinhDaiDien() {
         return hinhDaiDien;
     }
 
-    public void setHinhDaiDien(Blob hinhDaiDien) {
+    public void setHinhDaiDien(String hinhDaiDien) {
         this.hinhDaiDien = hinhDaiDien;
     }
 

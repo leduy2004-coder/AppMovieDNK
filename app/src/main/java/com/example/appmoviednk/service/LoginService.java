@@ -23,9 +23,6 @@ public interface LoginService {
     @POST("account/login")
     Call<CustomerModel> loginAccount(@Body CustomerModel customerModel);
 
-
-
-
     @GET("account/history/{maKH}")
     Call<List<Map<String, Object>>> getCustomerHistory(@Path("maKH") String maKH);
 }

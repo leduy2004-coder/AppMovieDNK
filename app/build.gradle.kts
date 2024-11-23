@@ -55,5 +55,6 @@ dependencies {
     implementation(libs.retrofit2.converter.gson)
     implementation(libs.core)
     implementation(libs.custom.ui)
-
+    implementation(libs.zxing.android.embedded)
+    implementation (libs.picasso)
 }

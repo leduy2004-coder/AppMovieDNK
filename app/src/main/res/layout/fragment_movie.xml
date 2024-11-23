@@ -19,7 +19,7 @@
 
             <FrameLayout
                 android:id="@+id/fr_trailer"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <ImageView
@@ -27,9 +27,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:alpha="0.7"
-
                     android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
                     android:src="@drawable/img_phim1" />
+
 
                 <ImageView
                     android:layout_width="wrap_content"

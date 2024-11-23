@@ -14,6 +14,7 @@ public class CustomerModel {
     private boolean tinhTrang;
     private String tenTK;
     private String matKhau;
+    private int diemThuong;
     private int diemDanh;
     private int soLuongVoucher;
     private Date ngayDiemDanhCuoi;
@@ -154,5 +155,13 @@ public class CustomerModel {
 
     public void setNgay(LocalDate ngay) {
         this.ngay = ngay;
+    }
+
+    public int getDiemThuong() {
+        return diemThuong;
+    }
+
+    public void setDiemThuong(int diemThuong) {
+        this.diemThuong = diemThuong;
     }
 }

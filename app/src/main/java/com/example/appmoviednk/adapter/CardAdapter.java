@@ -15,6 +15,7 @@ import com.example.appmoviednk.databinding.CardMovieHomeBinding;
 import com.example.appmoviednk.fragment.MovieFragment;
 import com.example.appmoviednk.model.MovieModel;
 import com.example.appmoviednk.service.MovieService;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -63,9 +64,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         }
 
         holder.cardMovieHomeBinding.tvName.setText(movie.getTenPhim());
-//        holder.cardMovieHomeBinding.ivImg.setImageResource(movie.getImageResource()); // Thay đổi thành ảnh mặc định của bạn
-        holder.cardMovieHomeBinding.ivImg.setImageResource(R.drawable.img_phim3);
-
+        //Hinh dại dien
+        Picasso.get()
+                .load(movie.getHinhDaiDien()) // URL ảnh cần tải
+                .placeholder(R.drawable.img_phim3) // Ảnh hiển thị khi đang tải (tùy chọn)
+                .error(R.drawable.img_phim3) // Ảnh hiển thị nếu lỗi (tùy chọn)
+                .into(holder.cardMovieHomeBinding.ivImg);
         // Click card
         holder.itemView.setOnClickListener(v -> {
             if (mContext instanceof MainActivity) {

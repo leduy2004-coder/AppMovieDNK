@@ -7,12 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.example.appmoviednk.DateUtils;
+import com.example.appmoviednk.R;
 import com.example.appmoviednk.activity.MainActivity;
 import com.example.appmoviednk.adapter.ScheduleShowingAdapter;
 import com.example.appmoviednk.databinding.FragmentMovieBinding;
@@ -20,6 +22,7 @@ import com.example.appmoviednk.model.MovieModel;
 import com.example.appmoviednk.model.ScheduleModel;
 import com.example.appmoviednk.retrofit.RetrofitClient;
 import com.example.appmoviednk.service.MovieService;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -36,7 +39,7 @@ public class MovieFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentMovieBinding.inflate(inflater, container, false);
         movie = new ViewModelProvider(requireActivity()).get(MovieModel.class);
@@ -107,11 +110,22 @@ public class MovieFragment extends Fragment {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void setContent(MovieModel movie) {
         binding.tvName.setText(movie.getTenPhim());
         binding.tvType.setText("Thể loại: " );
         binding.tvDescription.setText(movie.getMoTa());
         binding.tvDirector.setText(movie.getDaoDien());
+        Picasso.get()
+                .load(movie.getHinhDaiDien()) // URL ảnh cần tải
+                .placeholder(R.drawable.img_phim3) // Ảnh hiển thị khi đang tải (tùy chọn)
+                .error(R.drawable.img_phim3) // Ảnh hiển thị nếu lỗi (tùy chọn)
+                .into(binding.imgProfile);
+        Picasso.get()
+                .load(movie.getHinhDaiDien())
+                .placeholder(R.drawable.img_phim3)
+                .error(R.drawable.img_phim3)
+                .into(binding.imgCover);
         String formatDate = DateUtils.formatDateString(movie.getNgayKhoiChieu());
         binding.tvDate.setText(formatDate);
         binding.tvDuration.setText(String.valueOf(movie.getThoiLuong()));

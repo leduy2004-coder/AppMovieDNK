@@ -48,8 +48,6 @@ public class AccountFragment extends Fragment {
 
         // Set data to adapter and bind to RecyclerView
 
-
-
         CustomerModel loggedInAccount = UserSession.getInstance().getLoggedInAccount();
         if(loggedInAccount != null  ){
             binding.accountName.setText(loggedInAccount.getHoTen());

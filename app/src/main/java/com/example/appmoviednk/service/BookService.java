@@ -1,6 +1,7 @@
 package com.example.appmoviednk.service;
 
 import com.example.appmoviednk.model.BookChairModel;
+import com.example.appmoviednk.model.CustomerModel;
 
 import java.util.List;
 
@@ -11,4 +12,6 @@ import retrofit2.http.Path;
 public interface BookService {
     @GET("book/{maSuat}")
     Call<List<BookChairModel>> getGheDaDat(@Path("maSuat") String maSuat);
+
+
 }
