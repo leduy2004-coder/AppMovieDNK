@@ -1,19 +1,31 @@
 # Thành viên nhóm:
-- Lê Duy 221105053122206
-- Bùi Quốc Nam 22115053122230
-- Lê Công Khánh 22115053122220
-# Lớp HP: 124LTTD03
+- **Lê Duy**: 221105053122206
+- **Bùi Quốc Nam**: 22115053122230
+- **Lê Công Khánh**: 22115053122220
 
-# Ứng dụng Đặt Vé Xem Phim 
+**Lớp HP**: 124LTTD03
+
+---
+
+# Ứng dụng Đặt Vé Xem Phim
 
 ## Giới thiệu
-Ứng dụng giúp người dùng đặt vé xem phim nhanh chóng, tiện lợi với các tính năng nổi bật:
-- Xem danh sách phim, lịch chiếu.
-- Đặt vé trực tuyến.
-- Quản lý thông tin cá nhân và lịch sử đặt vé.
-- Đánh giá phim.
-- Điểm danh hằng ngày nhận voucher
-## Clone
+Ứng dụng giúp người dùng đặt vé xem phim nhanh chóng và tiện lợi với các tính năng nổi bật:
+- **Xem danh sách phim**, lịch chiếu.
+- **Đặt vé trực tuyến**.
+- **Quản lý thông tin cá nhân** và **lịch sử đặt vé**.
+- **Đánh giá phim**.
+- **Điểm danh hằng ngày** nhận voucher.
+
+---
+
+## Clone Repository
+
+Để clone các nhánh của ứng dụng từ GitHub, bạn có thể sử dụng các lệnh sau:
+
+```bash
 git clone --branch backend --single-branch https://github.com/leduy2004-coder/AppMovieDNK.git
+
 git clone --branch admin --single-branch https://github.com/leduy2004-coder/AppMovieDNK.git
+
 git clone --branch main --single-branch https://github.com/leduy2004-coder/AppMovieDNK.git
