@@ -1,6 +1,6 @@
 import { Card, CardBody, CardImg, CardSubtitle, CardText, CardTitle, Button } from 'reactstrap';
 
-const Blog = (props) => {
+const DetailMovie = (props) => {
     return (
         <Card>
             
@@ -14,4 +14,4 @@ const Blog = (props) => {
     );
 };
 
-export default Blog;
+export default DetailMovie;

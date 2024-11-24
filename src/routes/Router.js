@@ -7,7 +7,7 @@ const FullLayout = lazy(() => import('../layouts/FullLayout.js'));
 /***** Pages ****/
 const Statistics = lazy(() => import('../views/Statistics.js'));
 const About = lazy(() => import('../views/About.js'));
-const Alerts = lazy(() => import('../views/ui/Alerts'));
+const Movie = lazy(() => import('../views/ui/Movie.js'));
 const Badges = lazy(() => import('../views/ui/Badges'));
 const Buttons = lazy(() => import('../views/ui/Buttons'));
 const Cards = lazy(() => import('../views/ui/Cards'));
@@ -32,7 +32,7 @@ const ThemeRoutes = [
             { path: '/', element: <Navigate to="/login" /> },
             { path: '/starter', element: <Statistics /> },
             { path: '/about', element: <About /> },
-            { path: '/alerts', element: <Alerts /> },
+            { path: '/movie', element: <Movie /> },
             { path: '/badges', element: <Badges /> },
             { path: '/buttons', element: <Buttons /> },
             { path: '/cards', element: <Cards /> },

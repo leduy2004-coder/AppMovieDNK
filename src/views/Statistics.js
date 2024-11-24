@@ -1,46 +1,76 @@
+import React, { useState, useEffect } from 'react';
 import { Col, Row, Form, FormGroup, Label, Input } from 'reactstrap';
 import TicketsChart from '~/components/TicketsChart';
 import General from '~/components/General';
 import TopUser from '~/components/TopUser';
+import { UserNotify } from '~/components/store/NotifyContext';
 
-import Blog from '~/components/TopMovie';
-import bg1 from '~/assets/images/bg/bg1.jpg';
-import bg2 from '~/assets/images/bg/bg2.jpg';
-import bg3 from '~/assets/images/bg/bg3.jpg';
-import bg4 from '~/assets/images/bg/bg4.jpg';
-
-const BlogData = [
-    {
-        image: bg1,
-        title: 'This is simple blog',
-        subtitle: '2 comments, 1 Like',
-        description: 'This is a wider card with supporting text below as a natural lead-in to additional content.',
-        btnbg: 'primary',
-    },
-    {
-        image: bg2,
-        title: 'Lets be simple blog',
-        subtitle: '2 comments, 1 Like',
-        description: 'This is a wider card with supporting text below as a natural lead-in to additional content.',
-        btnbg: 'primary',
-    },
-    {
-        image: bg3,
-        title: "Don't Lamp blog",
-        subtitle: '2 comments, 1 Like',
-        description: 'This is a wider card with supporting text below as a natural lead-in to additional content.',
-        btnbg: 'primary',
-    },
-    {
-        image: bg4,
-        title: 'Simple is beautiful',
-        subtitle: '2 comments, 1 Like',
-        description: 'This is a wider card with supporting text below as a natural lead-in to additional content.',
-        btnbg: 'primary',
-    },
-];
+import config from '~/services';
 
 const Starter = () => {
+    const currentYear = new Date().getFullYear(); // Lấy năm hiện tại
+    const [selectedYear, setSelectedYear] = useState(currentYear);
+    const { setInfoNotify } = UserNotify();
+    const [dataTicketChart, setDataTicketChart] = useState([]);
+    const [dataTopUser, setDataTopUser] = useState([]);
+    const [generalData, setGeneralData] = useState({
+        sumMovie: 0,
+        sumTurnover: 0,
+        sumTicket: 0,
+    });
+
+    // Hàm gọi API và cập nhật dữ liệu
+    const fetchData = async (year) => {
+        try {
+            const [ticketData, topUserData, sumMovieData, sumTurnoverData, sumTicketData] = await Promise.all([
+                config.getTicketByYear(year),
+                config.getTopCustomersByYear(year),
+                config.getSumMovieByYear(year),
+                config.getSumTurnoverByYear(year),
+                config.getSumTicketByYear(year),
+            ]);
+
+            if (
+                ticketData.errCode ||
+                topUserData.errCode ||
+                sumMovieData.errCode ||
+                sumTurnoverData.errCode ||
+                sumTicketData.errCode
+            ) {
+                setInfoNotify({
+                    content: 'Lỗi dữ liệu !!',
+                    delay: 1500,
+                    isNotify: true,
+                    type: 'error',
+                });
+            } else {
+                setDataTicketChart(ticketData);
+                setDataTopUser(topUserData);
+
+                // Cập nhật dữ liệu vào generalData
+                setGeneralData({
+                    sumMovie: sumMovieData.SoLuongPhim,
+                    sumTurnover: sumTurnoverData.TongDoanhThu,
+                    sumTicket: sumTicketData.TongSoLuongVe,
+                });
+            }
+        } catch (error) {
+            setInfoNotify({
+                content: 'Lỗi khi lấy dữ liệu từ server !!',
+                delay: 1500,
+                isNotify: true,
+                type: 'error',
+            });
+        }
+    };
+    // Gọi hàm fetchData khi component load lần đầu hoặc khi selectedYear thay đổi
+    useEffect(() => {
+        fetchData(selectedYear);
+    }, [selectedYear]);
+
+    const handleYearChange = (e) => {
+        setSelectedYear(e.target.value); // Cập nhật năm đã chọn
+    };
     return (
         <div>
             {/***Top Cards***/}
@@ -52,7 +82,13 @@ const Starter = () => {
                     <Form>
                         <FormGroup>
                             <Label for="yearSelect">Chọn năm</Label>
-                            <Input type="select" name="year" id="yearSelect">
+                            <Input
+                                type="select"
+                                name="year"
+                                id="yearSelect"
+                                value={selectedYear}
+                                onChange={handleYearChange}
+                            >
                                 <option value="2023">2023</option>
                                 <option value="2024">2024</option>
                                 <option value="2025">2025</option>
@@ -65,32 +101,17 @@ const Starter = () => {
 
             <Row>
                 <Col sm="6" lg="6" xl="7" xxl="8">
-                    <TicketsChart />
+                    <TicketsChart data={dataTicketChart} />
                 </Col>
                 <Col sm="6" lg="6" xl="5" xxl="4">
-                    <General />
+                    <General data={generalData} />
                 </Col>
             </Row>
             {/***Table ***/}
             <Row>
                 <Col lg="12">
-                    <TopUser />
+                    <TopUser data={dataTopUser} />
                 </Col>
-            </Row>
-            {/***Blog Cards***/}
-            <Row>
-                <h4>Top phim có nhiều lượt xem nhất</h4>
-                {BlogData.map((blg, index) => (
-                    <Col sm="6" lg="6" xl="3" key={index}>
-                        <Blog
-                            image={blg.image}
-                            title={blg.title}
-                            subtitle={blg.subtitle}
-                            text={blg.description}
-                            color={blg.btnbg}
-                        />
-                    </Col>
-                ))}
             </Row>
         </div>
     );

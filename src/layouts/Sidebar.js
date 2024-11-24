@@ -13,7 +13,7 @@ const navigation = [
     },
     {
         title: 'Quản lí phim',
-        href: '/alerts',
+        href: '/movie',
         icon: 'bi bi-layout-split',
     },
     {

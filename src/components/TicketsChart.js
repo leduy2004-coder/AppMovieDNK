@@ -1,7 +1,13 @@
 import { Card, CardBody, CardSubtitle, CardTitle } from 'reactstrap';
 import Chart from 'react-apexcharts';
 
-const SalesChart = () => {
+const SalesChart = ({ data }) => {
+    // Xử lý dữ liệu: Mặc định giá trị 0 cho các tháng chưa có dữ liệu
+    const processedData = Array.from({ length: 12 }, (_, index) => {
+        const monthData = data.find((item) => item.Thang === index + 1);
+        return monthData ? monthData.TongSoVe : 0;
+    });
+
     const options = {
         chart: {
             toolbar: {
@@ -29,7 +35,20 @@ const SalesChart = () => {
         },
         colors: ['#0d6efd', '#009efb', '#6771dc'],
         xaxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+            categories: [
+                'Tháng 1',
+                'Tháng 2',
+                'Tháng 3',
+                'Tháng 4',
+                'Tháng 5',
+                'Tháng 6',
+                'Tháng 7',
+                'Tháng 8',
+                'Tháng 9',
+                'Tháng 10',
+                'Tháng 11',
+                'Tháng 12',
+            ],
         },
         responsive: [
             {
@@ -47,12 +66,8 @@ const SalesChart = () => {
     };
     const series = [
         {
-            name: '2020',
-            data: [20, 40, 50, 30, 40, 50, 30, 30, 40],
-        },
-        {
-            name: '2022',
-            data: [10, 20, 40, 60, 20, 40, 60, 60, 20],
+            name: 'Số vé',
+            data: processedData,
         },
     ];
 
