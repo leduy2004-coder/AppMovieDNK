@@ -3,51 +3,32 @@ import { Card, CardBody, CardTitle, ListGroup, CardSubtitle, ListGroupItem, Butt
 
 const FeedData = [
     {
-        title: 'Cras justo odio',
+        title: 'Tổng số vé bán được',
         icon: 'bi bi-bell',
         color: 'primary',
         date: '6 minute ago',
     },
     {
-        title: 'New user registered.',
+        title: 'Tổng doanh thu',
         icon: 'bi bi-person',
         color: 'info',
         date: '6 minute ago',
     },
     {
-        title: 'Server #1 overloaded.',
+        title: 'Tài khoản đăng kí',
         icon: 'bi bi-hdd',
         color: 'danger',
         date: '6 minute ago',
     },
-    {
-        title: 'New order received.',
-        icon: 'bi bi-bag-check',
-        color: 'success',
-        date: '6 minute ago',
-    },
-    {
-        title: 'Cras justo odio',
-        icon: 'bi bi-bell',
-        color: 'dark',
-        date: '6 minute ago',
-    },
-    {
-        title: 'Server #1 overloaded.',
-        icon: 'bi bi-hdd',
-        color: 'warning',
-        date: '6 minute ago',
-    },
+
 ];
 
 const Feeds = () => {
     return (
         <Card>
             <CardBody>
-                <CardTitle tag="h5">Feeds</CardTitle>
-                <CardSubtitle className="mb-2 text-muted" tag="h6">
-                    Widget you can use
-                </CardSubtitle>
+                <CardTitle tag="h5">Tổng quát</CardTitle>
+
                 <ListGroup flush className="mt-4">
                     {FeedData.map((feed, index) => (
                         <ListGroupItem

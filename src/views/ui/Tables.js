@@ -1,4 +1,4 @@
-import ProjectTables from '~/components/ProjectTable';
+import ProjectTables from '~/components/TopUser';
 import { Row, Col, Table, Card, CardTitle, CardBody } from 'reactstrap';
 
 const Tables = () => {

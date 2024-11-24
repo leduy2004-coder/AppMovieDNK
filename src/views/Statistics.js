@@ -1,9 +1,9 @@
-import { Col, Row } from 'reactstrap';
-import SalesChart from '~/components/SalesChart';
-import Feeds from '~/components/Feeds';
-import ProjectTables from '~/components/ProjectTable';
+import { Col, Row, Form, FormGroup, Label, Input } from 'reactstrap';
+import TicketsChart from '~/components/TicketsChart';
+import General from '~/components/General';
+import TopUser from '~/components/TopUser';
 
-import Blog from '~/components/Blog';
+import Blog from '~/components/TopMovie';
 import bg1 from '~/assets/images/bg/bg1.jpg';
 import bg2 from '~/assets/images/bg/bg2.jpg';
 import bg3 from '~/assets/images/bg/bg3.jpg';
@@ -46,22 +46,40 @@ const Starter = () => {
             {/***Top Cards***/}
 
             {/***Sales & Feed***/}
+            <Row className="mb-4">
+                {/* ComboBox for Year */}
+                <Col sm="12">
+                    <Form>
+                        <FormGroup>
+                            <Label for="yearSelect">Chọn năm</Label>
+                            <Input type="select" name="year" id="yearSelect">
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                                {/* Add more years as needed */}
+                            </Input>
+                        </FormGroup>
+                    </Form>
+                </Col>
+            </Row>
+
             <Row>
                 <Col sm="6" lg="6" xl="7" xxl="8">
-                    <SalesChart />
+                    <TicketsChart />
                 </Col>
                 <Col sm="6" lg="6" xl="5" xxl="4">
-                    <Feeds />
+                    <General />
                 </Col>
             </Row>
             {/***Table ***/}
             <Row>
                 <Col lg="12">
-                    <ProjectTables />
+                    <TopUser />
                 </Col>
             </Row>
             {/***Blog Cards***/}
             <Row>
+                <h4>Top phim có nhiều lượt xem nhất</h4>
                 {BlogData.map((blg, index) => (
                     <Col sm="6" lg="6" xl="3" key={index}>
                         <Blog

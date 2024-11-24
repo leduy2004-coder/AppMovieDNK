@@ -5,7 +5,7 @@ import { Navigate } from 'react-router-dom';
 const FullLayout = lazy(() => import('../layouts/FullLayout.js'));
 
 /***** Pages ****/
-const Starter = lazy(() => import('../views/Starter.js'));
+const Statistics = lazy(() => import('../views/Statistics.js'));
 const About = lazy(() => import('../views/About.js'));
 const Alerts = lazy(() => import('../views/ui/Alerts'));
 const Badges = lazy(() => import('../views/ui/Badges'));
@@ -30,7 +30,7 @@ const ThemeRoutes = [
         element: <FullLayout />,
         children: [
             { path: '/', element: <Navigate to="/login" /> },
-            { path: '/starter', element: <Starter /> },
+            { path: '/starter', element: <Statistics /> },
             { path: '/about', element: <About /> },
             { path: '/alerts', element: <Alerts /> },
             { path: '/badges', element: <Badges /> },
