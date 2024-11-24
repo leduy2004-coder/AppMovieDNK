@@ -13,3 +13,7 @@
 - Quản lý thông tin cá nhân và lịch sử đặt vé.
 - Đánh giá phim.
 - Điểm danh hằng ngày nhận voucher
+## Clone
+git clone --branch backend --single-branch https://github.com/leduy2004-coder/AppMovieDNK.git
+git clone --branch admin --single-branch https://github.com/leduy2004-coder/AppMovieDNK.git
+git clone --branch main --single-branch https://github.com/leduy2004-coder/AppMovieDNK.git
