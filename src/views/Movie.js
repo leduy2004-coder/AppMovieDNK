@@ -13,6 +13,10 @@ import {
     Pagination,
     PaginationItem,
     PaginationLink,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
 } from 'reactstrap';
 import { FaPlus, FaTrashAlt, FaInfoCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -20,11 +24,15 @@ import config from '~/services';
 import { UserNotify } from '~/components/store/NotifyContext';
 import { UserAuth } from '~/components/store/AuthContext';
 import AddMovieForm from '~/components/form/FormUpdateMovie';
+
 const Movie = () => {
     const [movies, setMovies] = useState([]);
     const [search, setSearch] = useState('');
     const [movieId, setMovieId] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
+    const [showConfirmDelete, setShowConfirmDelete] = useState(false); // Điều khiển việc hiển thị modal xác nhận
+    const [movieToDelete, setMovieToDelete] = useState(null); // Lưu thông tin phim cần xóa
+
     const { setInfoNotify } = UserNotify();
     const { openFormAddMovie, setOpenFormAddMovie } = UserAuth();
     const itemsPerPage = 12;
@@ -44,7 +52,7 @@ const Movie = () => {
                         type: 'error',
                     });
                 } else {
-                    setMovies(data);
+                    setMovies(data.reverse());
                 }
             } catch (error) {
                 setInfoNotify({
@@ -84,9 +92,56 @@ const Movie = () => {
     };
 
     const handOpenFormAdd = () => {
+        setMovieId('');
         setOpenFormAddMovie(true);
     };
 
+    // Hàm mở modal xác nhận xóa
+    const handleOpenConfirmDelete = (movieId) => {
+        setMovieToDelete(movieId);
+        setShowConfirmDelete(true);
+    };
+
+    // Hàm xóa phim
+    const handRemoveMovie = async () => {
+        if (!movieToDelete) return;
+
+        try {
+            const data = await config.removeMovie(movieToDelete);
+
+            if (data.errCode) {
+                setInfoNotify({
+                    content: 'Lỗi dữ liệu !!',
+                    delay: 1500,
+                    isNotify: true,
+                    type: 'error',
+                });
+            } else {
+                // Lọc bỏ phim bị xóa khỏi danh sách
+                const updatedMovies = movies.filter((movie) => movie.maPhim !== movieToDelete);
+                setMovies(updatedMovies);
+                setInfoNotify({
+                    content: 'Phim đã được xóa thành công.',
+                    delay: 1500,
+                    isNotify: true,
+                    type: 'success',
+                });
+            }
+        } catch (error) {
+            setInfoNotify({
+                content: 'Lỗi khi lấy dữ liệu từ server !!',
+                delay: 1500,
+                isNotify: true,
+                type: 'error',
+            });
+        } finally {
+            setShowConfirmDelete(false); // Đóng modal xác nhận sau khi thực hiện
+            setMovieToDelete(null); // Reset thông tin phim cần xóa
+        }
+    };
+    const handleMoviesUpdate = (updatedMovies) => {
+        setMovies(updatedMovies);
+    };
     return (
         <div>
             {/* Thanh tìm kiếm và nút thêm */}
@@ -111,7 +166,7 @@ const Movie = () => {
             <Row>
                 {currentMovies.map((movie) => (
                     <Col sm="6" lg="4" xl="3" key={movie.maPhim} className="mb-4">
-                        <Card>
+                        <Card style={{ display: 'flex', flexDirection: 'column', height: '350px' }}>
                             <div
                                 className="card-img-container"
                                 style={{
@@ -132,22 +187,26 @@ const Movie = () => {
                                 />
                             </div>
 
-                            <CardBody>
+                            <CardBody style={{ flexGrow: 1 }}>
                                 <CardTitle tag="h5">{movie.tenPhim}</CardTitle>
                                 <CardSubtitle tag="h6" className="mb-2 text-muted">
                                     {movie.thoiLuong} phút
                                 </CardSubtitle>
-                                <div className="d-flex justify-content-between">
-                                    <Button color="danger" size="sm">
-                                        <FaTrashAlt className="me-1" />
-                                        Xóa
-                                    </Button>
-                                    <Button color="info" size="sm" onClick={() => handleViewDetails(movie.maPhim)}>
-                                        <FaInfoCircle className="me-1" />
-                                        Chỉnh sửa
-                                    </Button>
-                                </div>
                             </CardBody>
+
+                            <div
+                                className="d-flex justify-content-between"
+                                style={{ marginTop: 'auto', padding: '0px 25px 10px 25px' }}
+                            >
+                                <Button color="danger" size="sm" onClick={() => handleOpenConfirmDelete(movie.maPhim)}>
+                                    <FaTrashAlt className="me-1" />
+                                    Xóa
+                                </Button>
+                                <Button color="info" size="sm" onClick={() => handleViewDetails(movie.maPhim)}>
+                                    <FaInfoCircle className="me-1" />
+                                    Chỉnh sửa
+                                </Button>
+                            </div>
                         </Card>
                     </Col>
                 ))}
@@ -172,7 +231,21 @@ const Movie = () => {
                 </Col>
             </Row>
 
-            {openFormAddMovie && <AddMovieForm movieId={movieId} />}
+            {/* Modal xác nhận xóa */}
+            <Modal isOpen={showConfirmDelete} toggle={() => setShowConfirmDelete(false)}>
+                <ModalHeader toggle={() => setShowConfirmDelete(false)}>Xác nhận xóa phim</ModalHeader>
+                <ModalBody>Bạn có chắc chắn muốn xóa phim này?</ModalBody>
+                <ModalFooter>
+                    <Button color="secondary" onClick={() => setShowConfirmDelete(false)}>
+                        Hủy
+                    </Button>
+                    <Button color="danger" onClick={handRemoveMovie}>
+                        Xóa
+                    </Button>
+                </ModalFooter>
+            </Modal>
+
+            {openFormAddMovie && <AddMovieForm movieId={movieId} movies={movies} onMoviesUpdate={handleMoviesUpdate} />}
         </div>
     );
 };

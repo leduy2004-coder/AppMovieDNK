@@ -5,9 +5,10 @@ import { UserNotify } from '~/components/store/NotifyContext';
 import './form.scss';
 import config from '~/services';
 
-const UpdateMovieForm = ({ movieId }) => {
+const UpdateMovieForm = ({ movieId, movies, onMoviesUpdate }) => {
     const { setInfoNotify } = UserNotify();
     const { setOpenFormAddMovie } = UserAuth();
+    const [selectedFile, setSelectedFile] = useState(false);
 
     const [movieDetails, setMovieDetails] = useState({
         movieTitle: '',
@@ -43,13 +44,7 @@ const UpdateMovieForm = ({ movieId }) => {
                 } else {
                     const mappedData = {
                         movieTitle: data.tenPhim || '',
-                        releaseDate: data.ngayKhoiChieu
-                            ? new Date(data.ngayKhoiChieu).toLocaleDateString('vi-VN', {
-                                  year: 'numeric',
-                                  month: '2-digit',
-                                  day: '2-digit',
-                              })
-                            : '',
+                        releaseDate: data.ngayKhoiChieu ? new Date(data.ngayKhoiChieu).toISOString().split('T')[0] : '',
                         director: data.daoDien || '',
                         ageRequirement: data.doTuoiYeuCau || '',
                         duration: data.thoiLuong || '',
@@ -58,7 +53,9 @@ const UpdateMovieForm = ({ movieId }) => {
                         movieVideo: data.video || '',
                         description: data.moTa || '',
                     };
-                    console.log(mappedData.releaseDate)
+                    setSelectedFile(true);
+
+                    console.log(mappedData.releaseDate);
                     setMovieDetails(mappedData);
                 }
             } catch (error) {
@@ -108,14 +105,26 @@ const UpdateMovieForm = ({ movieId }) => {
     };
 
     const handleFileChange = (e) => {
+        setSelectedFile(false);
+
         const { name, files } = e.target;
         setMovieDetails((prev) => ({ ...prev, [name]: files[0] }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
-            const data = await config.insertMovie(movieDetails);
+            let data;
+            let actionMessage = '';
+
+            if (movieId) {
+                data = await config.updateMovie(movieId, movieDetails);
+                actionMessage = 'Cập nhật phim thành công !!';
+            } else {
+                data = await config.insertMovie(movieDetails);
+                actionMessage = 'Thêm phim thành công !!';
+            }
 
             if (data.errCode) {
                 setInfoNotify({
@@ -124,15 +133,24 @@ const UpdateMovieForm = ({ movieId }) => {
                     isNotify: true,
                     type: 'error',
                 });
-            } else {
-                setOpenFormAddMovie(false);
-                setInfoNotify({
-                    content: 'Thêm phim thành công !!',
-                    delay: 1500,
-                    isNotify: true,
-                    type: 'success',
-                });
+                return;
             }
+
+            // Cập nhật danh sách movies
+            const updatedMovies = movieId
+                ? movies.map((movie) => (movie.maPhim === movieId ? { ...movie, ...data } : movie))
+                : [data, ...(movies || [])];
+            console.log(updatedMovies);
+            console.log(data);
+            onMoviesUpdate(updatedMovies); // Cập nhật state ở cha
+            setOpenFormAddMovie(false); // Đóng form
+
+            setInfoNotify({
+                content: actionMessage,
+                delay: 1500,
+                isNotify: true,
+                type: 'success',
+            });
         } catch (error) {
             setInfoNotify({
                 content: 'Lỗi khi lấy dữ liệu từ server !!',
@@ -144,7 +162,7 @@ const UpdateMovieForm = ({ movieId }) => {
     };
 
     const handleClose = () => {
-        setOpenFormAddMovie(false); // Close the form
+        setOpenFormAddMovie(false);
     };
 
     return (
@@ -159,7 +177,7 @@ const UpdateMovieForm = ({ movieId }) => {
                                 </span>
                             </div>
                             <CardTitle tag="h4" className="text-center mb-4">
-                                Thêm mới phim
+                                {movieId ? 'Cập nhật phim' : 'Thêm mới phim'}
                             </CardTitle>
                             <Form onSubmit={handleSubmit}>
                                 <Row>
@@ -262,11 +280,16 @@ const UpdateMovieForm = ({ movieId }) => {
                                             <Label for="movieImage">Ảnh bìa phim</Label>
                                             <div className="file-upload">
                                                 {/* Display the image if available */}
-                                                {movieDetails.movieImage && (
+                                                {movieDetails.movieImage && selectedFile && (
                                                     <img
                                                         src={movieDetails.movieImage}
                                                         alt="Movie"
-                                                        style={{ width: '100px', height: 'auto', marginRight: '15px' }}
+                                                        style={{
+                                                            width: '100px',
+                                                            height: 'auto',
+                                                            marginRight: '15px',
+                                                            marginBottom: '10px',
+                                                        }}
                                                     />
                                                 )}
                                                 <Input
@@ -275,7 +298,7 @@ const UpdateMovieForm = ({ movieId }) => {
                                                     name="movieImage"
                                                     onChange={handleFileChange}
                                                     accept="image/*"
-                                                    required
+                                                    required={!movieDetails.movieImage}
                                                 />
                                             </div>
                                         </FormGroup>
@@ -311,7 +334,7 @@ const UpdateMovieForm = ({ movieId }) => {
 
                                 <div className="area-btn-submit">
                                     <Button className="btn-submit" type="submit">
-                                        Thêm phim
+                                        {movieId ? 'Cập nhật phim' : 'Thêm phim'}
                                     </Button>
                                 </div>
                             </Form>

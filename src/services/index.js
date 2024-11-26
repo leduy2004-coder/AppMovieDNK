@@ -1,5 +1,5 @@
 import { login, logout } from './authService';
-import { getAllMovies, getAllTypeMovie, insertMovie, getMovieById } from './movieService';
+import { getAllMovies, getAllTypeMovie, insertMovie, getMovieById, updateMovie, removeMovie } from './movieService';
 import {
     getTicketByYear,
     getTopCustomersByYear,
@@ -19,7 +19,9 @@ const config = {
     getAllMovies,
     getAllTypeMovie,
     insertMovie,
-    getMovieById
+    getMovieById,
+    updateMovie,
+    removeMovie,
 };
 
 export default config;
