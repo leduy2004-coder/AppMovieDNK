@@ -23,7 +23,7 @@ const voucher = require('./routes/voucher');
 const comment = require('./routes/comment');
 const customer = require('./routes/customer');
 const statistic = require('./routes/statistic');
-
+const schedule = require('./routes/schedule');
 // Sử dụng route
 app.use('/movies', moviesRoute);
 app.use('/book', bookRoute);
@@ -35,6 +35,7 @@ app.use('/comment', comment);
 app.use('/voucher', voucher);
 app.use('/customer', customer);
 app.use('/statistic', statistic);
+app.use('/schedule', schedule);
 
 // Định tuyến API
 app.get('/', (req, res) => {
