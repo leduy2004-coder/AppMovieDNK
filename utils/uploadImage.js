@@ -44,5 +44,22 @@ const uploadMultipleImages = (images) => {
     });
 };
 
+// Hàm xóa ảnh
+const deleteImage = (publicUrl) => {
+  console.log('34234225252')
+  const publicId = publicUrl.split('/').pop().split('.')[0];
+  return new Promise((resolve, reject) => {
+    cloudier.uploader.destroy(publicId, (error, result) => {
+      if (error) {
+        console.error('Error deleting image:', error?.message);
+        return reject({ message: error?.message || 'Delete failed' });
+      }
+      console.log('Deleted Image Result:', result);
+      return resolve(result); // Trả về kết quả xóa
+    });
+  });
+};
+
 // Xuất các hàm
-module.exports = { uploadImage, uploadMultipleImages };
+module.exports = { uploadImage, uploadMultipleImages, deleteImage };
+
