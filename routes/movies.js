@@ -5,7 +5,8 @@ const router = express.Router();
 const sql = require('mssql');
 const { connectToDatabase } = require('../config/dbConfig');
 const axiosRetry = require('axios-retry');
-
+const { uploadImage, uploadMultipleImages } = require('../utils/uploadImage');
+const multer = require('multer');
 
 // Hàm để lấy chi tiết của từng phim với retry và timeout
 const fetchMovieDetails = async (movies) => {
@@ -34,6 +35,24 @@ const fetchMovieDetailsSequential = async (movies) => {
     }
     return movieDetails;
 };
+
+
+// Route để lấy tất cả phim 
+router.get('/getAll', async (req, res) => {
+    let pool;
+
+    try {
+        pool = await connectToDatabase();
+
+        let result = await pool.request()
+            .query('SELECT maPhim, tenPhim, thoiLuong, hinhDaiDien from Phim'); 
+
+        res.json(result.recordset);
+    } catch (err) {
+        console.error('Lỗi khi lấy dữ liệu phim chiếu:', err);
+        res.status(500).send('Lỗi khi lấy dữ liệu phim chiếu');
+    } 
+});
 // Route để lấy những phim đang chiếu
 router.get('/phimdangchieu', async (req, res) => {
     let pool;
@@ -97,6 +116,24 @@ router.get('/ngaydangchieu', async (req, res) => {
     } catch (err) {
         console.error('Lỗi khi lấy dữ liệu phim đang chiếu ppp:', err);
         res.status(500).send('Lỗi khi lấy dữ liệu phim đang chiếu');
+    } 
+});
+// Route để lấy tất cả loại phim
+router.get('/getTypeMovie', async (req, res) => {
+    let pool;
+
+    try {
+        pool = await connectToDatabase();
+
+        // Lấy danh sách maPhim từ stored procedure GetSuatChieu
+        let result = await pool.request()
+            .query('SELECT * FROM TheLoaiPhim');
+
+        const data = result.recordset;
+        res.json(data);
+    } catch (err) {
+        console.error('Lỗi khi lấy dữ liệu loại phim:', err);
+        res.status(500).send('Lỗi khi lấy dữ liệu loại phim');
     } 
 });
 // Route để lấy thông tin của phim thông qua maPhim
@@ -258,42 +295,55 @@ router.get('/ticket-details/:maBook', async (req, res) => {
     }
 });
 
-router.post('/insert', async (req, res) => {
-    const {tenPhim, daoDien, doTuoiYeuCau, ngayKhoiChieu, thoiLuong, maLPhim, moTa, video } = req.body; 
+
+// Cấu hình Multer để nhận tệp mà không lưu trữ
+const storage = multer.memoryStorage();  // Lưu tệp vào bộ nhớ (RAM) thay vì trên đĩa
+const upload = multer({ storage: storage });
+
+router.post('/insert', upload.single('movieImage'), async  (req, res) => {
+    const { movieTitle, director, ageRequirement, releaseDate, duration, movieType, description, movieVideo } = req.body;
+    const file = req.file;
     let pool;
-    
+
     try {
         pool = await connectToDatabase();
 
-        // Kiểm tra dữ liệu có đầy đủ không
-        if (!tenPhim || !daoDien || !doTuoiYeuCau || !ngayKhoiChieu || !thoiLuong || !maLPhim) {
+        // Kiểm tra dữ liệu đầu vào
+        if (!movieTitle || !director || !ageRequirement || !releaseDate || !duration || !movieType) {
             return res.status(400).json({ message: 'Dữ liệu không đầy đủ, vui lòng kiểm tra lại' });
         }
 
+        let imageUrl = null;
+        if (file) {
+            const uploadResult = await uploadImage(file.buffer);
+            imageUrl = uploadResult.secure_url; 
+        }
+
         // Thực hiện câu lệnh INSERT vào cơ sở dữ liệu
-        let result = await pool.request()
-            .input('tenPhim', sql.NVarChar(50), tenPhim)
-            .input('daoDien', sql.NVarChar(50), daoDien)
-            .input('doTuoiYeuCau', sql.Int, doTuoiYeuCau)
-            .input('ngayKhoiChieu', sql.Date, ngayKhoiChieu)
-            .input('thoiLuong', sql.Int, thoiLuong)
-            .input('maLPhim', sql.VarChar(20), maLPhim)
+        await pool.request()
+            .input('tenPhim', sql.NVarChar(50), movieTitle)
+            .input('daoDien', sql.NVarChar(50), director)
+            .input('doTuoiYeuCau', sql.Int, ageRequirement)
+            .input('ngayKhoiChieu', sql.Date, releaseDate)
+            .input('thoiLuong', sql.Int, duration)
+            .input('maLPhim', sql.VarChar(20), movieType)
             .input('tinhTrang', sql.Int, 1)
-            .input('moTa', sql.NVarChar(sql.MAX), moTa) 
-            .input('video', sql.NVarChar(sql.MAX), video) 
+            .input('moTa', sql.NVarChar(sql.MAX), description)
+            .input('video', sql.NVarChar(sql.MAX), movieVideo)
+            .input('hinhDaiDien', sql.NVarChar(sql.MAX), imageUrl) // Lưu URL ảnh
             .query(`
                 INSERT INTO Phim 
-                ( tenPhim, daoDien, doTuoiYeuCau, ngayKhoiChieu, thoiLuong, maLPhim, moTa, video, tinhTrang)
+                (tenPhim, daoDien, doTuoiYeuCau, ngayKhoiChieu, thoiLuong, maLPhim, moTa, video, hinhDaiDien, tinhTrang)
                 VALUES 
-                ( @tenPhim, @daoDien, @doTuoiYeuCau, @ngayKhoiChieu, @thoiLuong, @maLPhim, @moTa, @video,@tinhTrang)
+                (@tenPhim, @daoDien, @doTuoiYeuCau, @ngayKhoiChieu, @thoiLuong, @maLPhim, @moTa, @video, @hinhDaiDien, @tinhTrang)
             `);
 
         // Trả về kết quả thành công
-        res.status(201).json({ message: 'Dữ liệu đã được chèn thành công!' });
+        res.status(201).json({ message: 'Dữ liệu đã được chèn thành công!', imageUrl });
 
     } catch (err) {
         console.error('Lỗi khi chèn dữ liệu:', err);
-        res.status(500).send('Lỗi khi chèn dữ liệu vào cơ sở dữ liệu');
+        res.status(500).json({ message: 'Lỗi khi chèn dữ liệu vào cơ sở dữ liệu', error: err.message });
     }
 });
 
