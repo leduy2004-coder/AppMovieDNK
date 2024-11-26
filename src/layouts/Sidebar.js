@@ -18,7 +18,7 @@ const navigation = [
     },
     {
         title: 'Quản lí lịch chiếu',
-        href: '/badges',
+        href: '/schedule',
         icon: 'bi bi-columns',
     },
     

@@ -7,19 +7,13 @@ const FullLayout = lazy(() => import('../layouts/FullLayout.js'));
 /***** Pages ****/
 const Statistics = lazy(() => import('../views/Statistics.js'));
 const About = lazy(() => import('../views/About.js'));
-const Movie = lazy(() => import('../views/ui/Movie.js'));
-const Badges = lazy(() => import('../views/ui/Badges'));
-const Buttons = lazy(() => import('../views/ui/Buttons'));
-const Cards = lazy(() => import('../views/ui/Cards'));
-const Grid = lazy(() => import('../views/ui/Grid'));
-const Tables = lazy(() => import('../views/ui/Tables'));
-const Forms = lazy(() => import('../views/ui/Forms'));
-const Breadcrumbs = lazy(() => import('../views/ui/Breadcrumbs'));
-const Login = lazy(() => import('../views/ui/Login'));
+const Movie = lazy(() => import('../views/Movie.js'));
+const Schedule = lazy(() => import('../views/Schedule.js'));
+const Login = lazy(() => import('../views/Login.js'));
+const DetailMovie = lazy(() => import('../views/DetailMovie'));
 
 /*****Routes******/
 const ThemeRoutes = [
-
     {
         path: '/login',
         element: <Login />,
@@ -33,13 +27,8 @@ const ThemeRoutes = [
             { path: '/starter', element: <Statistics /> },
             { path: '/about', element: <About /> },
             { path: '/movie', element: <Movie /> },
-            { path: '/badges', element: <Badges /> },
-            { path: '/buttons', element: <Buttons /> },
-            { path: '/cards', element: <Cards /> },
-            { path: '/grid', element: <Grid /> },
-            { path: '/table', element: <Tables /> },
-            { path: '/forms', element: <Forms /> },
-            { path: '/breadcrumbs', element: <Breadcrumbs /> },
+            { path: '/movie/:id', element: <DetailMovie /> },
+            { path: '/schedule', element: <Schedule /> },
         ],
     },
 ];

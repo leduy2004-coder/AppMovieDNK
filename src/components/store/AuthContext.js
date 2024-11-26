@@ -17,6 +17,7 @@ const isJSON = (str) => {
 
 export function AuthProvider({ children }) {
     const [userAuth, setUserAuth] = useState('');
+    const [openFormAddMovie, setOpenFormAddMovie] = useState(false);
 
     useEffect(() => {
         const storedUser = localStorage.getItem('userInfo');
@@ -26,6 +27,8 @@ export function AuthProvider({ children }) {
 
     const value = {
         userAuth,
+        openFormAddMovie,
+        setOpenFormAddMovie,
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

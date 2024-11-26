@@ -1,32 +1,17 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
     Button,
     Collapse,
-    Dropdown,
-    DropdownItem,
-    DropdownMenu,
-    DropdownToggle,
-    Nav,
-    NavItem,
-    Navbar,
-    NavbarBrand,
+    Navbar
 } from 'reactstrap';
 
-import { ReactComponent as LogoWhite } from '~/assets/images/logos/materialprowhite.svg';
-import user1 from '~/assets/images/users/user4.jpg';
 import './header.scss';
-import { UserNotify } from '~/components/store/NotifyContext';
-
 const Header = () => {
-    const navigate = useNavigate();
+
     const [isOpen, setIsOpen] = React.useState(false);
 
-    const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
-    const { setInfoNotify } = UserNotify();
-
-    const toggle = () => setDropdownOpen((prevState) => !prevState);
     const Handletoggle = () => {
         setIsOpen(!isOpen);
     };
@@ -34,16 +19,7 @@ const Header = () => {
         document.getElementById('sidebarArea').classList.toggle('showSidebar');
     };
 
-    const handleLogout = () => {
-        navigate('/login');
-        localStorage.clear();
-        setInfoNotify({
-            content: 'Đăng xuất thành công !!',
-            delay: 1500,
-            isNotify: true,
-            type: 'success',
-        });
-    };
+
 
     return (
         <Navbar color="dark" dark expand="md" className="fix-header">
@@ -53,9 +29,7 @@ const Header = () => {
                         DNK
                     </Link>
                 </div>
-                <NavbarBrand href="/">
-                    <LogoWhite className=" d-lg-none" />
-                </NavbarBrand>
+
                 <Button color="primary" className=" d-lg-none" onClick={() => showMobilemenu()}>
                     <i className="bi bi-list"></i>
                 </Button>

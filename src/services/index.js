@@ -1,4 +1,5 @@
 import { login, logout } from './authService';
+import { getAllMovies, getAllTypeMovie, insertMovie, getMovieById } from './movieService';
 import {
     getTicketByYear,
     getTopCustomersByYear,
@@ -15,6 +16,10 @@ const config = {
     getSumMovieByYear,
     getSumTicketByYear,
     getSumTurnoverByYear,
+    getAllMovies,
+    getAllTypeMovie,
+    insertMovie,
+    getMovieById
 };
 
 export default config;
