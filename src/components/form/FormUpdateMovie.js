@@ -9,7 +9,7 @@ const UpdateMovieForm = ({ movieId, movies, onMoviesUpdate }) => {
     const { setInfoNotify } = UserNotify();
     const { setOpenFormAddMovie } = UserAuth();
     const [selectedFile, setSelectedFile] = useState(false);
-
+   
     const [movieDetails, setMovieDetails] = useState({
         movieTitle: '',
         releaseDate: '',

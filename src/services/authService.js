@@ -6,6 +6,7 @@ export const login = async (tenTK, matKhau) => {
             tenTK,
             matKhau,
         });
+        console.log(res.data)
         return res.data;
     } catch (err) {
         return { errCode: err.response.status };

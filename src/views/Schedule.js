@@ -1,49 +1,131 @@
-import React, { useState } from 'react';
-import { Row, Col, Button, Input, InputGroup, InputGroupText, Table, Card, CardTitle, CardBody } from 'reactstrap';
+import React, { useState, useEffect } from 'react';
+import {
+    Row, Col, Button, Input, InputGroup, InputGroupText, Table, Card, CardTitle, CardBodyModal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter, CardBody, Modal,
+} from 'reactstrap';
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import config from '~/services';
+import { UserNotify } from '~/components/store/NotifyContext';
+import { UserAuth } from '~/components/store/AuthContext';
+import AddScheduleForm from '~/components/form/FormUpdateSchedule';
 
-// Dữ liệu mẫu
-const initialSchedules = [
-    {
-        id: 1,
-        movieName: 'Movie 1',
-        room: 'Room A',
-        showTime: '10:00 AM',
-        showDate: '2024-12-01',
-        status: 'Available',
-    },
-    {
-        id: 2,
-        movieName: 'Movie 2',
-        room: 'Room B',
-        showTime: '02:00 PM',
-        showDate: '2024-12-02',
-        status: 'Full',
-    },
-    {
-        id: 3,
-        movieName: 'Movie 3',
-        room: 'Room C',
-        showTime: '06:00 PM',
-        showDate: '2024-12-03',
-        status: 'Available',
-    },
-    // Thêm dữ liệu mẫu...
-];
+
+
 
 const Schedule = () => {
-    const [schedules, setSchedules] = useState(initialSchedules);
+    const [schedules, setSchedules] = useState([]);
     const [search, setSearch] = useState('');
+    const { setInfoNotify } = UserNotify();
+    const { openFormAddSchedule, setOpenFormAddSchedule } = UserAuth();
+    const [scheduleToDelete, setScheduleToDelete] = useState(null); // Lưu thông tin phim cần xóa
+    const [showConfirmDelete, setShowConfirmDelete] = useState(false); // Điều khiển việc hiển thị modal xác nhận
 
+    const [movieTitles, setmovieTitles] = useState([]);
+    const [rooms, setrooms] = useState([]);
+    const [shows, setshows] = useState([]);
+
+    const [schedule, setSchedule] = useState({
+        maSuat: '',
+        maPhim: '',
+        maCa: '',
+        maPhong: '',
+        tenPhim: '',
+        tenCa: '',
+        ngayChieu: '',
+        tinhTrang: ''
+    });
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await config.getAllSchedule();
+
+
+                setSchedules(data);
+                console.log(data);
+
+            } catch (error) {
+                console.log(error)
+                setInfoNotify({
+                    content: 'Lỗi khi lấy dữ liệu từ server getAllSchedule!!',
+                    delay: 1500,
+                    isNotify: true,
+                    type: 'error',
+                });
+            }
+        };
+
+        fetchData();
+    }, []);
     // Hàm xử lý tìm kiếm
     const handleSearch = (e) => {
         setSearch(e.target.value);
     };
 
+    const handleViewDetails = (maSuat, tenPhim, maPhong, tenCa, ngayChieu, tinhTrang, maPhim, maCa) => {
+        setSchedule({ maSuat, tenPhim, maPhong, tenCa, ngayChieu, tinhTrang, maPhim, maCa });
+
+        setOpenFormAddSchedule(true);
+        // Dữ liệu sẽ được chuyển sang form cập nhật lịch chiếu
+    };
+
+    const handOpenFormAdd = () => {
+        setSchedule('');
+        setOpenFormAddSchedule(true);
+    };
+
+    // Hàm mở modal xác nhận xóa
+    const handleOpenConfirmDelete = (maSuat) => {
+        setScheduleToDelete(maSuat);
+        setShowConfirmDelete(true);
+    };
+    // Hàm xóa phim
+    const handRemoveMovie = async () => {
+        if (!scheduleToDelete) return;
+
+        try {
+            const data = await config.removeSchedule(scheduleToDelete);
+
+            if (data.errCode) {
+                setInfoNotify({
+                    content: 'Lỗi dữ liệu !!',
+                    delay: 1500,
+                    isNotify: true,
+                    type: 'error',
+                });
+            } else {
+                // Lọc bỏ phim bị xóa khỏi danh sách
+                const updatedMovies = schedules.filter((schedule) => schedule.maSuat !== scheduleToDelete);
+                setSchedules(updatedMovies);
+                setInfoNotify({
+                    content: 'Lịch chiếu đã được xóa thành công.',
+                    delay: 1500,
+                    isNotify: true,
+                    type: 'success',
+                });
+            }
+        } catch (error) {
+            setInfoNotify({
+                content: 'Lỗi khi lấy dữ liệu từ server !!',
+                delay: 1500,
+                isNotify: true,
+                type: 'error',
+            });
+        } finally {
+            setShowConfirmDelete(false); // Đóng modal xác nhận sau khi thực hiện
+            setScheduleToDelete(null); // Reset thông tin phim cần xóa
+        }
+    };
+
     // Lọc danh sách lịch chiếu theo tìm kiếm
     const filteredSchedules = schedules.filter((schedule) =>
-        schedule.movieName.toLowerCase().includes(search.toLowerCase()),
+        schedule.tenPhim.toLowerCase().includes(search.toLowerCase()),
     );
+
 
     return (
         <Row>
@@ -58,7 +140,7 @@ const Schedule = () => {
                         </InputGroup>
                     </Col>
                     <Col md="3" className="text-end">
-                        <Button color="primary">
+                        <Button color="primary" onClick={handOpenFormAdd}>
                             <FaPlus className="me-2" />
                             Thêm lịch chiếu
                         </Button>
@@ -87,27 +169,27 @@ const Schedule = () => {
                             </thead>
                             <tbody>
                                 {filteredSchedules.map((schedule, index) => (
-                                    <tr key={schedule.id}>
+                                    <tr key={schedule.id || index}>
                                         <th scope="row">{index + 1}</th>
-                                        <td>{schedule.movieName}</td>
-                                        <td>{schedule.room}</td>
-                                        <td>{schedule.showTime}</td>
-                                        <td>{schedule.showDate}</td>
+                                        <td>{schedule.tenPhim}</td>
+                                        <td>{schedule.maPhong}</td>
+                                        <td>{schedule.tenCa}</td>
+                                        <td>{schedule.ngayChieu}</td>
                                         <td>
                                             <span
-                                                className={`badge ${
-                                                    schedule.status === 'Available' ? 'bg-success' : 'bg-danger'
-                                                }`}
+                                                className={`badge ${schedule.tinhTrang == '1' ? 'bg-success' : 'bg-danger'
+                                                    }`}
                                             >
-                                                {schedule.status}
+                                                {schedule.tinhTrang}
+                                                {schedule.tinhTrang == '1' ? 'Available' : 'Sold out'}
                                             </span>
                                         </td>
                                         <td>
-                                            <Button color="warning" size="sm" className="me-2">
+                                            <Button color="warning" size="sm" className="me-2" onClick={() => handleViewDetails(schedule.maSuat, schedule.maPhim, schedule.maCa, schedule.tenPhim, schedule.maPhong, schedule.tenCa, schedule.ngayChieu, schedule.tinhTrang)}>
                                                 <FaEdit className="me-1" />
                                                 Chỉnh sửa
                                             </Button>
-                                            <Button color="danger" size="sm">
+                                            <Button color="danger" size="sm" onClick={() => handleOpenConfirmDelete(schedule.maSuat)}>
                                                 <FaTrash className="me-1" />
                                                 Xóa
                                             </Button>
@@ -119,6 +201,27 @@ const Schedule = () => {
                     </CardBody>
                 </Card>
             </Col>
+
+            {openFormAddSchedule && (
+                <AddScheduleForm
+                    schedule={schedule}
+
+                    onClose={() => setOpenFormAddSchedule(false)} // Đóng form khi cần
+                />
+            )}
+            {/* Modal xác nhận xóa */}
+            <Modal isOpen={showConfirmDelete} toggle={() => setShowConfirmDelete(false)}>
+                <ModalHeader toggle={() => setShowConfirmDelete(false)}>Xác nhận xóa lịch chiếu</ModalHeader>
+                <ModalBody>Bạn có chắc chắn muốn xóa lịch chiếu này?</ModalBody>
+                <ModalFooter>
+                    <Button color="secondary" onClick={() => setShowConfirmDelete(false)}>
+                        Hủy
+                    </Button>
+                    <Button color="danger" onClick={handRemoveMovie}>
+                        Xóa
+                    </Button>
+                </ModalFooter>
+            </Modal>
         </Row>
     );
 };
