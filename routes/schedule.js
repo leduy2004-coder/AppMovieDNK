@@ -80,40 +80,96 @@ router.get('/getAvailableShifts/:ngayChieu/:maPhong', async (req, res) => {
     }
 });
 
-router.post('/updateSchedule', async (req, res) => {
-    const { maVe, maPhim, maNV, tinhTrang, soLuongToiDa, soLuongDaBan, tien } = req.body;
+router.post('/insertSchedule', async (req, res) => {
+    const { maPhim, maPhong, maCa, ngayChieu, tinhTrang } = req.body;
+    let pool;
+    // Kết nối tới cơ sở dữ liệu SQL Server
+    try { 
+        pool = await connectToDatabase();
+  
+      // Thực thi câu lệnh SQL để chèn dữ liệu vào bảng 'SuatChieu'
+      const result = await pool.request()
+        .input('maPhim', sql.NVarChar, maPhim)
+        .input('maPhong', sql.NVarChar, maPhong)
+        .input('maCa', sql.NVarChar, maCa)
+        .input('ngayChieu', sql.DateTime, ngayChieu)
+        .input('tinhTrang', sql.Int, tinhTrang)
+        .query(`
+          INSERT INTO [SuatChieu] ([maPhim], [maPhong], [maCa], [ngayChieu], [tinhTrang])
+          VALUES (@maPhim, @maPhong, @maCa, @ngayChieu, @tinhTrang)
+        `);
+  
+      res.status(201).json({
+        message: 'Dữ liệu đã được thêm thành công!',
+        data: result.recordset
+      });
+  
+    } catch (error) {
+      console.error('Error inserting data:', error);
+      res.status(500).json({ error: 'Lỗi khi thêm dữ liệu' });
+    }
+  });
+
+  router.post('/updateSchedule/maSuat', async (req, res) => {
+    const { maPhim, maPhong, maCa, ngayChieu, tinhTrang } = req.body;
+    let pool;
+    console.log('Dữ liệu nhận được:', req.body); 
+    if (!maPhim || !maPhong || !maCa || !ngayChieu || !tinhTrang ) {
+        return res.status(400).json({ message: 'Dữ liệu không đầy đủ, vui lòng kiểm tra lại' });
+    }
+    try {
+        // Kết nối tới cơ sở dữ liệu SQL Server
+        pool = await connectToDatabase();
+  
+        // Thực thi câu lệnh SQL để cập nhật dữ liệu trong bảng 'SuatChieu'
+        const result = await pool.request()
+            .input('maPhim', sql.NVarChar, maPhim)
+            .input('maPhong', sql.NVarChar, maPhong)
+            .input('maCa', sql.NVarChar, maCa)
+            .input('ngayChieu', sql.DateTime, ngayChieu)
+            .input('tinhTrang', sql.NVarChar, tinhTrang)
+            .query(`
+                UPDATE [dbo].[SuatChieu]
+                SET [maPhong] = @maPhong, [maCa] = @maCa, [ngayChieu] = @ngayChieu, [tinhTrang] = @tinhTrang
+                WHERE [maPhim] = @maPhim
+            `);
+  
+        res.status(200).json({
+            message: 'Cập nhật dữ liệu thành công!',
+            data: result.recordset
+        });
+  
+    } catch (error) {
+        console.error('Error updating data:', error);
+        res.status(500).json({ error: 'Lỗi khi cập nhật dữ liệu' });
+    }
+});
+
+router.delete('/delete/:idSchedule', async (req, res) => {
+    const { idSchedule } = req.params;  // Lấy giá trị từ tham số URL
     let pool;
 
     try {
         pool = await connectToDatabase();
 
-        // Kiểm tra dữ liệu đầu vào
-        if (!maVe || !maPhim || !maNV || !tinhTrang || !soLuongToiDa || !soLuongDaBan || !tien) {
-            return res.status(400).json({ message: 'Dữ liệu không đầy đủ, vui lòng kiểm tra lại' });
+        // Xóa dữ liệu trong bảng 'SuatChieu' với 'maSuat' khớp với idSchedule
+        const result = await pool.request()
+            .input('maSuat', sql.NVarChar, idSchedule)  // Đảm bảo rằng 'idSchedule' là 'maSuat' trong cơ sở dữ liệu
+            .query('DELETE FROM SuatChieu WHERE maSuat = @maSuat');
+
+        // Kiểm tra nếu có dòng bị xóa
+        if (result.rowsAffected[0] > 0) {
+            res.status(200).send('Xóa suất chiếu thành công');
+        } else {
+            res.status(404).send('Không tìm thấy suất chiếu');
         }
 
-        // Thực hiện câu lệnh UPDATE bảng Ve
-        await pool.request()
-            .input('maPhim', sql.VarChar(50), maPhim)
-            .input('soLuongToiDa', sql.Int, soLuongToiDa)
-            .input('soLuongDaBan', sql.Int, soLuongDaBan)
-            .query(`
-                UPDATE [Cinema_version4].[dbo].[Ve]
-                SET 
-                    [maPhim] = @maPhim,
-                    [soLuongToiDa] = @soLuongToiDa,
-                    [soLuongDaBan] = @soLuongDaBan,
-                WHERE [maVe] = @maVe
-            `);
-
-        // Trả về kết quả thành công
-        res.status(200).json({ message: 'Dữ liệu đã được cập nhật thành công!' });
-
     } catch (err) {
-        console.error('Lỗi khi cập nhật dữ liệu:', err);
-        res.status(500).json({ message: 'Lỗi khi cập nhật dữ liệu vào cơ sở dữ liệu', error: err.message });
+        console.log('Lỗi khi xóa dữ liệu phim:', err);
+        res.status(500).send('Lỗi khi xóa dữ liệu phim');
     }
 });
+
 
 
 module.exports = router;
