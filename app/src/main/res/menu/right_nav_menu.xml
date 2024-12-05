@@ -9,7 +9,9 @@
     <group android:id="@+id/gr4">
         <item android:title="Thông tin cá nhân" android:id="@+id/nav_accout"/>
     </group>
-
+    <group android:id="@+id/gr5">
+        <item android:title="Thông tin nhóm" android:id="@+id/nav_inf"/>
+    </group>
 
 
 </menu>

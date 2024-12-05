@@ -23,6 +23,7 @@ import com.example.appmoviednk.databinding.HeaderNavigationBinding;
 import com.example.appmoviednk.fragment.AccountFragment;
 import com.example.appmoviednk.fragment.BookTicketFragment;
 import com.example.appmoviednk.fragment.HomeFragment;
+import com.example.appmoviednk.fragment.InformationFragment;
 import com.example.appmoviednk.fragment.LoginFragment;
 import com.example.appmoviednk.fragment.MovieFragment;
 import com.example.appmoviednk.fragment.RegisterFragment;
@@ -115,6 +116,9 @@ public class MainActivity extends AppCompatActivity  {
             } else if  (item.getItemId() == R.id.nav_accout) {
                 replaceFragment(new AccountFragment(), true);
                 binding.bottomNavigationView.setSelectedItemId(R.id.bottom_ticket);
+            }
+            else if  (item.getItemId() == R.id.nav_inf) {
+                replaceFragment(new InformationFragment(), true);
             }
             drawerLayout.closeDrawer(findViewById(R.id.navigation));
             return true;
