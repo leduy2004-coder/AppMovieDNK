@@ -11,27 +11,28 @@ export const getAllSchedule = async () => {
 };
 
 
-export const getAllRoom = async () => {
+export const getAllShift = async (date) => {
     try {
-        // Gọi API với các tham số được truyền vào
-        const res = await callPath.get(`/schedule/getAllRoom`, {});
-        return res; // Trả về dữ liệu từ API
+        const res = await callPath.get(`/schedule/getAllShift`, {
+            params: { date },
+        });
+        return res;
     } catch (err) {
         console.error('Lỗi khi gọi API getAvailableShifts:', err);
-        // Xử lý lỗi và trả về mã lỗi (nếu có)
         return { errCode: err.response?.status || 500, message: err.message };
     }
 };
 
 
-export const getAvailableShifts = async (ngayChieu, maPhong) => {
+export const getAllRoom = async (date, shift) => {
     try {
-        // Gọi API với các tham số được truyền vào
-        const res = await callPath.get(`/schedule/getAvailableShifts/${ngayChieu}/${maPhong}`);
-        return res; // Trả về dữ liệu từ API
+
+        const res = await callPath.get(`/schedule/getAllRoom`, {
+            params: { date, shift },
+        });
+        return res;
     } catch (err) {
         console.error('Lỗi khi gọi API getAvailableRooms:', err);
-        // Xử lý lỗi và trả về mã lỗi (nếu có)
         return { errCode: err.response?.status || 500, message: err.message };
     }
 };
@@ -39,12 +40,8 @@ export const getAvailableShifts = async (ngayChieu, maPhong) => {
 
 export const insertSchedule = async (scheduleDetails) => {
     try {
-        const res = await callPath.post('/schedule/insertSchedule', scheduleDetails, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
-         console.log(res.data)
+        const res = await callPath.post('/schedule/insert-schedule', scheduleDetails, {});
+        console.log(res.data)
         return res.data;
     } catch (err) {
         console.error('Lỗi khi gọi API getAvailableRooms:', err);

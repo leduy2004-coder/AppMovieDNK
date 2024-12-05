@@ -23,9 +23,7 @@ const Schedule = () => {
     const [scheduleToDelete, setScheduleToDelete] = useState(null); // Lưu thông tin phim cần xóa
     const [showConfirmDelete, setShowConfirmDelete] = useState(false); // Điều khiển việc hiển thị modal xác nhận
 
-    const [movieTitles, setmovieTitles] = useState([]);
-    const [rooms, setrooms] = useState([]);
-    const [shows, setshows] = useState([]);
+    const [refresh, setRefresh] = useState(false);
 
     const [schedule, setSchedule] = useState({
         maSuat: '',
@@ -43,10 +41,20 @@ const Schedule = () => {
         const fetchData = async () => {
             try {
                 const data = await config.getAllSchedule();
+                // Hàm chuyển đổi datetime sang định dạng dd/MM/yyyy
+                function formatDate(datetime) {
+                    const date = new Date(datetime); // Chuyển đổi datetime sang đối tượng Date
+                    const day = String(date.getDate()).padStart(2, '0'); // Lấy ngày, thêm '0' nếu cần
+                    const month = String(date.getMonth() + 1).padStart(2, '0'); // Lấy tháng (cộng 1 vì tháng bắt đầu từ 0)
+                    const year = date.getFullYear(); // Lấy năm
+                    return `${day}/${month}/${year}`; // Định dạng dd/MM/yyyy
+                }
 
-
-                setSchedules(data);
-                console.log(data);
+                const formattedData = data.map(item => ({
+                    ...item,
+                    ngayChieu: formatDate(item.ngayChieu)
+                }));
+                setSchedules(formattedData);
 
             } catch (error) {
                 console.log(error)
@@ -60,18 +68,12 @@ const Schedule = () => {
         };
 
         fetchData();
-    }, []);
+    }, [refresh]);
     // Hàm xử lý tìm kiếm
     const handleSearch = (e) => {
         setSearch(e.target.value);
     };
 
-    const handleViewDetails = (maSuat, tenPhim, maPhong, tenCa, ngayChieu, tinhTrang, maPhim, maCa) => {
-        setSchedule({ maSuat, tenPhim, maPhong, tenCa, ngayChieu, tinhTrang, maPhim, maCa });
-
-        setOpenFormAddSchedule(true);
-        // Dữ liệu sẽ được chuyển sang form cập nhật lịch chiếu
-    };
 
     const handOpenFormAdd = () => {
         setSchedule('');
@@ -126,7 +128,9 @@ const Schedule = () => {
         schedule.tenPhim.toLowerCase().includes(search.toLowerCase()),
     );
 
-
+    const handleSchedulesUpdate = () => {
+        setRefresh(prev => !prev)
+    };
     return (
         <Row>
             <Col lg="12" className="mb-4">
@@ -140,7 +144,7 @@ const Schedule = () => {
                         </InputGroup>
                     </Col>
                     <Col md="3" className="text-end">
-                        <Button color="primary" onClick={handOpenFormAdd}>
+                        <Button color="success" onClick={handOpenFormAdd}>
                             <FaPlus className="me-2" />
                             Thêm lịch chiếu
                         </Button>
@@ -181,14 +185,10 @@ const Schedule = () => {
                                                     }`}
                                             >
                                                 {schedule.tinhTrang}
-                                                {schedule.tinhTrang == '1' ? 'Available' : 'Sold out'}
+                                                {schedule.tinhTrang == '1' ? 'Đang chiếu' : 'Ngừng chiếu'}
                                             </span>
                                         </td>
                                         <td>
-                                            <Button color="warning" size="sm" className="me-2" onClick={() => handleViewDetails(schedule.maSuat, schedule.maPhim, schedule.maCa, schedule.tenPhim, schedule.maPhong, schedule.tenCa, schedule.ngayChieu, schedule.tinhTrang)}>
-                                                <FaEdit className="me-1" />
-                                                Chỉnh sửa
-                                            </Button>
                                             <Button color="danger" size="sm" onClick={() => handleOpenConfirmDelete(schedule.maSuat)}>
                                                 <FaTrash className="me-1" />
                                                 Xóa
@@ -205,7 +205,7 @@ const Schedule = () => {
             {openFormAddSchedule && (
                 <AddScheduleForm
                     schedule={schedule}
-
+                    onSchedulesUpdate={handleSchedulesUpdate}
                     onClose={() => setOpenFormAddSchedule(false)} // Đóng form khi cần
                 />
             )}

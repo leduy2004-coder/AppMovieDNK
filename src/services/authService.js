@@ -2,11 +2,10 @@ import * as callPath from '../utils/httpRequest';
 
 export const login = async (tenTK, matKhau) => {
     try {
-        const res = await callPath.post('/account/login', {
+        const res = await callPath.post('/account/login-admin', {
             tenTK,
             matKhau,
         });
-        console.log(res.data)
         return res.data;
     } catch (err) {
         return { errCode: err.response.status };

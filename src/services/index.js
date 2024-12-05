@@ -1,6 +1,6 @@
 import { login, logout } from './authService';
 import { getAllMovies, getAllTypeMovie, insertMovie, getMovieById, updateMovie, removeMovie } from './movieService';
-import {getAllSchedule, getAvailableShifts, getAllRoom ,insertSchedule, removeSchedule} from './scheduleService';
+import {getAllSchedule, getAllRoom, getAllShift ,insertSchedule, removeSchedule} from './scheduleService';
 import { updateAbout } from './aboutService';
 
 import {
@@ -25,11 +25,9 @@ const config = {
     getMovieById,
     updateMovie,
     removeMovie,
-    insertMovie,
-    getMovieById,
     getAllSchedule,
-    getAvailableShifts, 
-    getAllRoom,
+    getAllRoom, 
+    getAllShift,
     insertSchedule,
     removeSchedule,
     updateAbout,

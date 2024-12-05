@@ -30,10 +30,8 @@ const UpdateMovieForm = ({ movieId, movies, onMoviesUpdate }) => {
         }
         const fetchData = async () => {
             try {
-                console.log(movieId);
 
                 const data = await config.getMovieById(movieId);
-                console.log(data);
                 if (data.errCode) {
                     setInfoNotify({
                         content: 'Lỗi dữ liệu !!',
@@ -55,7 +53,6 @@ const UpdateMovieForm = ({ movieId, movies, onMoviesUpdate }) => {
                     };
                     setSelectedFile(true);
 
-                    console.log(mappedData.releaseDate);
                     setMovieDetails(mappedData);
                 }
             } catch (error) {
@@ -140,8 +137,6 @@ const UpdateMovieForm = ({ movieId, movies, onMoviesUpdate }) => {
             const updatedMovies = movieId
                 ? movies.map((movie) => (movie.maPhim === movieId ? { ...movie, ...data } : movie))
                 : [data, ...(movies || [])];
-            console.log(updatedMovies);
-            console.log(data);
             onMoviesUpdate(updatedMovies); // Cập nhật state ở cha
             setOpenFormAddMovie(false); // Đóng form
 
@@ -176,7 +171,7 @@ const UpdateMovieForm = ({ movieId, movies, onMoviesUpdate }) => {
                                     &times;
                                 </span>
                             </div>
-                            <CardTitle tag="h4" className="text-center mb-4">
+                            <CardTitle tag="h4" className="text-center mb-4" style={{ color: 'red' }}>
                                 {movieId ? 'Cập nhật phim' : 'Thêm mới phim'}
                             </CardTitle>
                             <Form onSubmit={handleSubmit}>

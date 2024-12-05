@@ -1,13 +1,9 @@
 import * as callPath from '../utils/httpRequest';
 
-export const updateAbout = async (id, formData) => {
+export const updateAbout = async (formData) => {
     try {
-        console.log(id);
-        const res = await callPath.patch(`/customer/update/${id}`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
+        console.log(formData)
+        const res = await callPath.patch(`/account/update-admin`, formData, {});
         return res.data;
     } catch (err) {
         return { errCode: err.response.status };

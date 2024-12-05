@@ -44,7 +44,6 @@ export const insertMovie = async (movieDetails) => {
 
 export const updateMovie = async (idMovie, formData) => {
     try {
-        console.log(idMovie);
         const res = await callPath.patch(`/movies/update-movie/${idMovie}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
