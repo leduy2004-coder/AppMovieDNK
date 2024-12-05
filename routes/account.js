@@ -5,7 +5,7 @@ const sql = require('mssql');
 const { connectToDatabase } = require('../config/dbConfig');
 const bcrypt = require('bcrypt')
 
-
+// Route để đăng nhập khách hàng
 router.post('/login', async (req, res) => {
     const { tenTK, matKhau } = req.body;
 
@@ -44,7 +44,72 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ message: 'Lỗi khi xử lý yêu cầu' });
     } 
 });
+// Route để đăng nhập admin
+router.post('/login-admin', async (req, res) => {
+    const { tenTK, matKhau } = req.body;
+    console.log(tenTK)
+    console.log(matKhau)
+    try {
+        let pool = await connectToDatabase();
+        
+        // Lấy thông tin người dùng dựa trên tài khoản
+        let results = await pool.request()
+    .input('tenTK', sql.VarChar, tenTK)
+    .input('matKhau', sql.VarChar, matKhau)
+    .query('SELECT * FROM QuanLi WHERE tenTK = @tenTK and matKhau = @matKhau');
 
+    if (results.recordset[0]) {  
+        console.log(results.recordset[0])
+        return res.json(results.recordset[0]); 
+    }
+    // Không có người dùng trong bảng
+     res.status(401).json({ message: "Không tìm thấy người dùng" });
+    
+    } catch (err) {
+        console.error('Lỗi:', err);
+        res.status(500).json({ message: 'Lỗi khi xử lý yêu cầu' });
+    } 
+});
+// Route update thông tin admin
+router.patch('/update-admin', async (req, res) => {
+    const { maQL, hoTen, sdt, ngaySinh, diaChi, cccd, gioiTinh } = req.body;  
+    if (!maQL || !hoTen || !ngaySinh ) {
+        return res.status(400).json({ message: 'Thiếu thông tin cần thiết để cập nhật' }); 
+    }
+
+    try {
+        let pool = await connectToDatabase();
+
+        let results = await pool.request()
+            .input('maQL', sql.VarChar, maQL)
+            .query('SELECT * FROM QuanLi WHERE maQL = @maQL');
+
+        if (results.recordset.length === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy người dùng với id đã cung cấp' });  
+        }
+
+        await pool.request()
+            .input('maQL', sql.VarChar, maQL)
+            .input('hoTen', sql.NVarChar, hoTen)
+            .input('sdt', sql.NVarChar, sdt || null)  
+            .input('ngaySinh', sql.Date, ngaySinh) 
+            .input('diaChi', sql.NVarChar, diaChi || null)
+            .input('cccd', sql.BigInt, cccd || null)
+            .input('gioiTinh', sql.Bit, gioiTinh) 
+            .query(`
+                UPDATE QuanLi
+                SET hoTen = @hoTen, sdt = @sdt, ngaySinh = @ngaySinh,
+                    diaChi = @diaChi, cccd = @cccd, gioiTinh = @gioiTinh
+                WHERE maQL = @maQL
+            `);
+
+        return res.json({ message: 'Cập nhật thông tin người dùng thành công' });
+
+    } catch (err) {
+        console.error('Lỗi:', err);
+        return res.status(500).json({ message: 'Lỗi khi xử lý yêu cầu' });
+    }
+});
 
 // Route để lấy lịch sử khách hàng
 router.get('/history/:maKH', async (req, res) => {
