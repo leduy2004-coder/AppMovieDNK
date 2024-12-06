@@ -83,7 +83,7 @@ public class MovieFragment extends Fragment {
     private void getSchedules(String phimId) {
         apiService.getSchedules(phimId).enqueue(new Callback<List<ScheduleModel>>() {
             @Override
-            public void onResponse(Call<List<ScheduleModel>> call, Response<List<ScheduleModel>> response) {
+            public void onResponse(@NonNull Call<List<ScheduleModel>> call, @NonNull Response<List<ScheduleModel>> response) {
                 if (response.isSuccessful()) {
                     List<ScheduleModel> schedules = response.body();
                     // Kiểm tra schedules có khác null không trước khi ghi log
@@ -104,7 +104,7 @@ public class MovieFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<ScheduleModel>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<ScheduleModel>> call, @NonNull Throwable t) {
                 Log.d("API Error", t.getMessage());
             }
         });

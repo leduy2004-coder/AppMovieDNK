@@ -19,17 +19,22 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     private Context mContext;
     private boolean showAll = false;
 
+    // Hàm cập nhật dữ liệu
     @SuppressLint("NotifyDataSetChanged")
     public void setData(List<CommentModel> cmtList) {
-        this.cmtList = cmtList;
-        notifyDataSetChanged();
+        if (cmtList != null) {
+            this.cmtList = cmtList;
+            notifyDataSetChanged();
+        }
     }
+
     // Hàm cập nhật trạng thái hiển thị
     @SuppressLint("NotifyDataSetChanged")
     public void setShowAll(boolean showAll) {
         this.showAll = showAll;
         notifyDataSetChanged();
     }
+
     @NonNull
     @Override
     public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -44,28 +49,35 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-        CommentModel cmt = cmtList.get(position);
-        if(cmt == null){
-            return;
+        if (cmtList == null || cmtList.isEmpty()) {
+            return;  // Nếu danh sách null hoặc rỗng, không làm gì cả
         }
+
+        CommentModel cmt = cmtList.get(position);
+        if (cmt == null) {
+            return; // Nếu phần tử null, không làm gì cả
+        }
+
         holder.commentBinding.cmtUser.setText(cmt.getKhachHang().getHoTen());
         holder.commentBinding.cmtContent.setText(cmt.getNoiDung());
     }
 
     @Override
     public int getItemCount() {
+        if (cmtList == null) {
+            return 0; // Nếu danh sách null, trả về 0
+        }
         // Nếu showAll là true, trả về toàn bộ số lượng item
         if (showAll) {
             return cmtList.size();
-        } else
-        // Nếu showAll là false, chỉ trả về tối đa 4 item
-        {
-            return cmtList != null ? 4 : 0;
+        } else {
+            // Nếu showAll là false, chỉ trả về tối đa 4 item
+            return Math.min(cmtList.size(), 4);
         }
     }
 
     public static class CommentViewHolder extends RecyclerView.ViewHolder {
-    ItemCommentBinding commentBinding;
+        ItemCommentBinding commentBinding;
 
         public CommentViewHolder(@NonNull ItemCommentBinding binding) {
             super(binding.getRoot());
@@ -73,3 +85,4 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         }
     }
 }
+

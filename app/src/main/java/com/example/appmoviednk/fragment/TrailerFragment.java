@@ -193,7 +193,7 @@ public class TrailerFragment extends Fragment {
                     // Lấy comment mới
                     CommentModel newComment = commentResponse.getComment();
                     newComment.setKhachHang(UserSession.getInstance().getLoggedInAccount());
-                    commentModels.add(newComment);
+
                     // Cập nhật Adapter để làm mới RecyclerView
                     commentModels.add(0, newComment);
                     cmtAdapter.setData(commentModels);
