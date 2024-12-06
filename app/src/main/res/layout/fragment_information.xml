@@ -37,27 +37,27 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="left"
         android:layout_margin="30dp"
-        android:text="Lê Duy - 22115053122206"
+        android:text="Lê Duy -22115053122206"
         android:textColor="#000000"
         android:textSize="20sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="left"
         android:layout_margin="30dp"
-        android:text="Bùi Quốc Nam - 22115053122230"
+        android:text="Bùi Quốc Nam -22115053122230"
         android:textColor="#000000"
         android:textSize="20sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="left"
         android:layout_margin="30dp"
-        android:text="Lê Công Khánh - 22115053122220"
+        android:text="Lê Công Khánh -22115053122220"
         android:textColor="#000000"
         android:textSize="20sp" />
 

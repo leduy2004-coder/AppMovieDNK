@@ -95,7 +95,11 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:hint="Nhập bình luận"
-                        android:inputType="text" />
+                        android:inputType="text"
+                        android:minHeight="48dp"
+                        android:minWidth="48dp"
+                        android:padding="8dp" />
+
 
                     <ImageView
                         android:id="@+id/img_send"
@@ -110,7 +114,7 @@
                     android:layout_height="match_parent"
                     tools:context=".fragment.ShowingMovieHomeFragment">
 
-                    <!-- TODO: Update blank fragment layout -->
+
 
                     <RelativeLayout
                         android:layout_width="match_parent"
