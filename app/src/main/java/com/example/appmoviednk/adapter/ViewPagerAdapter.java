@@ -24,22 +24,6 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
         fragments = new ArrayList<>();
     }
 
-//    @NonNull
-//    @Override
-//    public Fragment createFragment(int position) {
-//        // Tạo và trả về Fragment tương ứng với vị trí
-//        switch (position) {
-//            case 0:
-//                return new HomeFragment();
-//            case 1:
-//                return new AccountFragment();
-//            case 2:
-//                return new VoucherFragment();
-//            default:
-//                return new HomeFragment();
-//        }
-//    }
-
     @NonNull
     @Override
     public Fragment createFragment(int position) {

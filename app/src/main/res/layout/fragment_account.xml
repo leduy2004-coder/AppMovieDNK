@@ -50,16 +50,16 @@
                         android:layout_margin="5dp"
                         android:textSize="21sp"
                         android:textColor="@color/black"
-                        android:text="Họ tên: Họ tên khách hàng" />
+                        android:text="Họ tên: trống" />
 
                     <TextView
-                        android:id="@+id/account_date"
+                        android:id="@+id/account_point"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:textColor="@color/black"
                         android:textSize="21sp"
-                        android:text="Số điểm: 36" />
+                        android:text="Số điểm: 0" />
 
                     <TextView
                         android:id="@+id/account_email"
@@ -68,7 +68,7 @@
                         android:layout_margin="5dp"
                         android:textColor="@color/black"
                         android:textSize="21sp"
-                        android:text="Email: abc@gmail.com" />
+                        android:text="Email: trống" />
 
                     <TextView
                         android:id="@+id/account_phone"
@@ -77,7 +77,7 @@
                         android:layout_margin="5dp"
                         android:textColor="@color/black"
                         android:textSize="21sp"
-                        android:text="SDT: 09********" />
+                        android:text="SDT: trống" />
                 </LinearLayout>
 
                 <LinearLayout

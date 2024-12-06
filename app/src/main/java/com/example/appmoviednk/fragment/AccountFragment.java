@@ -3,6 +3,7 @@ package com.example.appmoviednk.fragment;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.appmoviednk.R;
 import com.example.appmoviednk.UserSession;
+import com.example.appmoviednk.activity.MainActivity;
 import com.example.appmoviednk.adapter.CommentAdapter;
 import com.example.appmoviednk.adapter.HistoryBookAdapter;
 import com.example.appmoviednk.databinding.FragmentAccountBinding;
@@ -50,12 +52,22 @@ public class AccountFragment extends Fragment {
 
         CustomerModel loggedInAccount = UserSession.getInstance().getLoggedInAccount();
         if(loggedInAccount != null  ){
-            binding.accountName.setText(loggedInAccount.getHoTen());
-
+            binding.accountName.setText("Họ tên: " +loggedInAccount.getHoTen());
+            binding.accountPoint.setText(
+                    "Số điểm: " +
+                            (loggedInAccount.getDiemThuong() == 0
+                                    ? "0"
+                                    : String.valueOf(loggedInAccount.getDiemThuong()))
+            );
+            binding.accountEmail.setText("Email: " +(loggedInAccount.getEmail()));
+            binding.accountPhone.setText("SDT: " +(loggedInAccount.getSdt()));
             //hien thi lich su ve da book
             String maKH = loggedInAccount.getMaKH();
             fetchCustomerHistory(maKH);
+        } else {
+            diaLogLogin();
         }
+
 
         binding.accoutBtn.btnPrimary.setText("Xem thêm");
 
@@ -125,5 +137,25 @@ public class AccountFragment extends Fragment {
             }
         });
     }
+    // Hiện dialog yêu cầu đăng nhập
+    private void diaLogLogin() {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Đăng nhập")
+                .setMessage("Bạn cần đăng nhập để xem lịch sử. ")
+                .setPositiveButton("Đăng nhập", (dialog, which) -> {
+                    LoginFragment loginFragment = new LoginFragment();
+                    Bundle args = new Bundle();
+                    args.putBoolean("returnToAccount", true);
+                    loginFragment.setArguments(args);
+
+                    MainActivity mainActivity = (MainActivity) getActivity();
+                    if (mainActivity != null) {
+                        mainActivity.replaceFragment(loginFragment, true);
+                    }
+                })
+                .setNegativeButton("Huỷ", null)
+                .show();
+    }
+
 
 }

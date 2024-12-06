@@ -182,6 +182,8 @@ public class LoginFragment extends Fragment {
         boolean returnToBookTicket = getArguments() != null && getArguments().getBoolean("returnToBookTicket", false);
         boolean returnToTrailer = getArguments() != null && getArguments().getBoolean("returnToTrailer", false);
         boolean returnToVoucher = getArguments() != null && getArguments().getBoolean("returnToVoucher", false);
+        boolean returnToAccount = getArguments() != null && getArguments().getBoolean("returnToAccount", false);
+
         MainActivity mainActivity = (MainActivity) getActivity();
 
 
@@ -193,12 +195,18 @@ public class LoginFragment extends Fragment {
         } else if (returnToVoucher) {
             assert mainActivity != null;
             mainActivity.replaceFragment(new VoucherFragment(), true);
-        } else {
+        } else if (returnToAccount){
+            if (mainActivity != null) {
+                mainActivity.replaceFragment(new AccountFragment(), true);
+
+            }
+        }else {
             if (mainActivity != null) {
                 mainActivity.replaceFragment(new HomeFragment(), true);
 
             }
         }
+
     }
 
 
