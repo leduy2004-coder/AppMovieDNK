@@ -36,6 +36,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.options.IFram
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerUtils;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -93,6 +94,7 @@ public class TrailerFragment extends Fragment {
                 binding.listCmt.setAdapter(cmtAdapter);
                 // Gọi API lấy comment
                 getComments(movie.getMaPhim());
+
             } else {
                 Log.e("MovieFragment", "MovieModel null");
             }
@@ -134,28 +136,30 @@ public class TrailerFragment extends Fragment {
             public void onResponse(@NonNull Call<List<CommentModel>> call, @NonNull Response<List<CommentModel>> response) {
                 if (response.isSuccessful()) {
                     commentModels = response.body();
-                    // Kiểm tra schedules có khác null không trước khi ghi log
+                    // Kiểm tra nếu commentModels rỗng hoặc null
                     if (commentModels != null && !commentModels.isEmpty()) {
                         Collections.reverse(commentModels);
-                        Log.d("thong tin", commentModels.toString());
-                        binding.countComment.setText( commentModels.size() + " bình luận");
+                        binding.countComment.setText(commentModels.size() + " bình luận");
                         cmtAdapter.setData(commentModels);
                     } else {
-                        Log.d("Error", "Response body is empty or null");
-                        cmtAdapter.setData(commentModels); // Truyền danh sách rỗng để xóa dữ liệu cũ
+                        // Nếu không có bình luận
+                        binding.countComment.setText("0 bình luận");
+                        cmtAdapter.setData(Collections.emptyList()); // Set danh sách bình luận rỗng
                     }
-
                 } else {
-                    Log.d("Error", "Request failed with status: " + response.code());
+                    binding.countComment.setText("0 bình luận");
+                    cmtAdapter.setData(Collections.emptyList());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<CommentModel>> call, Throwable t) {
-                Log.d("API Error", Objects.requireNonNull(t.getMessage()));
+                binding.countComment.setText("Chưa có bình luận nào");
+                cmtAdapter.setData(Collections.emptyList());
             }
         });
     }
+
     // Hàm gửi bình luận
     private void checkBeforeSendComment() {
         // Kiểm tra xem người dùng có đăng nhập và phim có hợp lệ không
@@ -178,7 +182,7 @@ public class TrailerFragment extends Fragment {
     }
     private void postComment(CommentModel commentModel) {
         apiService.insertComment(commentModel).enqueue(new Callback<CommentResponse>() {
-            @SuppressLint("NotifyDataSetChanged")
+            @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
             @Override
             public void onResponse(@NonNull Call<CommentResponse> call, @NonNull Response<CommentResponse> response) {
                 if (response.isSuccessful()) {
@@ -194,26 +198,39 @@ public class TrailerFragment extends Fragment {
                     CommentModel newComment = commentResponse.getComment();
                     newComment.setKhachHang(UserSession.getInstance().getLoggedInAccount());
 
-                    // Cập nhật Adapter để làm mới RecyclerView
-                    commentModels.add(0, newComment);
-                    cmtAdapter.setData(commentModels);
-                    cmtAdapter.notifyItemInserted(0);
+                    // Nếu commentModels là null hoặc rỗng, khởi tạo danh sách
+                    if (commentModels == null) {
+                        commentModels = new ArrayList<>();
+                    }
 
+                    // Thêm bình luận mới vào đầu danh sách
+                    commentModels.add(0, newComment);
+
+                    // Cập nhật Adapter để làm mới RecyclerView
+                    cmtAdapter.setData(commentModels);
+                    cmtAdapter.notifyItemInserted(0);  // Chỉ thông báo thay đổi khi thêm 1 mục mới vào đầu danh sách
+
+                    // Làm sạch nội dung bình luận
                     binding.commentContent.setText("");
+
+                    binding.countComment.setText(commentModels.size() + " bình luận");
+
+                    // Thông báo thành công
                     Toast.makeText(getContext(), "Bình luận thành công", Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.e("Insert Selected Chair Error", response.message());
-                    Toast.makeText(getContext(), "Comment thất bại", Toast.LENGTH_SHORT).show();
+                    Log.e("Insert Comment Error", response.message());
+                    Toast.makeText(getContext(), "Bình luận thất bại", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<CommentResponse> call, @NonNull Throwable t) {
                 Log.e("Error", Objects.requireNonNull(t.getMessage()));
-                Toast.makeText(getContext(), "Đặt ghế thất bại 2: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Thất bại: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
     // Hiện dialog yêu cầu đăng nhập
     private void diaLogLogin() {

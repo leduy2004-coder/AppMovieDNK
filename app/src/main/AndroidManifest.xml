@@ -20,7 +20,7 @@
         android:theme="@style/Theme.AppMovieDNK"
         tools:targetApi="31" >
 
-        <service android:name=".service.LoginService" />
+
 
         <activity
             android:name=".activity.MainActivity"

@@ -12,6 +12,7 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 
 public interface MovieService {
@@ -31,8 +32,9 @@ public interface MovieService {
     @GET("movies/get-date-schedule/{id}")
     Call<List<ScheduleModel>> getDateSchedules(@Path("id") String maPhim);
 
-    @GET("movies/phim/{ngay}")
-    Call<List<MovieModel>> getMoviesByDate(@Path("ngay") String ngay);
+    @GET("movies/get-movie-by-date")
+    Call<List<MovieModel>> getMoviesByDate(@Query("ngay") String ngay);
+
 
     @GET("movies/ticket-details/{maBook}")
     Call<List<Map<String, Object>>> getTicketDetails(@Path("maBook") String maBook);

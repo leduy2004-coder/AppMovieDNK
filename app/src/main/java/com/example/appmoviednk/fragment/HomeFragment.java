@@ -124,7 +124,7 @@ public class HomeFragment extends Fragment {
                     String displayText = selectedItem.getDisplayText();
                     if (displayText.equals("Chọn phim")) {
                         Log.d("Spinner", "Mục mặc định được chọn.");
-                        getDateShowingFromApi();
+
                     } else if (selectedItem instanceof MovieModel) {
                         MovieModel movie = ((MovieModel) selectedItem);
                         // Gọi API lấy danh sách ngày chiếu theo mã phim
@@ -156,10 +156,9 @@ public class HomeFragment extends Fragment {
                     String displayText = selectedItem.getDisplayText();
                     if (displayText.equals("Chọn ngày")) {
                         Log.d("Spinner", "Mục mặc định được chọn.");
-                        getMoviesFromApi();
+
                     } else if (selectedItem instanceof ScheduleModel) {
-                        String date = ((ScheduleModel) selectedItem).getNgayChieu();
-                        Log.d("Spinner", "Đã chọn: " + displayText + ", Ngày: " + date);
+                        String date = ((ScheduleModel) selectedItem).getDateString();
                         // Gọi API lấy danh sách phim chiếu theo ngày
                         getMoviesFromApi(date);
 
@@ -169,8 +168,6 @@ public class HomeFragment extends Fragment {
                         // Kiểm tra xem cả hai Spinner đều được chọn chưa
                         checkSelectionAndNavigate();
                     }
-
-
                 }
             }
 
@@ -240,7 +237,6 @@ public class HomeFragment extends Fragment {
 
                     movieAdapter.notifyDataSetChanged();
                     binding.spnMovie.setAdapter(movieAdapter);
-
 
                     Log.d("API_SUCCESS", "Danh sách phim đã được cập nhật");
                 } else {

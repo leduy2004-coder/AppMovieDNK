@@ -126,12 +126,16 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
-
-
     public void replaceFragment(Fragment fragment, boolean isFromRight) {
         // Lấy FragmentManager
         FragmentManager fragmentManager = getSupportFragmentManager();
 
+        // Kiểm tra nếu fragment hiện tại là fragment muốn thay thế
+        Fragment currentFragment = fragmentManager.findFragmentById(R.id.frameLayout);
+        if (currentFragment != null && currentFragment.getClass().equals(fragment.getClass())) {
+            // Nếu đang ở trang đó, không làm gì cả
+            return;
+        }
         // Bắt đầu một giao dịch Fragment
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -150,9 +154,7 @@ public class MainActivity extends AppCompatActivity  {
 
         // Cam kết giao dịch
         fragmentTransaction.commit();
-
     }
-
 
     private void showAccountPopup(View anchorView) {
         // Inflate layout từ file XML

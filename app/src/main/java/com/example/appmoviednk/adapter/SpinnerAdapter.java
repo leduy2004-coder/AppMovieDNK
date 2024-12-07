@@ -81,10 +81,12 @@ public class SpinnerAdapter<T extends DisplayTextSpinner> extends ArrayAdapter<T
             holder = (ViewHolder) convertView.getTag();
         }
 
+        // Lấy item từ position, chỉ xử lý khi có item
         T item = getItem(position);
         if (item != null) {
             holder.textView.setText(item.getDisplayText());
         }
+
         return convertView;
     }
 

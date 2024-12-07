@@ -18,7 +18,7 @@ import retrofit2.http.Path;
 public interface LoginService {
 
     @GET("account")
-    Call<List<CustomerModel>> getAllAccounts(); // Lấy danh sách tài khoản
+    Call<List<CustomerModel>> getAllAccounts();
 
     @POST("account/login")
     Call<CustomerModel> loginAccount(@Body CustomerModel customerModel);
