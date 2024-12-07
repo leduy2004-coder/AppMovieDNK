@@ -17,7 +17,7 @@ router.get('/:maPhim', async (req, res) => {
             .query('SELECT * FROM BinhLuan WHERE maPhim = @maPhim');
 
         const comments = result.recordset;
-
+        console.log(comments)
         if (comments.length > 0) {
             // Gọi hàm fetchCommentsWithUserInfo để lấy thông tin khách hàng
             const commentsWithUserInfo = await fetchCommentsWithUserInfo(comments);

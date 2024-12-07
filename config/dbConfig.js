@@ -8,14 +8,11 @@ const config = {
     database: process.env.SQL_DATABASE,
     server: process.env.SQL_SERVER,
     port: parseInt(process.env.SQL_PORT),
-    // user: "sa",
-    // password: "ad123456",
-    // database: "Cinema_version4",
-    // server: "DESKTOP-2NFEM03",
-    // port: 3000,
+
     options: {
         encrypt: true, // Nếu bạn đang sử dụng Azure, bật tùy chọn này
-        trustServerCertificate: true // Nếu sử dụng self-signed SSL
+        trustServerCertificate: true, // Nếu sử dụng self-signed SSL
+        enableArithAbort: true,
     },
     pool: {
         max: 5,                  // Giới hạn tối đa kết nối pool
