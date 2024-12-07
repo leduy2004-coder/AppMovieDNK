@@ -223,20 +223,23 @@ router.get('/ngaychieu/:maPhim', async (req, res) => {
     } 
 
 });
+
 // Route để lấy thông tin của phim thông qua ngày chiếu
-router.get('/phim/:ngay', async (req, res) => {
-    const { ngay } = req.params; // Lấy mã phim từ URL
+router.get('/get-movie-by-date', async (req, res) => {
+
+    const ngay = req.query.ngay;
+    const formattedDate = convertDateFormat(ngay);
+
     let pool;
     try {
         pool = await connectToDatabase();
         
         let result = await pool.request()
-            .input('ngay', sql.VarChar(20), ngay) 
-            .query('SELECT * FROM fXuatNgayChieu(@ngay)'); 
+            .input('ngay', sql.NVarChar(50), formattedDate) 
+            .query('SELECT * FROM fXuatPhimChieu(@ngay)'); 
         // Lấy thông tin chi tiết của các phim
         const movieDetails = await fetchMovieDetailsSequential(result.recordset);
 
-        // Trả về danh sách thông tin chi tiết của các phim
         res.json(movieDetails.filter(movie => movie !== null));
   
     } catch (err) {
@@ -244,6 +247,10 @@ router.get('/phim/:ngay', async (req, res) => {
         res.status(500).send('Lỗi khi lấy dữ liệu phim');
     } 
 });
+function convertDateFormat(dateStr) {
+    const [day, month, year] = dateStr.split('/');
+    return `${year}-${month}-${day}`;
+}
 router.get('/get-schedule/:id', async (req, res) => {
     const phimId = req.params.id;
     let pool;
