@@ -134,6 +134,36 @@ router.get('/getTypeMovie', async (req, res) => {
         res.status(500).send('Lỗi khi lấy dữ liệu loại phim');
     } 
 });
+
+// Route để lấy loại phim dựa vào mã phim
+router.get('/getGenreByMovie/:maPhim', async (req, res) => {
+    const { maPhim } = req.params;
+    let pool;
+    try {
+        // Kết nối với cơ sở dữ liệu
+        pool = await connectToDatabase();
+
+        // Thực thi truy vấn SQL
+        const result = await pool.request()
+            .input('maPhim', sql.VarChar(20), maPhim) // Tham số đầu vào
+            .query(`
+                SELECT tlp.maLPhim, tlp.tenLPhim, tlp.moTaLP
+                FROM Phim p
+                JOIN TheLoaiPhim tlp ON p.maLPhim = tlp.maLPhim
+                WHERE p.maPhim = @maPhim
+            `);
+
+        // Trả về kết quả nếu tìm thấy
+        if (result.recordset.length > 0) {
+            res.json(result.recordset[0]);
+        } else {
+            res.status(404).send('Không tìm thấy loại phim cho mã phim này.');
+        }
+    } catch (error) {
+        console.error('Lỗi khi truy vấn:', error);
+        res.status(500).send('Có lỗi xảy ra khi truy vấn cơ sở dữ liệu.');
+    }
+});
 // Route để lấy thông tin của phim thông qua maPhim
 router.get('/phim/:maPhim', async (req, res) => {
     const { maPhim } = req.params; // Lấy mã phim từ URL

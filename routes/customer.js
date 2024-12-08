@@ -5,8 +5,8 @@ const sql = require('mssql');
 const { connectToDatabase } = require('../config/dbConfig');
 
 
-// Route để lấy số lượng voucher và điểm của khách hàng
-router.get('/getVoucherAndPoint/:maKH', async (req, res) => {
+// Route để lấy thông tin khách hàng
+router.get('/getInfCustomer/:maKH', async (req, res) => {
     const { maKH } = req.params;
 
         try {
@@ -14,7 +14,7 @@ router.get('/getVoucherAndPoint/:maKH', async (req, res) => {
 
             const result = await pool.request()
                 .input('maKH', sql.VarChar(20), maKH)
-                .query('SELECT soLuongVoucher, diemThuong FROM KhachHang Where maKH = @maKH');
+                .query('SELECT * FROM KhachHang Where maKH = @maKH');
      
             res.json(result.recordset[0]);
         } catch (error) {
