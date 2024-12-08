@@ -13,9 +13,11 @@ import retrofit2.http.Path;
 
 public interface CustomerService {
 
+    @GET("customer/getInfCustomer/{maKH}")
+    Call<CustomerModel> getInfCustomer(@Path("maKH") String maKH);
+
     @POST("customer/updatePoint/{maKH}")
     Call<JsonObject> updatePoint(@Path("maKH") String maKH, @Body Map<String, Integer> diemThuong);
-
 
     @GET("customer/getVoucherAndPoint/{maKH}")
     Call<CustomerModel> getSoLuongVoucherVaDiem(@Path("maKH") String maKH);

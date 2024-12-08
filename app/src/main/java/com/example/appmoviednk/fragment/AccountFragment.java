@@ -1,8 +1,11 @@
 package com.example.appmoviednk.fragment;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -25,9 +28,11 @@ import com.example.appmoviednk.databinding.FragmentAccountBinding;
 import com.example.appmoviednk.databinding.FragmentTrailerBinding;
 import com.example.appmoviednk.model.CustomerModel;
 import com.example.appmoviednk.retrofit.RetrofitClient;
+import com.example.appmoviednk.service.CustomerService;
 import com.example.appmoviednk.service.LoginService;
 
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +46,7 @@ public class AccountFragment extends Fragment {
     FragmentAccountBinding binding;
     HistoryBookAdapter historyBookAdapter;
     LoginService loginService;
+    CustomerService customerService;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -52,29 +58,95 @@ public class AccountFragment extends Fragment {
 
         CustomerModel loggedInAccount = UserSession.getInstance().getLoggedInAccount();
         if(loggedInAccount != null  ){
-            binding.accountName.setText("Họ tên: " +loggedInAccount.getHoTen());
-            binding.accountPoint.setText(
-                    "Số điểm: " +
-                            (loggedInAccount.getDiemThuong() == 0
-                                    ? "0"
-                                    : String.valueOf(loggedInAccount.getDiemThuong()))
-            );
-            binding.accountEmail.setText("Email: " +(loggedInAccount.getEmail()));
-            binding.accountPhone.setText("SDT: " +(loggedInAccount.getSdt()));
-            //hien thi lich su ve da book
             String maKH = loggedInAccount.getMaKH();
+            fetchCustomerInf(maKH);
             fetchCustomerHistory(maKH);
+            binding.loggedIn.setVisibility(View.VISIBLE);
         } else {
-            diaLogLogin();
+            styleBtn();
+            activeInLoggedOut();
+            binding.loggedOut.setVisibility(View.VISIBLE);
+
         }
-
-
         binding.accoutBtn.btnPrimary.setText("Xem thêm");
+
 
         // Return the root view from binding
         return binding.getRoot();
     }
 
+    private void styleBtn(){
+        Button btnLogin = binding.btnLogin.btnPrimary;
+        Button btnRegister = binding.btnRegister.btnPrimary;
+
+        btnLogin.setText("Đăng nhập");
+        btnRegister.setText("Đăng ký");
+
+        ViewGroup.LayoutParams loginParams = btnLogin.getLayoutParams();
+        ViewGroup.LayoutParams regisrerParams = btnRegister.getLayoutParams();
+
+        int widthInPx = (int) (160 * getResources().getDisplayMetrics().density);
+        int heightInPx = (int) (64 * getResources().getDisplayMetrics().density);
+
+        // Gắn chiều dài 50dp cho cả hai nút
+        loginParams.width = widthInPx;
+        regisrerParams.width = widthInPx;
+        loginParams.height = heightInPx;
+        regisrerParams.height = heightInPx;
+
+    }
+
+    private void activeInLoggedOut(){
+        Toast.makeText(getContext(), "Vui lòng đăng nhập", Toast.LENGTH_SHORT).show();
+        binding.btnLogin.btnPrimary.setOnClickListener(view -> {
+            LoginFragment loginFragment = new LoginFragment();
+            Bundle args = new Bundle();
+            args.putBoolean("returnToAccount", true);
+            loginFragment.setArguments(args);
+
+            MainActivity mainActivity = (MainActivity) getActivity();
+            if (mainActivity != null) {
+                mainActivity.replaceFragment(loginFragment, true);
+            }
+        });
+        binding.btnRegister.btnPrimary.setOnClickListener(view ->  {
+            RegisterFragment registerFragment = new RegisterFragment();
+            MainActivity mainActivity = (MainActivity) getActivity();
+            if (mainActivity != null) {
+                mainActivity.replaceFragment(registerFragment, true);
+            }
+        });
+    }
+
+    //get thông tin tài khoản
+    private void fetchCustomerInf(String maKH){
+        customerService = RetrofitClient.getRetrofitInstance().create(CustomerService.class);
+        customerService.getInfCustomer(maKH).enqueue(new Callback<CustomerModel>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(@NonNull Call<CustomerModel> call, @NonNull Response<CustomerModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    CustomerModel customerModel = response.body();
+                    Log.d("diem thuong", "onResponse: " + customerModel.getDiemThuong());
+                    binding.accountName.setText("Họ tên: " + customerModel.getTenTK());
+                    binding.accountPoint.setText("Điểm: " + customerModel.getDiemThuong());
+                    binding.accountVoucher.setText("Voucher: " + customerModel.getSoLuongVoucher());
+                    binding.accountEmail.setText("Email: " + customerModel.getTenTK());
+                    binding.accountPhone.setText("SDT: " + customerModel.getTenTK());
+                } else {
+                    Log.e("API_ERROR", "Không lấy được thông tin khách hàng " + response.errorBody());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<CustomerModel> call, @NonNull Throwable t) {
+                Log.e("API_ERROR", "Lỗi khi gọi API: " + t.getMessage(), t);
+            }
+        });
+
+
+    }
+    //get ra lịch sử đặt vé
     private void fetchCustomerHistory(String maKH) {
         loginService = RetrofitClient.getRetrofitInstance().create(LoginService.class);
         Call<List<Map<String, Object>>> call = loginService.getCustomerHistory(maKH);
@@ -88,9 +160,14 @@ public class AccountFragment extends Fragment {
 
                     if (historyList.isEmpty()) {
                         Toast.makeText(getContext(), "Không có lịch sử vé đặt!", Toast.LENGTH_SHORT).show();
+                        Log.d("history list", "onResponse: " + historyList.size());
+                        binding.accoutBtn.btnPrimary.setVisibility(View.GONE);
+                        binding.table.setVisibility(View.GONE);
+                        binding.isEmpty.setVisibility(View.VISIBLE);
                         return; // Kết thúc luôn nếu dữ liệu trống
                     }
                     // Cập nhật dữ liệu vào adapter
+
                     HistoryBookAdapter adapter = new HistoryBookAdapter(getContext());
                     adapter.setData(historyList);
 
@@ -100,8 +177,10 @@ public class AccountFragment extends Fragment {
                     if (historyList.size() > 3) {
                         binding.moreItems.setVisibility(View.VISIBLE); // Hiển thị dấu ...
 
+                    } else {
+                        binding.accoutBtn.btnPrimary.setVisibility(View.GONE);
                     }
-                    // Bắt sự kiện khi nhấn vào nút "accout_btn"
+                    // Bắt sự kiện khi nhấn vào nút "accout_btn" - xem lịch sử
                     binding.accoutBtn.btnPrimary.setOnClickListener(v -> {
                         // Kiểm tra trạng thái hiển thị hiện tại
                         if (adapter.getItemCount() > 3) {
@@ -114,7 +193,7 @@ public class AccountFragment extends Fragment {
                             // Đang hiển thị 3 mục, giờ hiển thị toàn bộ
                             adapter.setShowAll(true);
                             binding.accoutBtn.btnPrimary.setText("Rút gọn");
-                            binding.moreItems.setVisibility(View.GONE); // Hiển thị dấu ...
+                            binding.moreItems.setVisibility(View.GONE); //ẩn ...
 
                         }
                         // Cập nhật lại adapter để ép buộc render lại
@@ -136,25 +215,6 @@ public class AccountFragment extends Fragment {
                 Toast.makeText(getContext(), "Lỗi kết nối, vui lòng thử lại!", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-    // Hiện dialog yêu cầu đăng nhập
-    private void diaLogLogin() {
-        new AlertDialog.Builder(getContext())
-                .setTitle("Đăng nhập")
-                .setMessage("Bạn cần đăng nhập để xem lịch sử. ")
-                .setPositiveButton("Đăng nhập", (dialog, which) -> {
-                    LoginFragment loginFragment = new LoginFragment();
-                    Bundle args = new Bundle();
-                    args.putBoolean("returnToAccount", true);
-                    loginFragment.setArguments(args);
-
-                    MainActivity mainActivity = (MainActivity) getActivity();
-                    if (mainActivity != null) {
-                        mainActivity.replaceFragment(loginFragment, true);
-                    }
-                })
-                .setNegativeButton("Huỷ", null)
-                .show();
     }
 
 

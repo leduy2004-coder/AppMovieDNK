@@ -5,6 +5,7 @@ package com.example.appmoviednk.service;
 
 import com.example.appmoviednk.model.MovieModel;
 import com.example.appmoviednk.model.ScheduleModel;
+import com.example.appmoviednk.model.TypeMovieModel;
 
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,9 @@ public interface MovieService {
 
     @GET("movies/phimchuachieu")
     Call<List<MovieModel>> getMoviesChuaChieu();
+
+    @GET("movies/getGenreByMovie/{id}")
+    Call<TypeMovieModel> getGenreByMovie(@Path("id") String maPhim);
 
     @GET("movies/ngaydangchieu")
     Call<List<ScheduleModel>> getNgayDangChieu();

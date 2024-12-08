@@ -147,7 +147,7 @@ public class VoucherFragment extends Fragment {
     private void diaLogLogin() {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Đăng nhập")
-                .setMessage("Bạn cần đăng nhập để bình luận. ")
+                .setMessage("Bạn cần đăng nhập để điểm danh. ")
                 .setPositiveButton("Đăng nhập", (dialog, which) -> {
                     LoginFragment loginFragment = new LoginFragment();
                     Bundle args = new Bundle();

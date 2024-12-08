@@ -20,6 +20,7 @@ import com.example.appmoviednk.adapter.ScheduleShowingAdapter;
 import com.example.appmoviednk.databinding.FragmentMovieBinding;
 import com.example.appmoviednk.model.MovieModel;
 import com.example.appmoviednk.model.ScheduleModel;
+import com.example.appmoviednk.model.TypeMovieModel;
 import com.example.appmoviednk.retrofit.RetrofitClient;
 import com.example.appmoviednk.service.MovieService;
 import com.squareup.picasso.Picasso;
@@ -34,7 +35,7 @@ public class MovieFragment extends Fragment {
 
     FragmentMovieBinding binding;
     ScheduleShowingAdapter scheduleShowingAdapter;
-    MovieService apiService;
+    MovieService movieService;
     MovieModel movie;
 
     @SuppressLint("SetTextI18n")
@@ -44,8 +45,8 @@ public class MovieFragment extends Fragment {
         binding = FragmentMovieBinding.inflate(inflater, container, false);
         movie = new ViewModelProvider(requireActivity()).get(MovieModel.class);
 
-        // Khởi tạo apiService
-        apiService = RetrofitClient.getRetrofitInstance().create(MovieService.class);
+        // Khởi tạo movieService
+        movieService = RetrofitClient.getRetrofitInstance().create(MovieService.class);
 
         scheduleShowingAdapter = new ScheduleShowingAdapter(requireContext());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), 1);
@@ -59,6 +60,7 @@ public class MovieFragment extends Fragment {
                     movie = selectedMovie;
                     setContent(selectedMovie);
                     getSchedules(selectedMovie.getMaPhim().toString().trim());
+                    getGenreByMovie(selectedMovie.getMaPhim().toString().trim());
                     Log.d("23232323", selectedMovie.getMaPhim());
                 } else {
                     Log.e("MovieFragment", "Nhận được MovieModel null");
@@ -80,18 +82,33 @@ public class MovieFragment extends Fragment {
         return binding.getRoot();
     }
 
+    private void getGenreByMovie(String phimId) {
+        movieService.getGenreByMovie(phimId).enqueue(new Callback<TypeMovieModel>() {
+            @Override
+            public void onResponse(Call<TypeMovieModel> call, Response<TypeMovieModel> response) {
+                if (response.isSuccessful()) {
+                    TypeMovieModel typeMovieModel = response.body();
+                    binding.tvType.setText("Thể loại: " + typeMovieModel.getTenLPhim());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TypeMovieModel> call, Throwable t) {
+                Log.d("API Error", t.getMessage());
+            }
+        });
+    }
+
     private void getSchedules(String phimId) {
-        apiService.getSchedules(phimId).enqueue(new Callback<List<ScheduleModel>>() {
+        movieService.getSchedules(phimId).enqueue(new Callback<List<ScheduleModel>>() {
             @Override
             public void onResponse(@NonNull Call<List<ScheduleModel>> call, @NonNull Response<List<ScheduleModel>> response) {
                 if (response.isSuccessful()) {
                     List<ScheduleModel> schedules = response.body();
                     // Kiểm tra schedules có khác null không trước khi ghi log
                     if (schedules != null) {
-                        Log.d("thong tin", schedules.toString());
                         for (ScheduleModel schedule : schedules) {
                             schedule.setMaPhim(phimId); // Thiết lập maPhim cho từng đối tượng
-                            Log.d("yonh yin 2", schedule.getMaPhim());
                         }
 //                        // Gọi phương thức setData để cập nhật RecyclerView
                         scheduleShowingAdapter.setData(schedules);
@@ -113,7 +130,6 @@ public class MovieFragment extends Fragment {
     @SuppressLint("SetTextI18n")
     private void setContent(MovieModel movie) {
         binding.tvName.setText(movie.getTenPhim());
-        binding.tvType.setText("Thể loại: " );
         binding.tvDescription.setText(movie.getMoTa());
         binding.tvDirector.setText(movie.getDaoDien());
         Picasso.get()
