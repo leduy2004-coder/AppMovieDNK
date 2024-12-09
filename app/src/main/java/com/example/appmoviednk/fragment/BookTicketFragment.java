@@ -477,7 +477,7 @@ public class BookTicketFragment extends Fragment {
         voucherSelect = voucher;
         binding.tvVoucher.setText("Đã sử dụng "+ voucherSelect+ " voucher");
         binding.selectVoucherBtn.btnPrimary.setText("Hủy");
-        totalAmount = totalAmount - voucherSelect * 1000;
+        totalAmount = totalAmount - voucherSelect * 10000;
         // Cập nhật tổng tiền
         binding.totalAmountTv.setText("Tổng tiền: " + totalAmount + " VND");
     }

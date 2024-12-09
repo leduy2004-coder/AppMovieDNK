@@ -62,7 +62,7 @@ public class ScheduleShowingAdapter extends RecyclerView.Adapter<ScheduleShowing
         return 0;
     }
 
-    public class ScheduleShowingViewHolder extends RecyclerView.ViewHolder {
+    public static class ScheduleShowingViewHolder extends RecyclerView.ViewHolder {
         ItemScheduleShowingMovieBinding itemScheduleMovieBinding;
 
         public ScheduleShowingViewHolder(@NonNull ItemScheduleShowingMovieBinding binding) {

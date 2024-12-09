@@ -1,17 +1,7 @@
 package com.example.appmoviednk.fragment;
 
 import android.annotation.SuppressLint;
-import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,21 +9,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.appmoviednk.R;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.example.appmoviednk.UserSession;
 import com.example.appmoviednk.activity.MainActivity;
-import com.example.appmoviednk.adapter.CommentAdapter;
 import com.example.appmoviednk.adapter.HistoryBookAdapter;
 import com.example.appmoviednk.databinding.FragmentAccountBinding;
-import com.example.appmoviednk.databinding.FragmentTrailerBinding;
 import com.example.appmoviednk.model.CustomerModel;
 import com.example.appmoviednk.retrofit.RetrofitClient;
 import com.example.appmoviednk.service.CustomerService;
 import com.example.appmoviednk.service.LoginService;
 
-
-import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -48,7 +36,7 @@ public class AccountFragment extends Fragment {
     LoginService loginService;
     CustomerService customerService;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentAccountBinding.inflate(inflater, container, false);
@@ -77,23 +65,27 @@ public class AccountFragment extends Fragment {
 
     private void styleBtn(){
         Button btnLogin = binding.btnLogin.btnPrimary;
-        Button btnRegister = binding.btnRegister.btnPrimary;
 
         btnLogin.setText("Đăng nhập");
-        btnRegister.setText("Đăng ký");
 
         ViewGroup.LayoutParams loginParams = btnLogin.getLayoutParams();
-        ViewGroup.LayoutParams regisrerParams = btnRegister.getLayoutParams();
 
-        int widthInPx = (int) (160 * getResources().getDisplayMetrics().density);
-        int heightInPx = (int) (64 * getResources().getDisplayMetrics().density);
+        int widthInPx = (int) (140 * getResources().getDisplayMetrics().density);
+        int heightInPx = (int) (55 * getResources().getDisplayMetrics().density);
+        int marginInPx = (int) (16 * getResources().getDisplayMetrics().density);
 
         // Gắn chiều dài 50dp cho cả hai nút
         loginParams.width = widthInPx;
-        regisrerParams.width = widthInPx;
-        loginParams.height = heightInPx;
-        regisrerParams.height = heightInPx;
 
+        loginParams.height = heightInPx;
+
+        if (loginParams instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) loginParams;
+
+            // Đặt margin (16dp cho tất cả các cạnh)
+            marginParams.setMargins(marginInPx, marginInPx, marginInPx, marginInPx);
+            btnLogin.setLayoutParams(marginParams);
+        }
     }
 
     private void activeInLoggedOut(){
@@ -109,13 +101,6 @@ public class AccountFragment extends Fragment {
                 mainActivity.replaceFragment(loginFragment, true);
             }
         });
-        binding.btnRegister.btnPrimary.setOnClickListener(view ->  {
-            RegisterFragment registerFragment = new RegisterFragment();
-            MainActivity mainActivity = (MainActivity) getActivity();
-            if (mainActivity != null) {
-                mainActivity.replaceFragment(registerFragment, true);
-            }
-        });
     }
 
     //get thông tin tài khoản
@@ -128,11 +113,11 @@ public class AccountFragment extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     CustomerModel customerModel = response.body();
                     Log.d("diem thuong", "onResponse: " + customerModel.getDiemThuong());
-                    binding.accountName.setText("Họ tên: " + customerModel.getTenTK());
+                    binding.accountName.setText("Họ tên: " + customerModel.getHoTen());
                     binding.accountPoint.setText("Điểm: " + customerModel.getDiemThuong());
                     binding.accountVoucher.setText("Voucher: " + customerModel.getSoLuongVoucher());
-                    binding.accountEmail.setText("Email: " + customerModel.getTenTK());
-                    binding.accountPhone.setText("SDT: " + customerModel.getTenTK());
+                    binding.accountEmail.setText("Email: " + customerModel.getEmail());
+                    binding.accountPhone.setText("SDT: " + customerModel.getSdt());
                 } else {
                     Log.e("API_ERROR", "Không lấy được thông tin khách hàng " + response.errorBody());
                 }

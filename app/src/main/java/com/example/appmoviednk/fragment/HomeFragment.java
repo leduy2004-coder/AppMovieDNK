@@ -223,7 +223,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void getMoviesFromApi() {
-        apiService.getMoviesDangChieu().enqueue(new Callback<List<MovieModel>>() {
+        apiService.getMoviesSearch().enqueue(new Callback<List<MovieModel>>() {
             @Override
             public void onResponse(Call<List<MovieModel>> call, Response<List<MovieModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {

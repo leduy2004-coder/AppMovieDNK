@@ -92,6 +92,7 @@ public class TrailerFragment extends Fragment {
 
 
                 binding.listCmt.setAdapter(cmtAdapter);
+
                 // Gọi API lấy comment
                 getComments(movie.getMaPhim());
 
@@ -136,19 +137,28 @@ public class TrailerFragment extends Fragment {
             public void onResponse(@NonNull Call<List<CommentModel>> call, @NonNull Response<List<CommentModel>> response) {
                 if (response.isSuccessful()) {
                     commentModels = response.body();
-                    // Kiểm tra nếu commentModels rỗng hoặc null
+
                     if (commentModels != null && !commentModels.isEmpty()) {
                         Collections.reverse(commentModels);
                         binding.countComment.setText(commentModels.size() + " bình luận");
                         cmtAdapter.setData(commentModels);
-                    } else {
+
+                        if(commentModels.size() > 4){
+                            binding.btnSeen.setVisibility(View.VISIBLE);
+                        }else {
+                            binding.btnSeen.setVisibility(View.GONE);
+                        }
+                    } else if (commentModels.isEmpty()){
                         // Nếu không có bình luận
                         binding.countComment.setText("0 bình luận");
                         cmtAdapter.setData(Collections.emptyList()); // Set danh sách bình luận rỗng
+                        binding.btnSeen.setVisibility(View.GONE);
                     }
                 } else {
                     binding.countComment.setText("0 bình luận");
                     cmtAdapter.setData(Collections.emptyList());
+                    binding.btnSeen.setVisibility(View.GONE);
+
                 }
             }
 
@@ -171,6 +181,7 @@ public class TrailerFragment extends Fragment {
                 commentModel.setNoiDung(commentContent);
                 commentModel.setKhachHang(UserSession.getInstance().getLoggedInAccount());
                 postComment(commentModel);
+
             } else {
                 // Hiển thị thông báo nếu nội dung bình luận trống
                 Toast.makeText(getContext(), "Vui lòng nhập bình luận", Toast.LENGTH_SHORT).show();
@@ -214,6 +225,8 @@ public class TrailerFragment extends Fragment {
                     binding.commentContent.setText("");
 
                     binding.countComment.setText(commentModels.size() + " bình luận");
+                    getComments(movie.getMaPhim());
+
 
                     // Thông báo thành công
                     Toast.makeText(getContext(), "Bình luận thành công", Toast.LENGTH_SHORT).show();

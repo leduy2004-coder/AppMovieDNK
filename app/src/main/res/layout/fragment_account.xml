@@ -50,7 +50,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:textSize="21sp"
+                        android:textSize="18sp"
                         android:textColor="@color/black"
                         android:text="Họ tên: trống" />
 
@@ -60,7 +60,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:textColor="@color/black"
-                        android:textSize="21sp"
+                        android:textSize="18sp"
                         android:text="Số điểm: 0" />
                     <TextView
                         android:id="@+id/account_voucher"
@@ -68,7 +68,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:textColor="@color/black"
-                        android:textSize="21sp"
+                        android:textSize="18sp"
                         android:text="Voucher: 0" />
                     <TextView
                         android:id="@+id/account_email"
@@ -76,7 +76,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:textColor="@color/black"
-                        android:textSize="21sp"
+                        android:textSize="18sp"
                         android:text="Email: trống" />
 
                     <TextView
@@ -85,7 +85,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:textColor="@color/black"
-                        android:textSize="21sp"
+                        android:textSize="18sp"
                         android:text="SDT: trống" />
                 </LinearLayout>
 
@@ -188,28 +188,37 @@
     </ScrollView>
 
     <LinearLayout
-        android:id="@+id/logged_out"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_gravity="center"
+        android:id="@+id/loggedOut"
+        android:gravity="center"
         android:visibility="gone"
-        android:gravity="center">
+        android:padding="16dp">
 
-        <include
-            layout="@layout/button_primary"
-            android:id="@+id/btn_login"
-            />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10sp"
-            />
-        <include
-            layout="@layout/button_primary"
-            android:id="@+id/btn_register"
-            />
+            android:text="Vui lòng đăng nhập để xem thông tin"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:padding="15dp"
+            android:elevation="4dp" />
+        <ImageView
+            android:id="@+id/imgMain"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:src="@drawable/img_nodata"
+            android:scaleType="center" />
+
+
+        <include layout="@layout/button_primary" android:id="@+id/btnLogin"/>
+
 
     </LinearLayout>
+
 
 </FrameLayout>

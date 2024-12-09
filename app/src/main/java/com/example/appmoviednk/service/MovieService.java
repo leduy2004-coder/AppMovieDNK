@@ -24,6 +24,9 @@ public interface MovieService {
     @GET("movies/phimchuachieu")
     Call<List<MovieModel>> getMoviesChuaChieu();
 
+    @GET("movies/movie-search")
+    Call<List<MovieModel>> getMoviesSearch();
+
     @GET("movies/getGenreByMovie/{id}")
     Call<TypeMovieModel> getGenreByMovie(@Path("id") String maPhim);
 
