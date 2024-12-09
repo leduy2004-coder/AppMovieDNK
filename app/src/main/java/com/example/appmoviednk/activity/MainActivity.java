@@ -1,6 +1,7 @@
 package com.example.appmoviednk.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -32,6 +33,8 @@ import com.example.appmoviednk.fragment.VoucherFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class MainActivity extends AppCompatActivity  {
@@ -79,10 +82,17 @@ public class MainActivity extends AppCompatActivity  {
         });
 
         // Thiết lập sự kiện click cho imgLogo
-        binding.imgLogo.setOnClickListener(v -> {
-            replaceFragment(new HomeFragment(), true);
-            binding.bottomNavigationView.setSelectedItemId(R.id.bottom_home);
-        });
+        if (binding != null) {
+            binding.imgLogo.setOnClickListener(v -> {
+                replaceFragment(new HomeFragment(), true);
+                binding.bottomNavigationView.setSelectedItemId(R.id.bottom_home);
+            });
+        } else {
+            Log.e("HomeFragment", "Binding is null");
+        }
+
+
+
 
         drawerLayout = binding.main;
 

@@ -95,7 +95,7 @@ public class VoucherFragment extends Fragment {
                         title.setSpan(new ForegroundColorSpan(Color.RED), 0, title.length(), 0);
 
                         // Tạo AlertDialog để thông báo điểm danh thành công
-                        AlertDialog alertDialog = new AlertDialog.Builder(requireContext()).setIcon(R.drawable.ic_baseline_notifications_active_24).setTitle(title).setMessage("Bạn đã điểm danh ngày " + currentDay + " thành công!").setCancelable(false).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        AlertDialog alertDialog = new AlertDialog.Builder(requireContext()).setIcon(R.drawable.ic_baseline_notifications_active_24).setTitle(title).setMessage("Bạn đã điểm danh ngày thứ" + attendance + 1 + " thành công!").setCancelable(false).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.dismiss();

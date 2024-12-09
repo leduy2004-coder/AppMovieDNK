@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,8 +63,7 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         apiService = RetrofitClient.getRetrofitInstance().create(MovieService.class);
 
-        getMoviesFromApi();
-        getDateShowingFromApi();
+
         // Khởi tạo TabLayout và ViewPager2
         tagViewAdapter = new TagViewMovieAdapter(requireActivity(), 2);
         binding.viewPager.setAdapter(tagViewAdapter);
@@ -112,71 +112,82 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        binding.spnMovie.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (!isMovieSpinnerInitialized) {
-                    isMovieSpinnerInitialized = true;
-                    return;
-                }
-                DisplayTextSpinner selectedItem = (DisplayTextSpinner) parent.getItemAtPosition(position);
-                if (selectedItem != null) {
-                    String displayText = selectedItem.getDisplayText();
-                    if (displayText.equals("Chọn phim")) {
-                        Log.d("Spinner", "Mục mặc định được chọn.");
 
-                    } else if (selectedItem instanceof MovieModel) {
-                        MovieModel movie = ((MovieModel) selectedItem);
-                        // Gọi API lấy danh sách ngày chiếu theo mã phim
-                        getDateShowingFromApi(movie.getMaPhim());
+        // Truy cập spnMovie hoặc các phần tử khác ở đây
 
-                        // Lưu mã phim vào biến toàn cục hoặc SharedPreferences để kiểm tra ở spinner tiếp theo
-                        selectedMovie = movie;
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if (binding != null) {
+                binding.spnMovie.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        if (!isMovieSpinnerInitialized) {
+                            isMovieSpinnerInitialized = true;
+                            return;
+                        }
+                        DisplayTextSpinner selectedItem = (DisplayTextSpinner) parent.getItemAtPosition(position);
+                        if (selectedItem != null) {
+                            String displayText = selectedItem.getDisplayText();
+                            if (displayText.equals("Chọn phim")) {
+                                checkSelectionDefault();
+                                selectedMovie = null;
+                            } else if (selectedItem instanceof MovieModel) {
+                                MovieModel movie = ((MovieModel) selectedItem);
+                                // Gọi API lấy danh sách ngày chiếu theo mã phim
+                                getDateShowingFromApi(movie.getMaPhim());
 
-                        // Kiểm tra xem cả hai Spinner đều được chọn chưa
-                        checkSelectionAndNavigate();
+                                // Lưu mã phim vào biến toàn cục hoặc SharedPreferences để kiểm tra ở spinner tiếp theo
+                                selectedMovie = movie;
+
+                                // Kiểm tra xem cả hai Spinner đều được chọn chưa
+                                checkSelectionAndNavigate();
+                            }
+                        }
                     }
-                }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Không làm gì nếu không có mục nào được chọn
-            }
-        });
-        binding.spnDate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (!isDateSpinnerInitialized) {
-                    isDateSpinnerInitialized = true;
-                    return;
-                }
-                DisplayTextSpinner selectedItem = (DisplayTextSpinner) parent.getItemAtPosition(position);
-                if (selectedItem != null) {
-                    String displayText = selectedItem.getDisplayText();
-                    if (displayText.equals("Chọn ngày")) {
-                        Log.d("Spinner", "Mục mặc định được chọn.");
-
-                    } else if (selectedItem instanceof ScheduleModel) {
-                        String date = ((ScheduleModel) selectedItem).getDateString();
-                        // Gọi API lấy danh sách phim chiếu theo ngày
-                        getMoviesFromApi(date);
-
-                        // Lưu ngày đã chọn vào biến toàn cục hoặc SharedPreferences để kiểm tra ở spinner tiếp theo
-                        selectedDate = date;
-
-                        // Kiểm tra xem cả hai Spinner đều được chọn chưa
-                        checkSelectionAndNavigate();
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        // Không làm gì nếu không có mục nào được chọn
                     }
-                }
-            }
+                });
+                binding.spnDate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        if (!isDateSpinnerInitialized) {
+                            isDateSpinnerInitialized = true;
+                            return;
+                        }
+                        DisplayTextSpinner selectedItem = (DisplayTextSpinner) parent.getItemAtPosition(position);
+                        if (selectedItem != null) {
+                            String displayText = selectedItem.getDisplayText();
+                            if (displayText.equals("Chọn ngày")) {
+                                checkSelectionDefault();
+                                selectedDate = null;
+                            } else if (selectedItem instanceof ScheduleModel) {
+                                String date = ((ScheduleModel) selectedItem).getDateString();
+                                // Gọi API lấy danh sách phim chiếu theo ngày
+                                getMoviesFromApi(date);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Không làm gì nếu không có mục nào được chọn
-            }
-        });
+                                // Lưu ngày đã chọn vào biến toàn cục hoặc SharedPreferences để kiểm tra ở spinner tiếp theo
+                                selectedDate = date;
 
+                                // Kiểm tra xem cả hai Spinner đều được chọn chưa
+                                checkSelectionAndNavigate();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        // Không làm gì nếu không có mục nào được chọn
+                    }
+                });
+
+                getMoviesFromApi();
+                getDateShowingFromApi();
+            } else {
+                Log.e("BINDING_ERROR", "Binding chưa được khởi tạo!");
+            }
+        }, 1000);
         return binding.getRoot();
     }
 
@@ -223,7 +234,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void getMoviesFromApi() {
-        apiService.getMoviesSearch().enqueue(new Callback<List<MovieModel>>() {
+        apiService.getMoviesDangChieu().enqueue(new Callback<List<MovieModel>>() {
             @Override
             public void onResponse(Call<List<MovieModel>> call, Response<List<MovieModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -234,10 +245,10 @@ public class HomeFragment extends Fragment {
                     movieAdapter.clear();
                     movieAdapter.addDefaultItem("Chọn phim");
                     movieAdapter.addAll(list);
+                    isMovieSpinnerInitialized = false;
 
                     movieAdapter.notifyDataSetChanged();
                     binding.spnMovie.setAdapter(movieAdapter);
-
                     Log.d("API_SUCCESS", "Danh sách phim đã được cập nhật");
                 } else {
                     Log.e("API_ERROR", "Không lấy được danh sách phim: " + response.errorBody());
@@ -268,6 +279,8 @@ public class HomeFragment extends Fragment {
                     scheduleAdapter.clear();
                     scheduleAdapter.addDefaultItem("Chọn ngày");
                     scheduleAdapter.addAll(list);
+                    isDateSpinnerInitialized = false;
+
                     scheduleAdapter.notifyDataSetChanged();
 
                     binding.spnDate.setAdapter(scheduleAdapter);
@@ -360,5 +373,16 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    private void checkSelectionDefault() {
+        int selectedMoviePosition = binding.spnMovie.getSelectedItemPosition();
+        int selectedDatePosition = binding.spnDate.getSelectedItemPosition();
+
+        // Kiểm tra nếu cả hai spinner đều ở trạng thái mặc định
+        if (movieAdapter.isDefaultSelected(selectedMoviePosition, "Chọn phim")
+                && scheduleAdapter.isDefaultSelected(selectedDatePosition, "Chọn ngày")) {
+            getMoviesFromApi();
+            getDateShowingFromApi();
+        }
+    }
 
 }

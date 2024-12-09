@@ -96,17 +96,21 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Email"
+                                android:text="Tài khoản"
                                 android:textColor="@color/black"
-                                android:textSize="18sp"></TextView>
+                                android:textSize="18sp">
+
+                            </TextView>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="8sp"
+                                android:layout_marginLeft="8dp"
                                 android:text="(*)"
                                 android:textColor="@color/colorPrimary"
-                                android:textSize="18sp"></TextView>
+                                android:textSize="18sp">
+
+                            </TextView>
                         </LinearLayout>
 
                         <EditText
@@ -128,7 +132,9 @@
                                 android:layout_height="wrap_content"
                                 android:text="Mật khẩu"
                                 android:textColor="@color/black"
-                                android:textSize="18sp"></TextView>
+                                android:textSize="18sp">
+
+                            </TextView>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -136,7 +142,9 @@
                                 android:layout_marginLeft="8sp"
                                 android:text="(*)"
                                 android:textColor="@color/colorPrimary"
-                                android:textSize="18sp"></TextView>
+                                android:textSize="18sp">
+
+                            </TextView>
                         </LinearLayout>
 
                         <EditText
@@ -145,6 +153,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/bg_edittext"
                             android:hint="Nhập"
+                            android:inputType="textPassword"
                             android:padding="10dp" />
 
                     <CheckBox

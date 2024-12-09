@@ -45,7 +45,10 @@ public class SpinnerAdapter<T extends DisplayTextSpinner> extends ArrayAdapter<T
         }
     }
 
-
+    public boolean isDefaultSelected(int selectedPosition, String defaultDisplayText) {
+        T item = getItem(selectedPosition);
+        return item != null && defaultDisplayText.equals(item.getDisplayText());
+    }
 
     @NonNull
     @Override
