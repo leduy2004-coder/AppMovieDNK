@@ -94,7 +94,26 @@ router.get('/phimchuachieu', async (req, res) => {
         res.status(500).send('Lỗi khi lấy dữ liệu phim chưa chiếu');
     }
 });
+// Route để lấy những phim trong tim kiem
+router.get('/movie-search', async (req, res) => {
+    let pool;
 
+    try {
+        pool = await connectToDatabase();
+
+        // Lấy danh sách maPhim từ stored procedure GetSuatChieu
+        let result = await pool.request().execute('GetPhimSearch');
+
+        // Lấy thông tin chi tiết của các phim
+        const movieDetails = await fetchMovieDetailsSequential(result.recordset);
+
+        // Trả về danh sách thông tin chi tiết của các phim
+        res.json(movieDetails.filter(movie => movie !== null));
+    } catch (err) {
+        console.error('Lỗi khi lấy dữ liệu phim đang chiếu:', err);
+        res.status(500).send('Lỗi khi lấy dữ liệu phim đang chiếu');
+    } 
+});
 // Route để lấy những ngày đang chiếu
 router.get('/ngaydangchieu', async (req, res) => {
     let pool;
@@ -293,25 +312,25 @@ router.get('/get-schedule/:id', async (req, res) => {
 
         const ngayChieuList = result.recordset.map(item => {
             return {
-                maSuat: item.maSuat,
                 ngayChieu: item.ngayChieu.toISOString().split('T')[0] // Chỉ lấy ngày tháng năm
             };
         });
-        console.log(ngayChieuList);
         // Tạo mảng kết quả
         const schedules = [];
 
         // Lặp qua từng ngày chiếu để lấy thời gian chiếu
-        for (const { ngayChieu, maSuat } of ngayChieuList) { // Không cần truyền maSuat
+        for (const { ngayChieu } of ngayChieuList) {
+
+            
             const resultThoiGianChieu = await pool.request()
                 .input('id', sql.NVarChar, phimId)
                 .input('ngayChieu', sql.Date, ngayChieu)
-                .input('maSuat', sql.NVarChar(50), maSuat) // Truyền maSuat
                 .query(`
                     SELECT DISTINCT thoiGianBatDau, maCa, maSuat
                     FROM dbo.fXuatThoiGianChieu(@id, @ngayChieu)
+                    ORDER BY thoiGianBatDau
                 `);
-
+        
             schedules.push({
                 ngayChieu: ngayChieu,
                 caChieu: resultThoiGianChieu.recordset.map(thoiGian => {
@@ -322,8 +341,8 @@ router.get('/get-schedule/:id', async (req, res) => {
                     };
                 })
             });
-            break;
         }
+        
         console.log("ket qua cuoi cung: ");
         console.log(schedules);
 

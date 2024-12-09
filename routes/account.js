@@ -120,7 +120,7 @@ router.get('/history/:maKH', async (req, res) => {
         
         .input('maKH', sql.VarChar(20), maKH) // Đặt giá trị cho tham số maKH
         .query('SELECT * FROM fLichSuKH(@maKH)'); // Gọi hàm fLichSuKH
-
+        
     res.json(result.recordset);
     } catch (err) {
         console.error('Lỗi khi lấy lịch sử:', err);
