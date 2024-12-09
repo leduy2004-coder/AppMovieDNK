@@ -94,26 +94,7 @@ router.get('/phimchuachieu', async (req, res) => {
         res.status(500).send('Lỗi khi lấy dữ liệu phim chưa chiếu');
     }
 });
-// Route để lấy những phim trong tim kiem
-router.get('/movie-search', async (req, res) => {
-    let pool;
 
-    try {
-        pool = await connectToDatabase();
-
-        // Lấy danh sách maPhim từ stored procedure GetSuatChieu
-        let result = await pool.request().execute('GetPhimSearch');
-
-        // Lấy thông tin chi tiết của các phim
-        const movieDetails = await fetchMovieDetailsSequential(result.recordset);
-
-        // Trả về danh sách thông tin chi tiết của các phim
-        res.json(movieDetails.filter(movie => movie !== null));
-    } catch (err) {
-        console.error('Lỗi khi lấy dữ liệu phim đang chiếu:', err);
-        res.status(500).send('Lỗi khi lấy dữ liệu phim đang chiếu');
-    } 
-});
 // Route để lấy những ngày đang chiếu
 router.get('/ngaydangchieu', async (req, res) => {
     let pool;
