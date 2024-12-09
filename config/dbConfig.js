@@ -15,12 +15,12 @@ const config = {
         enableArithAbort: true,
     },
     pool: {
-        max: 5,                  // Giới hạn tối đa kết nối pool
+        max: 10,                  // Giới hạn tối đa kết nối pool
         min: 1,                  // Số kết nối tối thiểu
-        idleTimeoutMillis: 60000, // Thời gian chờ cho kết nối không hoạt động
+        idleTimeoutMillis: 120000, // Thời gian chờ cho kết nối không hoạt động
     },
-    connectionTimeout: 60000,   // Thời gian chờ kết nối
-    requestTimeout: 60000       // Thời gian chờ cho truy vấn
+    connectionTimeout: 120000,   // Thời gian chờ kết nối
+    requestTimeout: 120000       // Thời gian chờ cho truy vấn
 };
 
 // Tạo connection pool duy nhất
