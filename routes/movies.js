@@ -378,7 +378,7 @@ const storage = multer.memoryStorage();  // Lưu tệp vào bộ nhớ (RAM) tha
 const upload = multer({ storage: storage });
 
 router.post('/insert', upload.single('movieImage'), async  (req, res) => {
-    const { movieTitle, director, ageRequirement, releaseDate, duration, movieType, description, movieVideo } = req.body;
+    const { movieTitle, director, ageRequirement, releaseDate, duration, movieType, description, movieVideo, status } = req.body;
     const file = req.file;
     let pool;
 
@@ -435,7 +435,7 @@ router.post('/insert', upload.single('movieImage'), async  (req, res) => {
 });
 router.patch('/update-movie/:idMovie', upload.single('movieImage'), async (req, res) => {
     const maPhim = req.params.idMovie; 
-    const { movieTitle, director, ageRequirement, releaseDate, duration, movieType, description, movieVideo } = req.body;
+    const { movieTitle, director, ageRequirement, releaseDate, duration, movieType, description, movieVideo, status } = req.body;
     const file = req.file;
     let pool;
 
@@ -476,7 +476,7 @@ router.patch('/update-movie/:idMovie', upload.single('movieImage'), async (req, 
             .input('ngayKhoiChieu', sql.Date, releaseDate || movie.ngayKhoiChieu)
             .input('thoiLuong', sql.Int, duration || movie.thoiLuong)
             .input('maLPhim', sql.VarChar(20), movieType || movie.maLPhim)
-            .input('tinhTrang', sql.Bit, 1)
+            .input('tinhTrang', sql.Bit, status)
             .input('moTa', sql.NVarChar(sql.MAX), description || movie.moTa)
             .input('video', sql.NVarChar(sql.MAX), movieVideo || movie.video)
             .input('hinhDaiDien', sql.NVarChar(sql.MAX), imageUrl)
